@@ -1766,7 +1766,7 @@ function showResult() {
       document.body.appendChild(toast);
       setTimeout(() => toast.remove(), 4000);
       // 0.6秒後にLINE公式アカウントを開く
-      setTimeout(() => { if (navigator.share) { navigator.share({ title: '住まい診断結果', text: lineMsg }); }}, 600);
+      setTimeout(() => { setTimeout(() => { window.open('https://line.me/ti/p/@935yytsb', '_blank'); }, 600);}, 600);
     };
   });
 
