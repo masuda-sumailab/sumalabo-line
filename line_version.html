@@ -1,0 +1,1832 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>住まい診断｜住まらぼ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+  :root {
+    --primary: #F47B2D;
+    --primary-dark: #D96820;
+    --primary-light: #F9A06A;
+    --primary-bg: #FFF8F3;
+    --accent: #FF9F43;
+    --card: #ffffff;
+    --text: #2d2d2d;
+    --muted: #999;
+    --border: #FFE0C8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Noto Sans JP', 'Yu Gothic', 'Meiryo', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--primary-bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* ===== ヘッダー ===== */
+  .header {
+    background: linear-gradient(135deg, #7C3AED 0%, #F47B2D 100%);
+    color: white;
+    padding: 22px 20px 18px;
+    text-align: center;
+  }
+  .header .brand { font-size: 0.8rem; opacity: 0.85; letter-spacing: 1px; margin-bottom: 4px; font-family: 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', sans-serif; }
+  .header h1 { font-size: 1.35rem; font-weight: 600; font-family: 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', sans-serif; letter-spacing: 1px; }
+  .header p { font-size: 0.82rem; margin-top: 4px; opacity: 0.9; font-family: 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', sans-serif; }
+
+  /* ===== プログレスバー ===== */
+  #progressWrap {
+    height: 3px;
+    background: #FFE0C8;
+    display: none;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  #progressFill {
+    height: 100%;
+    background: linear-gradient(90deg, #F47B2D, #FF9F43);
+    transition: width 0.45s cubic-bezier(0.4,0,0.2,1);
+    border-radius: 0 2px 2px 0;
+  }
+
+  /* ===== コンテナ ===== */
+  .container { max-width: 480px; margin: 0 auto; padding: 20px 16px 60px; }
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  /* ===== 駅入力 (Screen1) ===== */
+  .s1-card {
+    background: white;
+    border-radius: 20px;
+    padding: 28px 22px;
+    box-shadow: 0 4px 20px rgba(244,123,45,0.12);
+    border: 1px solid var(--border);
+    margin-bottom: 16px;
+  }
+  .s1-title { font-size: 1rem; font-weight: 800; color: var(--text); margin-bottom: 18px; }
+  .s1-title span { color: var(--primary); }
+  .s1-label { font-size: 0.82rem; font-weight: 700; margin-bottom: 8px; display: block; }
+  .s1-input {
+    width: 100%; padding: 14px 16px;
+    border: 2px solid #e8e8e8; border-radius: 12px;
+    font-size: 1rem; color: var(--text);
+    background: white; transition: border-color 0.2s;
+    -webkit-appearance: none;
+  }
+  .s1-input:focus { outline: none; border-color: var(--primary); }
+  .s1-hint { font-size: 0.72rem; color: var(--muted); margin-top: 6px; }
+  .autocomplete-list {
+    border: 2px solid var(--primary); border-top: none;
+    border-radius: 0 0 12px 12px;
+    background: white; max-height: 200px; overflow-y: auto;
+    display: none; position: relative; z-index: 20;
+  }
+  .autocomplete-list.show { display: block; }
+  .autocomplete-item {
+    padding: 12px 16px; font-size: 0.9rem;
+    cursor: pointer; border-bottom: 1px solid #f0f0f0;
+  }
+  .autocomplete-item:hover { background: var(--primary-bg); }
+  .autocomplete-item:last-child { border-bottom: none; }
+  .line-badge {
+    font-size: 0.65rem; background: #fff0e6; color: var(--primary);
+    padding: 2px 6px; border-radius: 8px; margin-left: 6px;
+  }
+
+  /* ===== ボタン ===== */
+  .btn-main {
+    width: 100%; padding: 16px;
+    background: linear-gradient(135deg, #F47B2D, #FF9F43);
+    color: white; border: none; border-radius: 14px;
+    font-size: 1.05rem; font-weight: 600;
+    font-family: 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', sans-serif;
+    cursor: pointer; letter-spacing: 1px;
+    box-shadow: 0 4px 16px rgba(244,123,45,0.35);
+    transition: transform 0.1s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .btn-main:active { transform: scale(0.98); }
+
+  /* ===== クイズ画面 ===== */
+  .quiz-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 10px 0 20px;
+  }
+  .quiz-back {
+    font-size: 0.85rem; color: var(--muted); font-weight: 600;
+    cursor: pointer; padding: 6px 2px;
+    background: none; border: none;
+    -webkit-tap-highlight-color: transparent;
+    letter-spacing: 0.5px;
+  }
+  .quiz-counter {
+    font-size: 0.72rem; font-weight: 700;
+    background: var(--primary-bg); color: var(--primary);
+    padding: 4px 12px; border-radius: 20px;
+    border: 1px solid var(--border);
+    letter-spacing: 0.5px;
+  }
+
+  /* アニメーション */
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateX(24px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes slideInBack {
+    from { opacity: 0; transform: translateX(-24px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+  #quizContent { animation: slideIn 0.2s cubic-bezier(0.25,0.46,0.45,0.94); }
+  #quizContent.back { animation: slideInBack 0.2s cubic-bezier(0.25,0.46,0.45,0.94); }
+
+  /* 質問テキスト */
+  .quiz-q {
+    font-size: 1.25rem; font-weight: 600;
+    font-family: 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', sans-serif;
+    color: var(--text); margin-bottom: 8px; line-height: 1.65;
+    letter-spacing: 0.3px;
+  }
+  .quiz-sub {
+    font-size: 0.8rem; color: var(--muted);
+    font-family: 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', sans-serif;
+    margin-bottom: 20px; line-height: 1.6;
+  }
+  .optional-badge {
+    display: inline-block;
+    font-size: 0.68rem; font-weight: 600;
+    background: #f0f0f0; color: var(--muted);
+    padding: 2px 8px; border-radius: 20px; margin-left: 8px;
+    vertical-align: middle;
+  }
+
+  /* 選択肢（縦積みカード） */
+  .quiz-options { display: flex; flex-direction: column; gap: 10px; }
+  .quiz-option {
+    width: 100%; padding: 16px 18px;
+    border: 2px solid #ebebeb; border-radius: 14px;
+    cursor: pointer; background: white;
+    display: flex; align-items: center; gap: 14px;
+    transition: all 0.15s;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+  }
+  .quiz-option:active { transform: scale(0.98); }
+  .quiz-option.selected {
+    border-color: var(--primary);
+    background: #FFF3EA;
+  }
+  .quiz-option.selected .q-label { color: var(--primary); }
+  .quiz-option.flash {
+    border-color: var(--primary);
+    background: #FFD5A8;
+    transform: scale(0.98);
+  }
+  .q-icon { font-size: 1.3rem; line-height: 1; flex-shrink: 0; }
+  .q-label {
+    font-size: 0.95rem; font-weight: 700; color: var(--text);
+    flex: 1;
+  }
+  .q-sub {
+    font-size: 0.7rem; color: var(--muted);
+    background: #f0f0f0; padding: 3px 8px; border-radius: 8px;
+    flex-shrink: 0;
+  }
+  .quiz-option.selected .q-sub { background: rgba(244,123,45,0.15); color: var(--primary); }
+
+  /* マルチセレクト用チップ */
+  .quiz-chips { display: flex; flex-wrap: wrap; gap: 9px; margin-bottom: 20px; }
+  .quiz-chip {
+    padding: 10px 16px;
+    border: 2px solid #ebebeb; border-radius: 20px;
+    font-size: 0.85rem; font-weight: 700;
+    cursor: pointer; background: white;
+    transition: all 0.15s;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+  }
+  .quiz-chip:active { transform: scale(0.96); }
+  .quiz-chip.selected {
+    border-color: var(--primary); background: #FFF3EA; color: var(--primary);
+  }
+  .quiz-skip {
+    text-align: center; font-size: 0.8rem;
+    color: var(--muted); cursor: pointer; margin-top: 8px;
+    text-decoration: underline;
+  }
+
+  /* 対比カード */
+  .contrast-options { display: flex; gap: 8px; align-items: stretch; margin-bottom: 8px; }
+  .contrast-card {
+    flex: 1; padding: 16px 8px;
+    border: 2px solid #ebebeb; border-radius: 14px;
+    text-align: center; cursor: pointer;
+    background: white; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 6px;
+    min-height: 90px; transition: all 0.15s;
+    -webkit-tap-highlight-color: transparent; user-select: none;
+  }
+  .contrast-card:active { transform: scale(0.97); }
+  .c-icon { font-size: 1.5rem; line-height: 1; }
+  .c-text { font-size: 0.73rem; font-weight: 700; line-height: 1.5; color: var(--text); }
+  .contrast-card.left.selected  { border-color: #F47B2D; background: #FFF3EA; }
+  .contrast-card.left.selected  .c-text { color: #F47B2D; }
+  .contrast-card.right.selected { border-color: #6C5CE7; background: #F0EDFF; }
+  .contrast-card.right.selected .c-text { color: #6C5CE7; }
+  .contrast-neutral {
+    flex-shrink: 0; width: 56px;
+    padding: 8px 4px; border: 2px solid #ebebeb; border-radius: 14px;
+    font-size: 0.65rem; font-weight: 700; cursor: pointer;
+    background: white; color: var(--muted);
+    text-align: center; line-height: 1.4;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+    -webkit-tap-highlight-color: transparent; user-select: none;
+  }
+  .contrast-neutral.selected { border-color: var(--primary); background: #FFF3EA; color: var(--primary); }
+  .contrast-caption {
+    display: flex; justify-content: space-between;
+    font-size: 0.65rem; color: var(--muted); padding: 0 4px;
+    margin-top: 4px;
+  }
+
+  /* ===== 結果画面 ===== */
+  .result-header { text-align: center; padding: 8px 0 20px; }
+  .result-header h2 { font-size: 1.25rem; font-weight: 600; font-family: 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', sans-serif; }
+  .result-header p  { font-size: 0.8rem; color: var(--muted); margin-top: 5px; font-family: 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', sans-serif; }
+
+  .result-profile {
+    background: #FFF3EA; border-radius: 12px;
+    padding: 10px 14px; font-size: 0.76rem;
+    color: var(--muted); margin-bottom: 14px; line-height: 1.7;
+  }
+  .result-profile strong { color: var(--text); }
+
+  .result-card {
+    background: white; border-radius: 16px;
+    border: 2px solid #f0f0f0; padding: 18px 16px;
+    margin-bottom: 12px; position: relative; overflow: hidden;
+  }
+  .result-card::before {
+    content: ''; position: absolute; top: 0; left: 0;
+    width: 4px; height: 100%;
+  }
+  .result-card.rank-1::before { background: #F47B2D; }
+  .result-card.rank-2::before { background: #aaa; }
+  .result-card.rank-3::before { background: #D4956A; }
+  .rank-badge {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 26px; height: 26px; border-radius: 50%;
+    font-size: 0.8rem; font-weight: 800; margin-right: 8px;
+  }
+  .rank-1 .rank-badge { background: #FFF0D9; color: #F47B2D; }
+  .rank-2 .rank-badge { background: #eee; color: #777; }
+  .rank-3 .rank-badge { background: #FAE8D8; color: #D4956A; }
+  .result-name { font-size: 1.1rem; font-weight: 600; font-family: 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', sans-serif; }
+  .match-badge {
+    font-size: 0.7rem; margin-left: 8px;
+    background: #FFF3EA; color: var(--primary);
+    padding: 2px 8px; border-radius: 8px; font-weight: 700;
+  }
+  .result-tags { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 10px; }
+  .result-tag {
+    font-size: 0.73rem; padding: 4px 10px; border-radius: 10px;
+    background: var(--primary-bg); color: var(--primary-dark); font-weight: 600;
+  }
+  .result-info {
+    font-size: 0.8rem; color: var(--muted); margin-top: 9px; line-height: 1.6;
+  }
+  .result-info strong { color: var(--text); font-size: 0.92rem; }
+  .result-desc { font-size: 0.78rem; color: var(--muted); margin-top: 8px; line-height: 1.6; }
+  .station-list { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
+  .station-badge {
+    font-size: 0.7rem; padding: 3px 8px; border-radius: 8px;
+    background: #F0F8FF; color: #3a7bd5; font-weight: 600;
+    border: 1px solid #c8e0f8;
+  }
+  .score-bar-wrap { margin-top: 12px; }
+  .score-label {
+    font-size: 0.7rem; color: var(--muted);
+    display: flex; justify-content: space-between; margin-bottom: 4px;
+  }
+  .score-bar { height: 5px; background: #eee; border-radius: 3px; overflow: hidden; }
+  .score-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #F47B2D, #FF9F43);
+    border-radius: 3px; transition: width 0.8s ease;
+  }
+  .warn-tag {
+    display: inline-block; font-size: 0.68rem;
+    background: #fff3cd; color: #856404;
+    padding: 2px 8px; border-radius: 8px; margin-top: 6px;
+  }
+
+  /* ===== MBTI カード ===== */
+  .mbti-card {
+    background: linear-gradient(135deg, #FFF3EA 0%, #FFF8F3 100%);
+    border: 2px solid var(--border);
+    border-radius: 20px;
+    padding: 22px 18px 18px;
+    margin-bottom: 16px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .mbti-card::after {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, #F47B2D, #FF9F43, #F47B2D);
+  }
+  .mbti-label {
+    font-size: 0.68rem; font-weight: 700; letter-spacing: 2px;
+    color: var(--primary); text-transform: uppercase; margin-bottom: 10px;
+  }
+  .mbti-row {
+    display: flex; align-items: center; justify-content: center; gap: 12px;
+    margin-bottom: 8px;
+  }
+  .mbti-emoji { font-size: 2.2rem; line-height: 1; }
+  .mbti-type-wrap { text-align: left; }
+  .mbti-type {
+    font-size: 2rem; font-weight: 600; color: var(--primary);
+    font-family: 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', sans-serif;
+    letter-spacing: 4px; line-height: 1;
+  }
+  .mbti-name {
+    font-size: 1rem; font-weight: 600; color: var(--text);
+    font-family: 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', sans-serif;
+    margin-top: 2px;
+  }
+  .mbti-desc {
+    font-size: 0.82rem; color: var(--muted); line-height: 1.8;
+    font-family: 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', sans-serif;
+    margin-top: 10px;
+  }
+  .mbti-dims {
+    display: flex; justify-content: center; gap: 6px;
+    margin-top: 12px; flex-wrap: wrap;
+  }
+  .mbti-dim {
+    font-size: 0.72rem; font-weight: 700;
+    padding: 4px 10px; border-radius: 20px;
+    background: #FFF0E0; color: var(--primary-dark);
+  }
+
+  /* MBTIタイプ選択グリッド */
+  .mbti-type-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 12px 0;
+  }
+  .mbti-type-chip {
+    padding: 10px 4px; text-align: center; font-weight: 700;
+    font-size: 0.82rem; letter-spacing: 1px;
+    background: white; border: 2px solid #e8e8e8;
+    border-radius: 10px; cursor: pointer; transition: all 0.15s;
+  }
+  .mbti-type-chip:hover { border-color: var(--primary); background: #FFF8F3; }
+  .mbti-type-chip.selected { border-color: var(--primary); background: var(--primary); color: white; }
+
+  /* 初めての引っ越し情報 */
+  .firstmove-info {
+    background: #F0F9FF; border: 1px solid #B3E0FF; border-radius: 10px;
+    padding: 12px 14px; margin: 10px 0; font-size: 0.78rem; line-height: 1.6;
+  }
+  .firstmove-title { font-weight: 700; color: #0066CC; margin-bottom: 6px; font-size: 0.82rem; }
+  .firstmove-note { color: #0066CC; margin-top: 6px; font-size: 0.72rem; }
+
+  /* LINE CTA */
+  .line-cta {
+    background: linear-gradient(145deg, #00c94f 0%, #00a83c 50%, #007f2d 100%);
+    border-radius: 20px; padding: 26px 20px 22px;
+    text-align: center; color: white; margin-top: 20px;
+    box-shadow: 0 8px 28px rgba(0,140,50,0.45), inset 0 1px 0 rgba(255,255,255,0.2);
+    border: 1px solid rgba(255,255,255,0.15);
+  }
+  .line-cta h3 {
+    font-size: 1.1rem; font-weight: 800; margin-bottom: 8px;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.25);
+  }
+  .line-cta p {
+    font-size: 0.78rem; opacity: 0.95; margin-bottom: 14px; line-height: 1.7;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.15);
+  }
+  .line-perks {
+    display: flex; flex-direction: column; gap: 0;
+    margin-bottom: 6px; text-align: left;
+    background: rgba(0,0,0,0.12);
+    border-radius: 12px; padding: 10px 14px;
+    box-shadow: inset 0 2px 6px rgba(0,0,0,0.15);
+  }
+  .line-perk {
+    font-size: 0.8rem; font-weight: 700;
+    display: flex; align-items: center; gap: 6px;
+    padding: 5px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.12);
+    text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+  }
+  .line-perk:last-child { border-bottom: none; }
+  .line-perk-select {
+    display: inline-block;
+    background: #FFD700;
+    color: #1a6600;
+    font-size: 0.78rem; font-weight: 900;
+    padding: 4px 14px; border-radius: 20px;
+    margin: 4px auto 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    text-shadow: none;
+    letter-spacing: 0.5px;
+  }
+  .line-stores { display: flex; gap: 10px; margin-top: 10px; justify-content: center; }
+  .btn-line {
+    flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 16px 10px; background: white; color: #00a83c;
+    border: none; border-radius: 14px; font-size: 0.92rem; font-weight: 800;
+    cursor: pointer; text-decoration: none;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.8);
+    transition: transform 0.1s, box-shadow 0.1s;
+  }
+  .btn-line:active { transform: translateY(2px); box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
+  .btn-line svg { width: 22px; height: 22px; flex-shrink: 0; }
+
+  /* 駅別家賃表示 */
+  .rent-row {
+    margin: 8px 0 4px;
+    background: #FFF8F3;
+    border: 1px solid #FFE0C8;
+    border-radius: 10px;
+    padding: 8px 12px;
+    font-size: 0.78rem;
+    color: var(--text);
+  }
+  .rent-row-label {
+    font-weight: 700; color: var(--primary); margin-bottom: 4px; display: block;
+  }
+  .rent-station-list {
+    display: flex; flex-wrap: wrap; gap: 5px; margin-top: 4px;
+  }
+  .rent-station-item {
+    background: white; border: 1px solid #FFD0B0; border-radius: 6px;
+    padding: 3px 8px; font-size: 0.74rem; color: var(--text);
+  }
+  .rent-station-item strong { color: var(--primary); }
+
+  .retry-btn {
+    text-align: center; margin-top: 18px;
+    font-size: 0.8rem; color: var(--muted); cursor: pointer; text-decoration: underline;
+  }
+  .btn-save-img {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    width: 100%; padding: 14px;
+    background: white; color: #333;
+    border: 2px solid #e0e0e0; border-radius: 14px;
+    font-size: 0.88rem; font-weight: 700;
+    cursor: pointer; margin-bottom: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+  .btn-save-img:active { transform: scale(0.98); }
+  .saving-msg {
+    text-align: center; font-size: 0.78rem; color: var(--muted);
+    padding: 8px; display: none;
+  }
+
+  @media (max-width: 380px) {
+    .container { padding: 16px 12px 60px; }
+    .quiz-q { font-size: 1.05rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="brand" style="display:inline-block;background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.4);border-r
+  <h1>住まいエリア診断</h1>
+  <p>MBTI診断から見つける<br>大阪・関西 あなたにぴったりの街</p>
+</div>
+
+<div id="progressWrap"><div id="progressFill" style="width:0%"></div></div>
+
+<div class="container">
+
+  <!-- ===== SCREEN 1: 職場駅 ===== -->
+  <div class="screen active" id="screen1">
+    <div class="s1-card">
+      <div class="s1-title">🏢 <span>職場の最寄り駅</span>を教えてください</div>
+      <span class="s1-label">駅名を入力</span>
+      <input type="text" id="workStation" class="s1-input"
+        placeholder="例：梅田、本町、天王寺…" autocomplete="off">
+      <div class="autocomplete-list" id="autocompleteList"></div>
+      <div class="s1-hint">ひらがな・カタカナ・漢字どれでも検索できます</div>
+    </div>
+    <button class="btn-main" onclick="startQuiz()">診断スタート　→</button>
+  </div>
+
+  <!-- ===== SCREEN QUIZ: 一問一答 ===== -->
+  <div class="screen" id="screenQuiz">
+    <div class="quiz-header">
+      <button class="quiz-back" onclick="quizBack()">← 戻る</button>
+      <span class="quiz-counter" id="quizCounter">1 / 11</span>
+    </div>
+    <div id="quizContent"></div>
+  </div>
+
+  <!-- ===== SCREEN 4: 結果 ===== -->
+  <div class="screen" id="screen4">
+    <div class="result-header">
+      <h2>🎉 おすすめエリア TOP3</h2>
+      <p id="resultSubtitle"></p>
+    </div>
+    <div id="resultCards"></div>
+
+    <button class="btn-save-img" onclick="saveResultImage()">📸 結果を画像で保存してLINEに送る</button>
+    <div class="saving-msg" id="savingMsg">⏳ 画像を作成中です...</div>
+    <div class="line-cta">
+      <h3>📩 診断結果をスタッフに送ろう！</h3>
+      <p>下のボタンをタップすると<strong>診断結果が自動でコピー</strong>されてLINEが開きます。<br>トーク画面に<strong>貼り付けて送信</strong>するだけでスタッフがご提案！</p>
+      <div class="line-perks">
+        <div class="line-perk">✅ 来店不要・完全無料</div>
+        <div class="line-perk">✅ 冷蔵庫・洗濯機・電子レンジが無料でプレゼント✨</div>
+        <div class="line-perk">✅ お引越し費用無料✨</div>
+      </div>
+      <div style="text-align:center;margin:6px 0 10px;">
+        <span class="line-perk-select">🎁 どちらか選べる！！</span>
+      </div>
+      <div class="line-perks" style="margin-top:0;">
+        <div class="line-perk">✅ 内見予約・契約もLINEで完結可能</div>
+      </div>
+      <div class="line-stores">
+        <a href="https://lin.ee/424jmwsb" class="btn-line" target="_blank" style="flex:none;width:100%;max-width:320px;margin:0 auto;">
+          <svg viewBox="0 0 24 24" fill="#06c755"><path d="M19.365 9.89c.499 0 .906.41.906.91s-.407.907-.906.907h-2.87v1.875h2.87c.499 0 .906.407.906.906 0 .5-.407.908-.906.908h-3.777c-.499 0-.906-.408-.906-.908V8.984c0-.5.407-.907.906-.907h3.777zm-12.77 4.6c0 .5-.408.907-.907.907-.499 0-.907-.407-.907-.907V8.984c0-.5.408-.907.907-.907.499 0 .907.407.907.907v5.505zm3.245.907c-.346 0-.668-.199-.828-.511l-2.631-4.994v4.598c0 .5-.408.907-.908.907-.499 0-.907-.407-.907-.907V8.984c0-.5.408-.907.908-.907.346 0 .668.198.827.51l2.632 4.996V8.984c0-.5.407-.907.907-.907.5 0 .907.407.907.907v5.505c0 .5-.407.907-.907.907zm3.97 0h-1.816c-.499 0-.907-.407-.907-.907V8.984c0-.5.408-.907.907-.907.5 0 .907.407.907.907v4.598h.909c.499 0 .906.407.906.907 0 .5-.407.907-.906.907zM12 2C6.477 2 2 6.145 2 11.25c0 4.557 3.524 8.35 8.272 9.093.322.07.76.213.87.49.1.25.066.643.032.896l-.14.847c-.043.25-.196.978.857.533 1.054-.444 5.68-3.354 7.752-5.744C21.01 15.434 22 13.44 22 11.25 22 6.145 17.523 2 12 2z"/></svg>
+          公式LINEに送って相談する📩
+        </a>
+      </div>
+    </div>
+    <p class="retry-btn" onclick="restartQuiz()">🔄 もう一度診断する</p>
+  </div>
+
+</div>
+
+<script>
+// ===========================
+// 質問定義
+// ===========================
+const QUESTIONS = [
+  {
+    id: 'commuteMethod', type: 'single',
+    q: '通勤・通学の手段は？',
+    options: [
+      { val: 'train', icon: '🚃', label: '電車・公共交通' },
+      { val: 'car',   icon: '🚗', label: '車・バイク', sub: '駅距離は気にしない' },
+      { val: 'both',  icon: '🔄', label: '両方使う' },
+    ]
+  },
+  {
+    id: 'commute', type: 'single',
+    q: '電車の乗車時間、何分以内なら\n許容できますか？',
+    options: [
+      { val: 15,  icon: '⚡', label: '15分以内', sub: '駅近重視' },
+      { val: 20,  icon: '🚶', label: '20分以内' },
+      { val: 30,  icon: '🚃', label: '30分以内', sub: '標準的' },
+      { val: 45,  icon: '🚌', label: '45分以内' },
+      { val: 60,  icon: '🚂', label: '60分以内', sub: '郊外OK' },
+    ]
+  },
+  {
+    id: 'rent', type: 'single',
+    q: '毎月の家賃の上限は？',
+    options: [
+      { val: 40000,  icon: '💴', label: '4万円まで',  sub: '節約重視' },
+      { val: 55000,  icon: '💰', label: '5.5万円まで' },
+      { val: 70000,  icon: '🏠', label: '7万円まで',  sub: '標準的' },
+      { val: 90000,  icon: '🏡', label: '9万円まで' },
+      { val: 120000, icon: '✨', label: '12万円まで' },
+      { val: 999999, icon: '🆓', label: '上限なし' },
+    ]
+  },
+  {
+    id: 'roomType', type: 'single',
+    q: '希望の間取りは？',
+    options: [
+      { val: '1R1K',    icon: '🛏', label: '1R・1K',    sub: '一人暮らし' },
+      { val: '1DK1LDK', icon: '🛋', label: '1DK・1LDK', sub: '余裕の一人暮らし' },
+      { val: '2LDK',    icon: '👫', label: '2LDK',      sub: '二人暮らし' },
+      { val: '3LDK',    icon: '👨‍👩‍👦', label: '3LDK以上',  sub: 'ファミリー' },
+    ]
+  },
+  {
+    id: 'gender', type: 'single', optional: true,
+    q: '性別を教えてください',
+    sub: '診断精度の向上に使用します',
+    options: [
+      { val: 'male',   icon: '👔', label: '男性' },
+      { val: 'female', icon: '👗', label: '女性' },
+      { val: 'other',  icon: '🙅', label: '回答しない' },
+    ]
+  },
+  {
+    id: 'ageGroup', type: 'single', optional: true,
+    q: '年代を教えてください',
+    sub: '診断精度の向上に使用します',
+    options: [
+      { val: 'teen', icon: '🎒', label: '10代以下' },
+      { val: '20s',  icon: '🎓', label: '20代' },
+      { val: '30s',  icon: '💼', label: '30代' },
+      { val: '40s',  icon: '🏆', label: '40代' },
+      { val: '50s',  icon: '🌸', label: '50代以上' },
+    ]
+  },
+  {
+    id: 'cooking', type: 'single',
+    q: '自炊はどのくらいしますか？',
+    options: [
+      { val: 'often',     icon: '🍳', label: 'よくする',     sub: 'スーパー近いと嬉しい' },
+      { val: 'sometimes', icon: '🥡', label: 'たまにする' },
+      { val: 'rarely',    icon: '🍜', label: 'ほぼしない',   sub: '外食・デリバリー派' },
+    ]
+  },
+  {
+    id: 'homeTime', type: 'contrast',
+    q: '休日・自由な時間の過ごし方は？',
+    left:  { icon: '🏠', text: '家にいることが\n多い\n（インドア派）' },
+    right: { icon: '🚶', text: '外に出ることが\n多い\n（アウトドア派）' },
+    leftLabel: 'インドア派', rightLabel: 'アウトドア派'
+  },
+  {
+    id: 'firstMove', type: 'single', optional: true,
+    q: '引っ越しは初めてですか？',
+    options: [
+      { val: 'yes', icon: '🏠', label: 'はじめての引っ越し' },
+      { val: 'no',  icon: '📦', label: '経験あり' },
+    ]
+  },
+  {
+    id: 'movingCostKnown', type: 'single', optional: true,
+    q: '引っ越し費用の相場を知っていますか？',
+    options: [
+      { val: 'yes', icon: '💡', label: '大体知っている' },
+      { val: 'no',  icon: '❓', label: 'あまり知らない' },
+    ]
+  },
+  {
+    id: 'dislikes', type: 'multi', optional: true,
+    q: '苦手なこと・絶対に嫌なことは？',
+    sub: '複数選択できます。なければスキップしてください。',
+    options: [
+      { val: 'noisy',    label: '騒音・生活音' },
+      { val: 'crowd',    label: '人混み・満員電車' },
+      { val: 'nightlife',label: '夜の街・歓楽街' },
+      { val: 'hills',    label: '坂道・起伏が多い' },
+      { val: 'old',      label: '古い物件・設備' },
+      { val: 'unsafe',   label: '治安への不安' },
+      { val: 'traffic',  label: '交通量の多い道路沿い' },
+      { val: 'far',      label: '駅から遠い' },
+    ]
+  },
+  {
+    id: 'mbtiKnown', type: 'single',
+    q: 'MBTIタイプを知っていますか？',
+    sub: '知っている場合は入力して対比診断5問をスキップできます',
+    options: [
+      { val: 'yes', icon: '✅', label: '知っている（入力する）' },
+      { val: 'no',  icon: '🔍', label: '知らない（今から診断する）' },
+    ]
+  },
+  {
+    id: 'mbtiTypeInput', type: 'mbtiSelect',
+    q: 'あなたのMBTIタイプを選んでください',
+  },
+  {
+    id: 'contrast0', type: 'contrast',
+    q: '住む場所の雰囲気は？',
+    left:  { icon: '🔇', text: '静かで\n落ち着いた\n環境がいい' },
+    right: { icon: '🎉', text: '賑やかで\n活気ある\n環境がいい' },
+    leftLabel: '静か重視', rightLabel: '賑やか重視'
+  },
+  {
+    id: 'contrast1', type: 'contrast',
+    q: '周辺環境の好みは？',
+    left:  { icon: '🌿', text: '自然・緑が\n豊かな\n環境がいい' },
+    right: { icon: '🏙️', text: '都会的で\n便利な\n環境がいい' },
+    leftLabel: '自然重視', rightLabel: '都会重視'
+  },
+  {
+    id: 'contrast2', type: 'contrast',
+    q: 'コストとアクセス、どちら重視？',
+    left:  { icon: '💰', text: '多少遠くても\n家賃を\n安くしたい' },
+    right: { icon: '🚇', text: '多少高くても\n駅近・\n好立地がいい' },
+    leftLabel: '家賃重視', rightLabel: 'アクセス重視'
+  },
+  {
+    id: 'contrast3', type: 'contrast',
+    q: '部屋の広さと立地、どちらが大事？',
+    left:  { icon: '🛋️', text: '広くて\nゆったりした\n部屋がいい' },
+    right: { icon: '📍', text: '狭くても\n立地・駅近\nを優先したい' },
+    leftLabel: '広さ重視', rightLabel: '立地重視'
+  },
+  {
+    id: 'contrast4', type: 'contrast',
+    q: '好きな街のイメージは？',
+    left:  { icon: '🏡', text: '落ち着いた\n品のある\n街がいい' },
+    right: { icon: '✨', text: 'おしゃれで\nトレンディな\n街がいい' },
+    leftLabel: '落ち着き重視', rightLabel: 'おしゃれ重視'
+  },
+];
+
+// ===========================
+// ステート
+// ===========================
+let state = {
+  workStation: null,
+  commuteMax: 30, rentMax: 70000, roomType: '1R1K',
+  gender: null, ageGroup: null, dislikes: [],
+  contrasts: [0, 0, 0, 0, 0],
+  commuteMethod: 'train',
+  cooking: 'sometimes',
+  homeTime: 0,
+  firstMove: null,
+  movingCostKnown: null,
+  mbtiKnown: 'no',
+  mbtiTypeInput: null,
+};
+
+let quizIndex = 0;
+let quizAnswers = {};
+
+// スキップすべき質問IDを返す
+function getSkippedIds() {
+  const skip = new Set();
+  if (quizAnswers.commuteMethod === 'car') skip.add('commute');
+  if (quizAnswers.mbtiKnown !== 'yes') skip.add('mbtiTypeInput');
+  if (quizAnswers.mbtiKnown === 'yes') {
+    ['contrast0','contrast1','contrast2','contrast3','contrast4'].forEach(id => skip.add(id));
+  }
+  return skip;
+}
+
+function getVisibleQuestions() {
+  return QUESTIONS.filter(q => !getSkippedIds().has(q.id));
+}
+
+const DISLIKE_PENALTY = {
+  noisy:     ['梅田・福島','難波・心斎橋','天王寺・阿倍野','鶴橋・今里'],
+  crowd:     ['梅田・福島','難波・心斎橋','天王寺・阿倍野'],
+  nightlife: ['梅田・福島','難波・心斎橋','鶴橋・今里','本町・堀江','福島・野田・西区'],
+  hills:     [],
+  old:       ['鶴橋・今里','布施・東大阪','住道・鴻池新田'],
+  unsafe:    ['鶴橋・今里','布施・東大阪'],
+  traffic:   ['梅田・福島','難波・心斎橋','天王寺・阿倍野','福島・野田・西区'],
+  far:       ['堺・三国ヶ丘','住道・鴻池新田','布施・東大阪']
+};
+
+// ===========================
+// MBTIデータ
+// ===========================
+const MBTI_DATA = {
+  'INTJ': { name: '建築家',          emoji: '🏗️', desc: '緻密な計画と高い理想を持つ戦略家。静かな環境で集中力を最大限に発揮します。' },
+  'INTP': { name: '論理学者',        emoji: '🔬', desc: '知識探求が止まらない思索家。自分のペースで考えられる静かな住環境が最適です。' },
+  'ENTJ': { name: '指揮官',          emoji: '⚔️', desc: '大胆なリーダーシップで道を切り開く行動派。都会的で利便性の高い拠点を求めます。' },
+  'ENTP': { name: '討論者',          emoji: '💡', desc: '知的好奇心旺盛な革新者。多様な刺激と新しいアイデアに溢れる街が合っています。' },
+  'INFJ': { name: '提唱者',          emoji: '🌿', desc: '深い洞察力を持つ理想主義者。静かで意義深い雰囲気のエリアに心が落ち着きます。' },
+  'INFP': { name: '仲介者',          emoji: '🌙', desc: '詩的で親切な理想主義者。自分らしい居心地のよい個性的な空間を大切にします。' },
+  'ENFJ': { name: '主人公',          emoji: '🌟', desc: 'カリスマ的なリーダー。人との繋がりや活気ある環境からエネルギーをもらいます。' },
+  'ENFP': { name: '運動家',          emoji: '🎆', desc: '熱意あふれる自由な魂。おしゃれで刺激的な街で新しい出会いを積極的に楽しみます。' },
+  'ISTJ': { name: '管理者',          emoji: '📋', desc: '責任感が強く実直な守護者。安定した住環境と規則正しい生活リズムを大切にします。' },
+  'ISFJ': { name: '擁護者',          emoji: '🛡️', desc: '温かく献身的なサポーター。安心・安全でアットホームな住環境を強く重視します。' },
+  'ESTJ': { name: '幹部',            emoji: '🏛️', desc: '秩序と効率を重んじる管理者。利便性が高く整備された都市環境に住みやすさを感じます。' },
+  'ESFJ': { name: '領事',            emoji: '🤝', desc: '社交的で思いやり深いコネクター。人が集まり活気に溢れた街がぴったりです。' },
+  'ISTP': { name: '巨匠',            emoji: '🔧', desc: '実践的で柔軟な問題解決者。シンプルで機能的、無駄のない住環境を好みます。' },
+  'ISFP': { name: '冒険家',          emoji: '🎨', desc: '感性豊かなアーティスト気質。個性的でおしゃれな雰囲気の街を五感で楽しみます。' },
+  'ESTP': { name: '起業家',          emoji: '🚀', desc: 'エネルギッシュな行動派。都会の中心でスピーディな利便性と刺激を享受します。' },
+  'ESFP': { name: 'エンターテイナー', emoji: '🎭', desc: '自発的で明るいムードメーカー。賑やかでトレンディな街が一番輝く舞台です。' },
+};
+
+// MBTIタイプを導出（直接入力優先）
+function deriveMBTI() {
+  if (state.mbtiTypeInput) return state.mbtiTypeInput;
+  const [c0, c1, c2, , c4] = state.contrasts;
+  // I/E: c0 (静か=-1=I, 賑やか=+1=E, 0=E)
+  const E = c0 >= 0;
+  // S/N: c1 (自然=-1=S, 都会=+1=N, 0=N)
+  const N = c1 >= 0;
+  // T/F: c2 (家賃重視=-1=T, アクセス重視=+1=F, 0=F)
+  const F = c2 >= 0;
+  // J/P: c4 (落ち着き=-1=J, おしゃれ=+1=P, 0=P)
+  const P = c4 >= 0;
+  return (E ? 'E' : 'I') + (N ? 'N' : 'S') + (F ? 'F' : 'T') + (P ? 'P' : 'J');
+}
+
+// MBTI各軸ラベル
+function mbtiDimLabels(type) {
+  const dims = [
+    type[0] === 'E' ? '外向型 (E)' : '内向型 (I)',
+    type[1] === 'N' ? '直感型 (N)' : '感覚型 (S)',
+    type[2] === 'F' ? '感情型 (F)' : '思考型 (T)',
+    type[3] === 'P' ? '知覚型 (P)' : '判断型 (J)',
+  ];
+  return dims.map(d => `<span class="mbti-dim">${d}</span>`).join('');
+}
+
+// ===========================
+// 駅データ（大阪市内中心・約60駅）
+// ===========================
+const STATIONS = [
+  // ===== JR環状線 =====
+  { name:"大阪",              yomi:"おおさか",                    lines:["JR環状線","JR京都線","JR神戸線"], hub:true },
+  { name:"福島",              yomi:"ふくしま",                    lines:["JR環状線","JR東西線","阪神なんば線"] },
+  { name:"野田",              yomi:"のだ",                        lines:["JR環状線"] },
+  { name:"西九条",            yomi:"にしくじょう",                lines:["JR環状線","阪神なんば線"] },
+  { name:"弁天町",            yomi:"べんてんちょう",              lines:["JR環状線","大阪メトロ中央線"] },
+  { name:"大正",              yomi:"たいしょう",                  lines:["JR環状線","大阪メトロ長堀鶴見緑地線"] },
+  { name:"芦原橋",            yomi:"あしはらばし",                lines:["JR環状線"] },
+  { name:"今宮",              yomi:"いまみや",                    lines:["JR環状線"] },
+  { name:"新今宮",            yomi:"しんいまみや",                lines:["JR環状線","南海本線"] },
+  { name:"天王寺",            yomi:"てんのうじ",                  lines:["JR環状線","大阪メトロ御堂筋線","大阪メトロ谷町線"], hub:true },
+  { name:"寺田町",            yomi:"てらだちょう",                lines:["JR環状線"] },
+  { name:"桃谷",              yomi:"ももだに",                    lines:["JR環状線"] },
+  { name:"鶴橋",              yomi:"つるはし",                    lines:["JR環状線","大阪メトロ千日前線","近鉄大阪線・奈良線"] },
+  { name:"玉造",              yomi:"たまつくり",                  lines:["JR環状線","大阪メトロ長堀鶴見緑地線"] },
+  { name:"森ノ宮",            yomi:"もりのみや",                  lines:["JR環状線","大阪メトロ中央線","大阪メトロ長堀鶴見緑地線"] },
+  { name:"大阪城公園",        yomi:"おおさかじょうこうえん",      lines:["JR環状線"] },
+  { name:"京橋",              yomi:"きょうばし",                  lines:["JR環状線","大阪メトロ長堀鶴見緑地線","京阪本線"], hub:true },
+  { name:"桜ノ宮",            yomi:"さくらのみや",                lines:["JR環状線"] },
+  { name:"天満",              yomi:"てんま",                      lines:["JR環状線"] },
+  // ===== 大阪メトロ中央線 =====
+  { name:"コスモスクエア",    yomi:"こすもすくえあ",              lines:["大阪メトロ中央線"] },
+  { name:"大阪港",            yomi:"おおさかこう",                lines:["大阪メトロ中央線"] },
+  { name:"朝潮橋",            yomi:"あさしおばし",                lines:["大阪メトロ中央線"] },
+  { name:"九条",              yomi:"くじょう",                    lines:["大阪メトロ中央線","阪神なんば線"] },
+  { name:"西大橋",            yomi:"にしおおばし",                lines:["大阪メトロ中央線","大阪メトロ四つ橋線"] },
+  { name:"阿波座",            yomi:"あわざ",                      lines:["大阪メトロ中央線","大阪メトロ千日前線"] },
+  { name:"本町",              yomi:"ほんまち",                    lines:["大阪メトロ御堂筋線","大阪メトロ四つ橋線","大阪メトロ中央線"], hub:true },
+  { name:"堺筋本町",          yomi:"さかいすじほんまち",          lines:["大阪メトロ堺筋線","大阪メトロ中央線"] },
+  { name:"谷町四丁目",        yomi:"たにまちよんちょうめ",        lines:["大阪メトロ谷町線","大阪メトロ中央線"] },
+  { name:"緑橋",              yomi:"みどりばし",                  lines:["大阪メトロ中央線"] },
+  { name:"深江橋",            yomi:"ふかえばし",                  lines:["大阪メトロ中央線"] },
+  { name:"高井田",            yomi:"たかいだ",                    lines:["大阪メトロ中央線"] },
+  { name:"長田",              yomi:"ながた",                      lines:["大阪メトロ中央線","近鉄けいはんな線"] },
+  // ===== 大阪メトロ谷町線 =====
+  { name:"大日",              yomi:"だいにち",                    lines:["大阪メトロ谷町線"] },
+  { name:"守口",              yomi:"もりぐち",                    lines:["大阪メトロ谷町線"] },
+  { name:"太子橋今市",        yomi:"たいしばしいまいち",          lines:["大阪メトロ谷町線","大阪メトロ今里線"] },
+  { name:"千林大宮",          yomi:"せんばやしおおみや",          lines:["大阪メトロ谷町線"] },
+  { name:"関目高殿",          yomi:"せきめたかどの",              lines:["大阪メトロ谷町線"] },
+  { name:"野江内代",          yomi:"のえうちんだい",              lines:["大阪メトロ谷町線"] },
+  { name:"都島",              yomi:"みやこじま",                  lines:["大阪メトロ谷町線"] },
+  { name:"天神橋筋六丁目",    yomi:"てんじんばしすじろくちょうめ",lines:["大阪メトロ谷町線","大阪メトロ堺筋線","阪急千里線"] },
+  { name:"中崎町",            yomi:"なかざきちょう",              lines:["大阪メトロ谷町線"] },
+  { name:"東梅田",            yomi:"ひがしうめだ",                lines:["大阪メトロ谷町線"] },
+  { name:"南森町",            yomi:"みなみもりまち",              lines:["大阪メトロ谷町線","大阪メトロ堺筋線"] },
+  { name:"天満橋",            yomi:"てんまばし",                  lines:["大阪メトロ谷町線","京阪本線"] },
+  { name:"谷町六丁目",        yomi:"たにまちろくちょうめ",        lines:["大阪メトロ谷町線","大阪メトロ長堀鶴見緑地線"] },
+  { name:"谷町九丁目",        yomi:"たにまちきゅうちょうめ",      lines:["大阪メトロ谷町線","大阪メトロ千日前線"] },
+  { name:"四天王寺前夕陽丘",  yomi:"してんのうじまえゆうひがおか",lines:["大阪メトロ谷町線"] },
+  { name:"阿倍野",            yomi:"あべの",                      lines:["大阪メトロ谷町線"] },
+  { name:"文の里",            yomi:"ふみのさと",                  lines:["大阪メトロ谷町線"] },
+  { name:"田辺",              yomi:"たなべ",                      lines:["大阪メトロ谷町線"] },
+  { name:"駒川中野",          yomi:"こまがわなかの",              lines:["大阪メトロ谷町線"] },
+  { name:"針中野",            yomi:"はりなかの",                  lines:["大阪メトロ谷町線"] },
+  { name:"万代",              yomi:"まんだい",                    lines:["大阪メトロ谷町線"] },
+  { name:"中百舌鳥",          yomi:"なかもず",                    lines:["大阪メトロ谷町線","南海高野線"] },
+  // ===== 大阪メトロ四つ橋線 =====
+  { name:"西梅田",            yomi:"にしうめだ",                  lines:["大阪メトロ四つ橋線"] },
+  { name:"肥後橋",            yomi:"ひごばし",                    lines:["大阪メトロ四つ橋線"] },
+  { name:"四ツ橋",            yomi:"よつばし",                    lines:["大阪メトロ四つ橋線"] },
+  { name:"なんば",            yomi:"なんば",                      lines:["大阪メトロ御堂筋線","大阪メトロ四つ橋線","近鉄大阪線","南海本線","阪神なんば線"], hub:true },
+  { name:"大国町",            yomi:"だいこくちょう",              lines:["大阪メトロ四つ橋線","大阪メトロ御堂筋線"] },
+  { name:"花園町",            yomi:"はなぞのちょう",              lines:["大阪メトロ四つ橋線"] },
+  { name:"岸里玉出",          yomi:"きしのさとたまで",            lines:["大阪メトロ四つ橋線"] },
+  { name:"住之江公園",        yomi:"すみのえこうえん",            lines:["大阪メトロ四つ橋線"] },
+  // ===== 大阪メトロ今里線 =====
+  { name:"井高野",            yomi:"いたかの",                    lines:["大阪メトロ今里線"] },
+  { name:"瑞光四丁目",        yomi:"ずいこうよんちょうめ",        lines:["大阪メトロ今里線"] },
+  { name:"だいどう豊里",      yomi:"だいどうとよさと",            lines:["大阪メトロ今里線"] },
+  { name:"清水",              yomi:"しみず",                      lines:["大阪メトロ今里線"] },
+  { name:"新森古市",          yomi:"しんもりふるいち",            lines:["大阪メトロ今里線"] },
+  { name:"関目成育",          yomi:"せきめせいいく",              lines:["大阪メトロ今里線"] },
+  { name:"蒲生四丁目",        yomi:"がもうよんちょうめ",          lines:["大阪メトロ今里線"] },
+  { name:"今里",              yomi:"いまざと",                    lines:["大阪メトロ今里線","大阪メトロ千日前線"] },
+  // ===== JR東西線 =====
+  { name:"加島",              yomi:"かしま",                      lines:["JR東西線"] },
+  { name:"御幣島",            yomi:"みてじま",                    lines:["JR東西線"] },
+  { name:"海老江",            yomi:"えびえ",                      lines:["JR東西線"] },
+  { name:"新福島",            yomi:"しんふくしま",                lines:["JR東西線"] },
+  { name:"北新地",            yomi:"きたしんち",                  lines:["JR東西線"] },
+  { name:"大阪天満宮",        yomi:"おおさかてんまんぐう",        lines:["JR東西線"] },
+  { name:"鴫野",              yomi:"しぎの",                      lines:["JR東西線","JR学研都市線"] },
+  { name:"放出",              yomi:"はなてん",                    lines:["JR東西線","JR学研都市線","JRおおさか東線"] },
+  // ===== JR京都線 =====
+  { name:"新大阪",            yomi:"しんおおさか",                lines:["JR京都線","JR神戸線","大阪メトロ御堂筋線"], hub:true },
+  { name:"東淀川",            yomi:"ひがしよどがわ",              lines:["JR京都線"] },
+  { name:"吹田",              yomi:"すいた",                      lines:["JR京都線"] },
+  { name:"岸辺",              yomi:"きしべ",                      lines:["JR京都線"] },
+  { name:"千里丘",            yomi:"せんりがおか",                lines:["JR京都線"] },
+  { name:"茨木",              yomi:"いばらき",                    lines:["JR京都線"] },
+  { name:"摂津富田",          yomi:"せっつとんだ",                lines:["JR京都線"] },
+  { name:"高槻",              yomi:"たかつき",                    lines:["JR京都線"], hub:true },
+  // ===== JR神戸線 =====
+  { name:"塚本",              yomi:"つかもと",                    lines:["JR神戸線"] },
+  { name:"尼崎",              yomi:"あまがさき",                  lines:["JR神戸線","阪神本線"], hub:true },
+  // ===== 阪急宝塚線 =====
+  { name:"梅田",              yomi:"うめだ",                      lines:["阪急宝塚線","阪急神戸線","阪急京都線","大阪メトロ御堂筋線"], hub:true },
+  { name:"中津",              yomi:"なかつ",                      lines:["阪急宝塚線","阪急神戸線","大阪メトロ御堂筋線"] },
+  { name:"十三",              yomi:"じゅうそう",                  lines:["阪急宝塚線","阪急神戸線","阪急京都線"] },
+  { name:"神崎川",            yomi:"かんざきがわ",                lines:["阪急宝塚線"] },
+  { name:"三国",              yomi:"みくに",                      lines:["阪急宝塚線"] },
+  { name:"庄内",              yomi:"しょうない",                  lines:["阪急宝塚線"] },
+  { name:"豊中",              yomi:"とよなか",                    lines:["阪急宝塚線"] },
+  { name:"岡町",              yomi:"おかまち",                    lines:["阪急宝塚線"] },
+  { name:"服部天神",          yomi:"はっとりてんじん",            lines:["阪急宝塚線"] },
+  { name:"曽根",              yomi:"そね",                        lines:["阪急宝塚線"] },
+  // ===== 阪急神戸線 =====
+  { name:"園田",              yomi:"そのだ",                      lines:["阪急神戸線"] },
+  { name:"塚口",              yomi:"つかぐち",                    lines:["阪急神戸線"] },
+  { name:"武庫之荘",          yomi:"むこのそう",                  lines:["阪急神戸線"] },
+  { name:"西宮北口",          yomi:"にしのみやきたぐち",          lines:["阪急神戸線","阪急今津線"], hub:true },
+  // ===== 阪急京都線・千里線 =====
+  { name:"淡路",              yomi:"あわじ",                      lines:["阪急京都線","阪急千里線"] },
+  { name:"相川",              yomi:"あいかわ",                    lines:["阪急京都線"] },
+  { name:"正雀",              yomi:"しょうじゃく",                lines:["阪急京都線"] },
+  { name:"摂津市",            yomi:"せっつし",                    lines:["阪急京都線"] },
+  { name:"南茨木",            yomi:"みなみいばらき",              lines:["阪急京都線"] },
+  { name:"茨木市",            yomi:"いばらきし",                  lines:["阪急京都線"] },
+  { name:"関大前",            yomi:"かんだいまえ",                lines:["阪急千里線"] },
+  { name:"千里山",            yomi:"せんりやま",                  lines:["阪急千里線"] },
+  { name:"北千里",            yomi:"きたせんり",                  lines:["阪急千里線"] },
+  // ===== 大阪メトロ御堂筋線（補完） =====
+  { name:"心斎橋",            yomi:"しんさいばし",                lines:["大阪メトロ御堂筋線","大阪メトロ長堀鶴見緑地線"] },
+  { name:"淀屋橋",            yomi:"よどやばし",                  lines:["大阪メトロ御堂筋線","京阪本線"] },
+  { name:"北浜",              yomi:"きたはま",                    lines:["大阪メトロ堺筋線","京阪本線"] },
+  { name:"日本橋",            yomi:"にっぽんばし",                lines:["大阪メトロ御堂筋線","大阪メトロ堺筋線","近鉄奈良線"] },
+  { name:"動物園前",          yomi:"どうぶつえんまえ",            lines:["大阪メトロ御堂筋線","大阪メトロ堺筋線"] },
+  { name:"長居",              yomi:"ながい",                      lines:["大阪メトロ御堂筋線","JR阪和線"] },
+  { name:"西田辺",            yomi:"にしたなべ",                  lines:["大阪メトロ御堂筋線"] },
+  { name:"西中島南方",        yomi:"にしなかじまみなみかた",      lines:["大阪メトロ御堂筋線"] },
+  { name:"江坂",              yomi:"えさか",                      lines:["大阪メトロ御堂筋線"] },
+  // ===== その他補完 =====
+  { name:"野田阪神",          yomi:"のだはんしん",                lines:["阪神なんば線","大阪メトロ千日前線"] },
+  { name:"布施",              yomi:"ふせ",                        lines:["近鉄大阪線","近鉄奈良線"] },
+  { name:"近鉄八尾",          yomi:"きんてつやお",                lines:["近鉄大阪線"] },
+  { name:"住道",              yomi:"すみのどう",                  lines:["JR学研都市線"] },
+  { name:"鴻池新田",          yomi:"こうのいけしんでん",          lines:["JR学研都市線"] },
+  { name:"堺",                yomi:"さかい",                      lines:["JR阪和線"], hub:true },
+  { name:"堺市",              yomi:"さかいし",                    lines:["南海本線"] },
+  { name:"三国ヶ丘",          yomi:"みくにがおか",                lines:["JR阪和線","南海高野線"] },
+  { name:"三宮",              yomi:"さんのみや",                  lines:["JR神戸線","阪急神戸線","阪神本線","神戸市営地下鉄"], hub:true },
+  { name:"京都",              yomi:"きょうと",                    lines:["JR京都線","近鉄京都線","京都市営地下鉄"], hub:true },
+  { name:"奈良",              yomi:"なら",                        lines:["JR大和路線","近鉄奈良線"], hub:true },
+];
+
+// ===========================
+// エリアデータ（大阪市内中心・16エリア）
+// ===========================
+const AREAS = [
+  {
+    name:"梅田・福島",hub:"梅田",
+    nearStations:["梅田","大阪","西梅田","東梅田","福島","野田阪神"],
+    commute:{"梅田":0,"大阪":1,"東梅田":1,"西梅田":1,"福島":2,"天満":2,"北新地":2,"中津":2,"中崎町":3,"新大阪":3,"塚本":3,"桜ノ宮":4,"南森町":4,"新福島":4,"大阪天満宮":4,"淀屋橋":4,"野田":5,"天神橋筋六丁目":5,"肥後橋":5,"東淀川":5,"十三":5,"西中島南方":5,"都島":6,"海老江":6,"心斎橋":6,"本町":7,"北浜":7,"西九条":8,"大阪城公園":8,"京橋":8,"野江内代":8,"御幣島":8,"吹田":8,"尼崎":8,"神崎川":8,"淡路":8,"江坂":8,"野田阪神":8,"天満橋":9,"四ツ橋":9,"森ノ宮":10,"西大橋":10,"阿波座":10,"堺筋本町":10,"関目高殿":10,"なんば":10,"加島":10,"三国":10,"弁天町":12,"玉造":12,"谷町四丁目":12,"千林大宮":12,"鴫野":12,"岸辺":12,"庄内":12,"園田":12,"相川":12,"日本橋":12,"九条":13,"大国町":13,"鶴橋":14,"太子橋今市":14,"谷町六丁目":15,"千里丘":15,"豊中":15,"塚口":15,"動物園前":15,"大正":16,"桃谷":16,"花園町":16,"放出":16,"正雀":16,"新今宮":17,"朝潮橋":17,"谷町九丁目":17,"芦原橋":18,"今宮":18,"寺田町":18,"緑橋":18,"守口":18,"岸里玉出":18,"だいどう豊里":18,"清水":18,"茨木":18,"岡町":18,"武庫之荘":18,"摂津市":18,"天王寺":20,"大阪港":20,"四天王寺前夕陽丘":20,"瑞光四丁目":20,"新森古市":20,"関目成育":20,"服部天神":20,"千里山":20,"コスモスクエア":22,"深江橋":22,"大日":22,"阿倍野":22,"井高野":22,"蒲生四丁目":22,"今里":22,"摂津富田":22,"曽根":22,"西宮北口":22,"南茨木":22,"関大前":22,"文の里":24,"住之江公園":24,"茨木市":25,"北千里":25,"長居":25,"布施":25,"住道":25,"高井田":26,"田辺":26,"高槻":27,"三宮":27,"駒川中野":28,"西田辺":28,"鴻池新田":28,"長田":30,"針中野":30,"三国ヶ丘":30,"京都":30,"万代":32,"近鉄八尾":32,"堺":32,"堺市":35,"中百舌鳥":38,"奈良":50},
+    rent:{"1R1K":56000,"1DK1LDK":68000,"2LDK":150000,"3LDK":172000},
+    tags:["ターミナル直結","買い物便利","夜も賑やか","新築多い"],
+    desc:"大阪最大のターミナル直結エリア。どこへも乗り換えなしでアクセス可能。飲食・商業施設が充実。",
+    priority:{cheap:1,short:5,shopping:5,quiet:1,cafe:3,nature:1,safety:3,family:2,nightlife:5,new:4}
+  },
+  {
+    name:"中津・天神橋",hub:"梅田",
+    nearStations:["中津","天神橋筋六丁目","南森町","天満","桜ノ宮"],
+    commute:{"梅田":5,"大阪":6,"東梅田":6,"西梅田":6,"福島":7,"天満":7,"北新地":7,"中津":7,"中崎町":8,"新大阪":8,"塚本":8,"桜ノ宮":9,"南森町":9,"新福島":9,"大阪天満宮":9,"淀屋橋":9,"野田":10,"本町":10,"天神橋筋六丁目":10,"肥後橋":10,"東淀川":10,"十三":10,"西中島南方":10,"都島":11,"海老江":11,"心斎橋":11,"北浜":12,"西九条":13,"大阪城公園":13,"京橋":13,"西大橋":13,"堺筋本町":13,"野江内代":13,"四ツ橋":13,"御幣島":13,"吹田":13,"尼崎":13,"神崎川":13,"淡路":13,"江坂":13,"野田阪神":13,"阿波座":14,"天満橋":14,"森ノ宮":15,"谷町四丁目":15,"関目高殿":15,"なんば":15,"加島":15,"三国":15,"九条":16,"弁天町":17,"玉造":17,"千林大宮":17,"鴫野":17,"岸辺":17,"庄内":17,"園田":17,"相川":17,"日本橋":17,"谷町六丁目":18,"大国町":18,"鶴橋":19,"太子橋今市":19,"朝潮橋":20,"谷町九丁目":20,"千里丘":20,"豊中":20,"塚口":20,"動物園前":20,"大正":21,"桃谷":21,"花園町":21,"放出":21,"正雀":21,"新今宮":22,"芦原橋":23,"今宮":23,"寺田町":23,"緑橋":23,"守口":23,"岸里玉出":23,"だいどう豊里":23,"清水":23,"茨木":23,"岡町":23,"武庫之荘":23,"摂津市":23,"大阪港":24,"四天王寺前夕陽丘":24,"天王寺":25,"瑞光四丁目":25,"新森古市":25,"関目成育":25,"蒲生四丁目":25,"服部天神":25,"千里山":25,"阿倍野":26,"コスモスクエア":27,"深江橋":27,"大日":27,"井高野":27,"今里":27,"摂津富田":27,"曽根":27,"西宮北口":27,"南茨木":27,"関大前":27,"文の里":28,"住之江公園":29,"住道":29,"田辺":30,"茨木市":30,"北千里":30,"長居":30,"布施":30,"高井田":31,"駒川中野":32,"高槻":32,"西田辺":32,"三宮":32,"鴻池新田":33,"京都":33,"針中野":34,"長田":35,"三国ヶ丘":35,"万代":36,"近鉄八尾":37,"堺":37,"堺市":40,"中百舌鳥":42,"奈良":55},
+    rent:{"1R1K":52000,"1DK1LDK":63000,"2LDK":128000,"3LDK":162000},
+    tags:["梅田徒歩圏","天神橋商店街","下町感","コスパ良い"],
+    desc:"梅田から1〜2駅。天神橋筋商店街が近く生活利便性抜群。梅田より家賃が手頃でコスパ重視の方に人気。",
+    priority:{cheap:4,short:4,shopping:5,quiet:3,cafe:3,nature:2,safety:3,family:3,nightlife:3,new:2}
+  },
+  {
+    name:"新大阪・西中島",hub:"新大阪",
+    nearStations:["新大阪","西中島南方","江坂","十三"],
+    commute:{"新大阪":0,"西中島南方":2,"大阪":3,"東淀川":3,"北新地":5,"吹田":5,"塚本":5,"梅田":5,"江坂":5,"東梅田":6,"西梅田":6,"新福島":6,"福島":7,"天満":7,"大阪天満宮":7,"中津":7,"中崎町":8,"海老江":8,"十三":8,"桜ノ宮":9,"南森町":9,"岸辺":9,"淀屋橋":9,"野田":10,"天神橋筋六丁目":10,"肥後橋":10,"御幣島":10,"尼崎":10,"淡路":10,"都島":11,"神崎川":11,"心斎橋":11,"本町":12,"加島":12,"千里丘":12,"北浜":12,"西九条":13,"大阪城公園":13,"京橋":13,"野江内代":13,"三国":13,"野田阪神":13,"天満橋":14,"四ツ橋":14,"相川":14,"森ノ宮":15,"西大橋":15,"阿波座":15,"堺筋本町":15,"関目高殿":15,"なんば":15,"茨木":15,"庄内":15,"園田":15,"弁天町":17,"玉造":17,"谷町四丁目":17,"千林大宮":17,"鴫野":17,"日本橋":17,"九条":18,"大国町":18,"豊中":18,"塚口":18,"正雀":18,"鶴橋":19,"太子橋今市":19,"摂津富田":19,"谷町六丁目":20,"摂津市":20,"動物園前":20,"大正":21,"桃谷":21,"花園町":21,"だいどう豊里":21,"放出":21,"岡町":21,"武庫之荘":21,"朝潮橋":22,"谷町九丁目":22,"千里山":22,"芦原橋":23,"寺田町":23,"緑橋":23,"守口":23,"岸里玉出":23,"瑞光四丁目":23,"清水":23,"服部天神":23,"高槻":24,"南茨木":24,"関大前":24,"今宮":25,"新今宮":25,"天王寺":25,"大阪港":25,"四天王寺前夕陽丘":25,"井高野":25,"新森古市":25,"関目成育":25,"蒲生四丁目":25,"曽根":25,"西宮北口":25,"京都":25,"コスモスクエア":27,"深江橋":27,"大日":27,"阿倍野":27,"今里":27,"茨木市":27,"北千里":27,"住道":28,"文の里":29,"住之江公園":29,"長居":30,"三宮":30,"高井田":31,"田辺":31,"鴻池新田":31,"駒川中野":33,"西田辺":33,"布施":33,"長田":35,"針中野":35,"三国ヶ丘":35,"万代":37,"堺":37,"近鉄八尾":40,"堺市":40,"中百舌鳥":43,"奈良":57},
+    rent:{"1R1K":52000,"1DK1LDK":63000,"2LDK":124000,"3LDK":155000},
+    tags:["新幹線利用者向け","御堂筋線直通","出張族に人気","乗り換え便利"],
+    desc:"新幹線・御堂筋線の拠点。出張が多いビジネスパーソンに最適。梅田まで御堂筋線で5分の好立地。",
+    priority:{cheap:3,short:4,shopping:3,quiet:3,cafe:2,nature:2,safety:4,family:3,nightlife:2,new:3}
+  },
+  {
+    name:"本町・堀江",hub:"本町",
+    nearStations:["本町","堺筋本町","肥後橋","四ツ橋","阿波座"],
+    commute:{"本町":0,"西大橋":3,"堺筋本町":3,"肥後橋":3,"四ツ橋":3,"心斎橋":3,"淀屋橋":3,"阿波座":4,"北浜":4,"谷町四丁目":5,"西梅田":5,"なんば":5,"九条":6,"東梅田":7,"北新地":7,"梅田":7,"日本橋":7,"大阪":8,"森ノ宮":8,"南森町":8,"天満橋":8,"谷町六丁目":8,"大国町":8,"福島":9,"天満":9,"中崎町":9,"新福島":9,"大阪天満宮":9,"中津":9,"弁天町":10,"玉造":10,"朝潮橋":10,"谷町九丁目":10,"新大阪":10,"塚本":10,"桜ノ宮":11,"天神橋筋六丁目":11,"海老江":11,"野田":12,"新今宮":12,"鶴橋":12,"大阪城公園":12,"京橋":12,"都島":12,"花園町":12,"東淀川":12,"十三":12,"動物園前":12,"西中島南方":12,"今宮":13,"御幣島":13,"桃谷":14,"大阪港":14,"緑橋":14,"野江内代":14,"四天王寺前夕陽丘":14,"岸里玉出":14,"野田阪神":14,"西九条":15,"芦原橋":15,"加島":15,"吹田":15,"尼崎":15,"神崎川":15,"淡路":15,"江坂":15,"寺田町":16,"関目高殿":16,"阿倍野":16,"鴫野":16,"大正":17,"天王寺":17,"三国":17,"コスモスクエア":18,"深江橋":18,"千林大宮":18,"文の里":18,"今里":18,"放出":18,"岸辺":19,"庄内":19,"園田":19,"相川":19,"太子橋今市":20,"田辺":20,"住之江公園":20,"蒲生四丁目":20,"長居":20,"布施":20,"高井田":22,"駒川中野":22,"関目成育":22,"千里丘":22,"豊中":22,"塚口":22,"西田辺":22,"正雀":23,"守口":24,"針中野":24,"だいどう豊里":24,"清水":24,"新森古市":24,"茨木":25,"岡町":25,"武庫之荘":25,"摂津市":25,"長田":26,"万代":26,"瑞光四丁目":26,"住道":26,"三国ヶ丘":26,"服部天神":27,"千里山":27,"近鉄八尾":27,"堺":27,"大日":28,"井高野":28,"摂津富田":29,"曽根":29,"西宮北口":29,"南茨木":29,"関大前":29,"鴻池新田":30,"堺市":30,"中百舌鳥":32,"茨木市":32,"北千里":32,"高槻":34,"三宮":34,"京都":37,"奈良":45},
+    rent:{"1R1K":57000,"1DK1LDK":69000,"2LDK":152000,"3LDK":190000},
+    tags:["おしゃれ","堀江カフェ多数","ビジネス街","デザイナーズ多い"],
+    desc:"西区・南堀江のおしゃれエリア。カフェ・セレクトショップが集まる感度の高い街。ビジネス街にも隣接。",
+    priority:{cheap:1,short:4,shopping:4,quiet:3,cafe:5,nature:2,safety:4,family:2,nightlife:3,new:4}
+  },
+  {
+    name:"難波・心斎橋",hub:"なんば",
+    nearStations:["なんば","難波","心斎橋","日本橋","四ツ橋"],
+    commute:{"なんば":0,"心斎橋":3,"日本橋":3,"四ツ橋":4,"大国町":4,"本町":5,"西大橋":6,"新今宮":7,"堺筋本町":7,"花園町":7,"動物園前":7,"今宮":8,"阿波座":8,"肥後橋":8,"淀屋橋":8,"北浜":9,"芦原橋":10,"谷町四丁目":10,"谷町九丁目":10,"西梅田":10,"岸里玉出":10,"梅田":10,"大阪":11,"九条":11,"東梅田":11,"福島":12,"大正":12,"天王寺":12,"鶴橋":12,"天満":12,"谷町六丁目":12,"四天王寺前夕陽丘":12,"北新地":12,"中津":12,"森ノ宮":13,"中崎町":13,"南森町":13,"天満橋":13,"新大阪":13,"塚本":13,"寺田町":14,"桜ノ宮":14,"阿倍野":14,"今里":14,"新福島":14,"大阪天満宮":14,"野田":15,"弁天町":15,"桃谷":15,"玉造":15,"朝潮橋":15,"天神橋筋六丁目":15,"東淀川":15,"十三":15,"西中島南方":15,"野田阪神":15,"布施":15,"都島":16,"文の里":16,"住之江公園":16,"海老江":16,"長居":16,"大阪城公園":17,"京橋":17,"西九条":18,"大阪港":18,"野江内代":18,"田辺":18,"御幣島":18,"吹田":18,"尼崎":18,"神崎川":18,"淡路":18,"西田辺":18,"江坂":18,"緑橋":19,"コスモスクエア":20,"関目高殿":20,"駒川中野":20,"加島":20,"三国":20,"鴫野":21,"千林大宮":22,"針中野":22,"蒲生四丁目":22,"岸辺":22,"庄内":22,"園田":22,"相川":22,"近鉄八尾":22,"堺":22,"三国ヶ丘":22,"深江橋":23,"太子橋今市":24,"万代":24,"関目成育":24,"放出":24,"千里丘":25,"豊中":25,"塚口":25,"堺市":25,"新森古市":26,"正雀":26,"高井田":27,"守口":28,"だいどう豊里":28,"清水":28,"茨木":28,"岡町":28,"武庫之荘":28,"摂津市":28,"中百舌鳥":30,"瑞光四丁目":30,"服部天神":30,"千里山":30,"長田":31,"大日":32,"井高野":32,"摂津富田":32,"曽根":32,"西宮北口":32,"南茨木":32,"関大前":32,"住道":32,"茨木市":35,"北千里":35,"鴻池新田":35,"高槻":37,"三宮":37,"京都":40,"奈良":40},
+    rent:{"1R1K":53000,"1DK1LDK":65000,"2LDK":133000,"3LDK":165000},
+    tags:["繁華街直結","買い物天国","若者向け","グルメ充実"],
+    desc:"大阪最大の繁華街・ミナミの中心。どこへのアクセスも抜群。活気ある街が好きな方にはここ以上はない。",
+    priority:{cheap:1,short:5,shopping:5,quiet:1,cafe:4,nature:1,safety:2,family:1,nightlife:5,new:3}
+  },
+  {
+    name:"谷町・上町台地",hub:"本町",
+    nearStations:["谷町四丁目","谷町六丁目","谷町九丁目","天満橋"],
+    commute:{"本町":8,"京橋":10,"西大橋":11,"堺筋本町":11,"肥後橋":11,"四ツ橋":11,"心斎橋":11,"淀屋橋":11,"阿波座":12,"なんば":12,"梅田":12,"北浜":12,"大阪":13,"谷町四丁目":13,"東梅田":13,"西梅田":13,"福島":14,"大阪城公園":14,"天満":14,"九条":14,"北新地":14,"鴫野":14,"中津":14,"天王寺":15,"中崎町":15,"新大阪":15,"塚本":15,"日本橋":15,"森ノ宮":16,"桜ノ宮":16,"南森町":16,"天満橋":16,"谷町六丁目":16,"大国町":16,"新福島":16,"大阪天満宮":16,"放出":16,"野田":17,"天神橋筋六丁目":17,"東淀川":17,"十三":17,"西中島南方":17,"弁天町":18,"寺田町":18,"玉造":18,"朝潮橋":18,"緑橋":18,"都島":18,"谷町九丁目":18,"阿倍野":18,"海老江":18,"新今宮":19,"花園町":19,"動物園前":19,"西九条":20,"今宮":20,"桃谷":20,"鶴橋":20,"野江内代":20,"四天王寺前夕陽丘":20,"文の里":20,"蒲生四丁目":20,"御幣島":20,"吹田":20,"尼崎":20,"神崎川":20,"淡路":20,"江坂":20,"野田阪神":20,"芦原橋":22,"大阪港":22,"深江橋":22,"関目高殿":22,"岸里玉出":22,"加島":22,"三国":22,"田辺":23,"長居":23,"大正":24,"千林大宮":24,"関目成育":24,"岸辺":24,"庄内":24,"園田":24,"相川":24,"住道":24,"駒川中野":25,"西田辺":25,"コスモスクエア":26,"高井田":26,"太子橋今市":26,"新森古市":26,"今里":26,"針中野":27,"千里丘":27,"豊中":27,"塚口":27,"布施":27,"住之江公園":28,"正雀":28,"鴻池新田":28,"万代":29,"長田":30,"守口":30,"だいどう豊里":30,"清水":30,"茨木":30,"岡町":30,"武庫之荘":30,"摂津市":30,"瑞光四丁目":32,"服部天神":32,"千里山":32,"堺":33,"三国ヶ丘":33,"大日":34,"井高野":34,"摂津富田":34,"曽根":34,"西宮北口":34,"南茨木":34,"関大前":34,"近鉄八尾":34,"中百舌鳥":35,"茨木市":37,"北千里":37,"堺市":37,"高槻":39,"三宮":39,"京都":42,"奈良":52},
+    rent:{"1R1K":53000,"1DK1LDK":65000,"2LDK":128000,"3LDK":158000},
+    tags:["文教地区","静かな住宅街","寺社仏閣","落ち着いた雰囲気"],
+    desc:"歴史ある上町台地エリア。静かで落ち着いた住宅街。ファミリーや文化的な暮らしを好む方に人気のエリア。",
+    priority:{cheap:3,short:4,shopping:3,quiet:5,cafe:3,nature:4,safety:5,family:5,nightlife:1,new:2}
+  },
+  {
+    name:"京橋・大阪城公園",hub:"京橋",
+    nearStations:["京橋","大阪城公園","森ノ宮","桜ノ宮","玉造"],
+    commute:{"京橋":0,"大阪城公園":4,"鴫野":4,"森ノ宮":6,"放出":6,"大阪":8,"緑橋":8,"天満橋":8,"玉造":10,"桜ノ宮":10,"蒲生四丁目":10,"大阪天満宮":10,"梅田":10,"北浜":10,"東梅田":11,"西梅田":11,"福島":12,"天満":12,"本町":12,"谷町四丁目":12,"深江橋":12,"都島":12,"北新地":12,"中津":12,"中崎町":13,"新大阪":13,"塚本":13,"鶴橋":14,"西大橋":14,"堺筋本町":14,"野江内代":14,"天神橋筋六丁目":14,"南森町":14,"谷町六丁目":14,"肥後橋":14,"関目成育":14,"新福島":14,"淀屋橋":14,"住道":14,"野田":15,"四ツ橋":15,"東淀川":15,"十三":15,"心斎橋":15,"西中島南方":15,"九条":16,"阿波座":16,"高井田":16,"関目高殿":16,"谷町九丁目":16,"新森古市":16,"今里":16,"海老江":16,"日本橋":16,"なんば":17,"西九条":18,"桃谷":18,"千林大宮":18,"四天王寺前夕陽丘":18,"御幣島":18,"吹田":18,"尼崎":18,"神崎川":18,"淡路":18,"江坂":18,"野田阪神":18,"鴻池新田":18,"寺田町":20,"朝潮橋":20,"長田":20,"太子橋今市":20,"阿倍野":20,"大国町":20,"清水":20,"加島":20,"三国":20,"動物園前":20,"弁天町":22,"今宮":22,"新今宮":22,"天王寺":22,"大阪港":22,"文の里":22,"花園町":22,"岸辺":22,"庄内":22,"園田":22,"相川":22,"布施":22,"芦原橋":24,"田辺":24,"岸里玉出":24,"だいどう豊里":24,"千里丘":25,"豊中":25,"塚口":25,"大正":26,"コスモスクエア":26,"守口":26,"駒川中野":26,"瑞光四丁目":26,"正雀":26,"長居":26,"針中野":28,"井高野":28,"茨木":28,"岡町":28,"武庫之荘":28,"摂津市":28,"西田辺":28,"三国ヶ丘":28,"近鉄八尾":29,"大日":30,"万代":30,"住之江公園":30,"服部天神":30,"千里山":30,"堺":30,"摂津富田":32,"曽根":32,"西宮北口":32,"南茨木":32,"関大前":32,"堺市":33,"茨木市":35,"北千里":35,"中百舌鳥":36,"高槻":37,"三宮":37,"京都":40,"奈良":48},
+    rent:{"1R1K":51000,"1DK1LDK":62000,"2LDK":123000,"3LDK":135000},
+    tags:["大阪城隣接","公園緑豊か","3路線利用可","コスパ良い"],
+    desc:"大阪城公園を望む緑豊かなエリア。JR・京阪・メトロの3路線が使えて交通利便性抜群。家賃コスパも高い。",
+    priority:{cheap:4,short:4,shopping:3,quiet:4,cafe:2,nature:5,safety:4,family:4,nightlife:2,new:2}
+  },
+  {
+    name:"天王寺・阿倍野",hub:"天王寺",
+    nearStations:["天王寺","動物園前","新今宮","長居","西田辺"],
+    commute:{"天王寺":0,"寺田町":3,"阿倍野":3,"新今宮":5,"桃谷":5,"四天王寺前夕陽丘":5,"文の里":5,"今宮":8,"鶴橋":8,"谷町九丁目":8,"田辺":8,"花園町":8,"岸里玉出":8,"動物園前":8,"長居":8,"玉造":10,"駒川中野":10,"大国町":10,"西田辺":10,"芦原橋":12,"森ノ宮":12,"谷町六丁目":12,"針中野":12,"なんば":12,"大阪城公園":14,"万代":14,"日本橋":14,"大正":15,"谷町四丁目":15,"心斎橋":15,"四ツ橋":16,"住之江公園":16,"本町":17,"堺筋本町":17,"弁天町":18,"西大橋":18,"阿波座":18,"天満橋":18,"堺":18,"三国ヶ丘":18,"大阪":20,"西九条":20,"天満":20,"中百舌鳥":20,"肥後橋":20,"梅田":20,"淀屋橋":20,"北浜":20,"東梅田":21,"西梅田":21,"福島":22,"京橋":22,"桜ノ宮":22,"九条":22,"南森町":22,"今里":22,"北新地":22,"中津":22,"布施":22,"堺市":22,"中崎町":23,"新大阪":23,"塚本":23,"新福島":24,"大阪天満宮":24,"野田":25,"天神橋筋六丁目":25,"東淀川":25,"十三":25,"西中島南方":25,"野田阪神":25,"朝潮橋":26,"都島":26,"海老江":26,"鴫野":26,"大阪港":28,"緑橋":28,"野江内代":28,"蒲生四丁目":28,"御幣島":28,"放出":28,"吹田":28,"尼崎":28,"神崎川":28,"淡路":28,"江坂":28,"近鉄八尾":29,"コスモスクエア":30,"関目高殿":30,"加島":30,"三国":30,"関目成育":31,"深江橋":32,"千林大宮":32,"岸辺":32,"庄内":32,"園田":32,"相川":32,"新森古市":33,"太子橋今市":34,"清水":35,"千里丘":35,"豊中":35,"塚口":35,"住道":35,"高井田":36,"正雀":36,"守口":38,"だいどう豊里":38,"茨木":38,"岡町":38,"武庫之荘":38,"摂津市":38,"鴻池新田":38,"長田":40,"瑞光四丁目":40,"服部天神":40,"千里山":40,"大日":42,"井高野":42,"摂津富田":42,"曽根":42,"西宮北口":42,"南茨木":42,"関大前":42,"三宮":44,"茨木市":45,"北千里":45,"高槻":47,"奈良":47,"京都":50},
+    rent:{"1R1K":48000,"1DK1LDK":58000,"2LDK":118000,"3LDK":155000},
+    tags:["難波・梅田両方便利","あべのハルカス","公園あり","ファミリー人気"],
+    desc:"天王寺公園・動物園など緑も豊富。ハルカスでショッピングも。梅田・難波どちらへも好アクセスの好立地。",
+    priority:{cheap:4,short:4,shopping:4,quiet:3,cafe:3,nature:4,safety:3,family:5,nightlife:3,new:3}
+  },
+  {
+    name:"鶴橋・今里",hub:"なんば",
+    nearStations:["鶴橋","今里","桃谷","玉造"],
+    commute:{"なんば":10,"天王寺":12,"京橋":12,"本町":12,"心斎橋":13,"日本橋":13,"四ツ橋":14,"大国町":14,"寺田町":15,"西大橋":15,"堺筋本町":15,"阿倍野":15,"肥後橋":15,"淀屋橋":15,"大阪城公園":16,"阿波座":16,"鴫野":16,"北浜":16,"新今宮":17,"桃谷":17,"谷町四丁目":17,"四天王寺前夕陽丘":17,"文の里":17,"西梅田":17,"花園町":17,"動物園前":17,"今宮":18,"森ノ宮":18,"九条":18,"放出":18,"梅田":18,"大阪":19,"東梅田":19,"北新地":19,"福島":20,"芦原橋":20,"鶴橋":20,"天満":20,"緑橋":20,"南森町":20,"天満橋":20,"谷町六丁目":20,"谷町九丁目":20,"田辺":20,"岸里玉出":20,"中津":20,"長居":20,"中崎町":21,"新福島":21,"大阪天満宮":21,"新大阪":21,"塚本":21,"弁天町":22,"大正":22,"玉造":22,"桜ノ宮":22,"朝潮橋":22,"駒川中野":22,"蒲生四丁目":22,"西田辺":22,"野田":23,"天神橋筋六丁目":23,"海老江":23,"東淀川":23,"十三":23,"西中島南方":23,"深江橋":24,"都島":24,"針中野":24,"今里":24,"御幣島":25,"野田阪神":25,"布施":25,"西九条":26,"大阪港":26,"野江内代":26,"万代":26,"住之江公園":26,"関目成育":26,"吹田":26,"尼崎":26,"神崎川":26,"淡路":26,"江坂":26,"住道":26,"加島":27,"高井田":28,"関目高殿":28,"新森古市":28,"三国":28,"コスモスクエア":30,"千林大宮":30,"岸辺":30,"庄内":30,"園田":30,"相川":30,"鴻池新田":30,"堺":30,"三国ヶ丘":30,"長田":32,"太子橋今市":32,"中百舌鳥":32,"清水":32,"近鉄八尾":32,"千里丘":33,"豊中":33,"塚口":33,"正雀":34,"堺市":34,"守口":36,"だいどう豊里":36,"茨木":36,"岡町":36,"武庫之荘":36,"摂津市":36,"瑞光四丁目":38,"服部天神":38,"千里山":38,"大日":40,"井高野":40,"摂津富田":40,"曽根":40,"西宮北口":40,"南茨木":40,"関大前":40,"茨木市":43,"北千里":43,"高槻":45,"三宮":45,"京都":47,"奈良":50},
+    rent:{"1R1K":49000,"1DK1LDK":60000,"2LDK":121000,"3LDK":165000},
+    tags:["家賃安め","コリアタウン","多国籍グルメ","JR・近鉄・メトロ"],
+    desc:"大阪のコリアタウン近く。家賃相場が低くコスパ抜群。JR・近鉄・メトロが使えて交通の利便性も高い。",
+    priority:{cheap:5,short:3,shopping:3,quiet:3,cafe:2,nature:2,safety:3,family:3,nightlife:2,new:1}
+  },
+  {
+    name:"福島・野田・西区",hub:"梅田",
+    nearStations:["福島","野田阪神","九条","大正","阿波座"],
+    commute:{"梅田":7,"大阪":8,"本町":8,"東梅田":8,"西梅田":8,"福島":9,"天満":9,"北新地":9,"中津":9,"中崎町":10,"新大阪":10,"塚本":10,"桜ノ宮":11,"西大橋":11,"堺筋本町":11,"南森町":11,"肥後橋":11,"四ツ橋":11,"新福島":11,"大阪天満宮":11,"心斎橋":11,"淀屋橋":11,"野田":12,"阿波座":12,"天神橋筋六丁目":12,"なんば":12,"東淀川":12,"十三":12,"北浜":12,"西中島南方":12,"谷町四丁目":13,"都島":13,"海老江":13,"九条":14,"西九条":15,"大阪城公園":15,"京橋":15,"野江内代":15,"御幣島":15,"吹田":15,"尼崎":15,"神崎川":15,"淡路":15,"日本橋":15,"江坂":15,"野田阪神":15,"森ノ宮":16,"天満橋":16,"谷町六丁目":16,"大国町":16,"関目高殿":17,"加島":17,"三国":17,"弁天町":18,"玉造":18,"朝潮橋":18,"谷町九丁目":18,"新今宮":19,"千林大宮":19,"花園町":19,"鴫野":19,"岸辺":19,"庄内":19,"園田":19,"相川":19,"動物園前":19,"今宮":20,"鶴橋":20,"太子橋今市":21,"芦原橋":22,"桃谷":22,"大阪港":22,"緑橋":22,"四天王寺前夕陽丘":22,"岸里玉出":22,"千里丘":22,"豊中":22,"塚口":22,"大正":23,"放出":23,"正雀":23,"天王寺":24,"寺田町":24,"阿倍野":24,"守口":25,"だいどう豊里":25,"清水":25,"茨木":25,"岡町":25,"武庫之荘":25,"摂津市":25,"コスモスクエア":26,"深江橋":26,"文の里":26,"今里":26,"瑞光四丁目":27,"新森古市":27,"関目成育":27,"服部天神":27,"千里山":27,"布施":27,"田辺":28,"住之江公園":28,"蒲生四丁目":28,"長居":28,"大日":29,"井高野":29,"摂津富田":29,"曽根":29,"西宮北口":29,"南茨木":29,"関大前":29,"高井田":30,"駒川中野":30,"西田辺":30,"針中野":32,"茨木市":32,"北千里":32,"住道":32,"長田":34,"万代":34,"高槻":34,"近鉄八尾":34,"堺":34,"三国ヶ丘":34,"三宮":34,"鴻池新田":35,"京都":35,"堺市":37,"中百舌鳥":40,"奈良":52},
+    rent:{"1R1K":51000,"1DK1LDK":62000,"2LDK":111000,"3LDK":124000},
+    tags:["梅田徒歩圏","再開発進行中","ビジネス街隣接","若者に人気"],
+    desc:"梅田・本町の両ビジネス街に近い西大阪エリア。再開発が進みカフェや飲食店も増加中の注目エリア。",
+    priority:{cheap:2,short:4,shopping:4,quiet:3,cafe:4,nature:2,safety:3,family:2,nightlife:3,new:5}
+  },
+  {
+    name:"豊中・服部",hub:"梅田",
+    nearStations:["豊中","服部天神","十三"],
+    commute:{"梅田":17,"大阪":18,"東梅田":18,"西梅田":18,"福島":19,"天満":19,"北新地":19,"中津":19,"中崎町":20,"新大阪":20,"塚本":20,"桜ノ宮":21,"南森町":21,"新福島":21,"大阪天満宮":21,"淀屋橋":21,"野田":22,"天神橋筋六丁目":22,"肥後橋":22,"東淀川":22,"十三":22,"西中島南方":22,"都島":23,"海老江":23,"心斎橋":23,"本町":24,"北浜":24,"西九条":25,"大阪城公園":25,"京橋":25,"野江内代":25,"御幣島":25,"吹田":25,"尼崎":25,"神崎川":25,"淡路":25,"江坂":25,"野田阪神":25,"天満橋":26,"四ツ橋":26,"森ノ宮":27,"西大橋":27,"阿波座":27,"堺筋本町":27,"関目高殿":27,"なんば":27,"加島":27,"三国":27,"弁天町":29,"玉造":29,"谷町四丁目":29,"千林大宮":29,"鴫野":29,"岸辺":29,"庄内":29,"園田":29,"相川":29,"日本橋":29,"九条":30,"大国町":30,"鶴橋":31,"太子橋今市":31,"谷町六丁目":32,"千里丘":32,"豊中":32,"塚口":32,"動物園前":32,"大正":33,"桃谷":33,"花園町":33,"放出":33,"正雀":33,"新今宮":34,"朝潮橋":34,"谷町九丁目":34,"芦原橋":35,"今宮":35,"寺田町":35,"緑橋":35,"守口":35,"岸里玉出":35,"だいどう豊里":35,"清水":35,"茨木":35,"岡町":35,"武庫之荘":35,"摂津市":35,"天王寺":37,"大阪港":37,"四天王寺前夕陽丘":37,"瑞光四丁目":37,"新森古市":37,"関目成育":37,"服部天神":37,"千里山":37,"コスモスクエア":39,"深江橋":39,"大日":39,"阿倍野":39,"井高野":39,"蒲生四丁目":39,"今里":39,"摂津富田":39,"曽根":39,"西宮北口":39,"南茨木":39,"関大前":39,"文の里":41,"住之江公園":41,"茨木市":42,"北千里":42,"長居":42,"布施":42,"住道":42,"高井田":43,"田辺":43,"高槻":44,"三宮":44,"駒川中野":45,"西田辺":45,"鴻池新田":45,"京都":45,"長田":47,"針中野":47,"三国ヶ丘":47,"万代":49,"近鉄八尾":49,"堺":49,"堺市":52,"中百舌鳥":55,"奈良":67},
+    rent:{"1R1K":46000,"1DK1LDK":56000,"2LDK":100000,"3LDK":128000},
+    tags:["閑静な住宅地","梅田15分","阪急沿線","ファミリー人気"],
+    desc:"阪急宝塚線・神戸線沿線の閑静な住宅地。梅田まで直通15分。治安・教育環境が良くファミリーに人気。",
+    priority:{cheap:3,short:3,shopping:3,quiet:5,cafe:2,nature:4,safety:5,family:5,nightlife:1,new:2}
+  },
+  {
+    name:"吹田・江坂",hub:"新大阪",
+    nearStations:["江坂","吹田","西中島南方"],
+    commute:{"新大阪":5,"西中島南方":7,"大阪":8,"東淀川":8,"梅田":8,"東梅田":9,"西梅田":9,"福島":10,"天満":10,"北新地":10,"吹田":10,"塚本":10,"中津":10,"江坂":10,"中崎町":11,"新福島":11,"桜ノ宮":12,"南森町":12,"大阪天満宮":12,"淀屋橋":12,"野田":13,"天神橋筋六丁目":13,"肥後橋":13,"海老江":13,"十三":13,"都島":14,"岸辺":14,"心斎橋":14,"本町":15,"御幣島":15,"尼崎":15,"淡路":15,"北浜":15,"西九条":16,"大阪城公園":16,"京橋":16,"野江内代":16,"神崎川":16,"野田阪神":16,"天満橋":17,"四ツ橋":17,"加島":17,"千里丘":17,"森ノ宮":18,"西大橋":18,"阿波座":18,"堺筋本町":18,"関目高殿":18,"なんば":18,"三国":18,"相川":19,"弁天町":20,"玉造":20,"谷町四丁目":20,"千林大宮":20,"鴫野":20,"茨木":20,"庄内":20,"園田":20,"日本橋":20,"大国町":21,"鶴橋":22,"九条":22,"太子橋今市":22,"谷町六丁目":23,"豊中":23,"塚口":23,"正雀":23,"動物園前":23,"大正":24,"桃谷":24,"花園町":24,"放出":24,"摂津富田":24,"摂津市":25,"芦原橋":26,"寺田町":26,"朝潮橋":26,"緑橋":26,"守口":26,"谷町九丁目":26,"岸里玉出":26,"だいどう豊里":26,"清水":26,"岡町":26,"武庫之荘":26,"千里山":27,"今宮":28,"新今宮":28,"天王寺":28,"大阪港":28,"四天王寺前夕陽丘":28,"瑞光四丁目":28,"新森古市":28,"関目成育":28,"服部天神":28,"高槻":29,"南茨木":29,"関大前":29,"コスモスクエア":30,"深江橋":30,"大日":30,"阿倍野":30,"井高野":30,"蒲生四丁目":30,"今里":30,"曽根":30,"西宮北口":30,"京都":30,"文の里":32,"住之江公園":32,"茨木市":32,"北千里":32,"長居":33,"住道":33,"高井田":34,"田辺":34,"三宮":35,"駒川中野":36,"西田辺":36,"布施":36,"鴻池新田":36,"長田":38,"針中野":38,"三国ヶ丘":38,"万代":40,"堺":40,"近鉄八尾":43,"堺市":43,"中百舌鳥":46,"奈良":60},
+    rent:{"1R1K":50000,"1DK1LDK":61000,"2LDK":116000,"3LDK":148000},
+    tags:["大学街","静かな住宅地","公園多い","ファミリー向け"],
+    desc:"阪大・関大など大学が多い文教地区。静かな住宅地で子育てファミリーにも人気。御堂筋線で梅田へすぐ。",
+    priority:{cheap:3,short:3,shopping:3,quiet:5,cafe:2,nature:4,safety:5,family:5,nightlife:1,new:2}
+  },
+  {
+    name:"尼崎・塚口",hub:"梅田",
+    nearStations:["尼崎","塚口"],
+    commute:{"梅田":12,"大阪":13,"東梅田":13,"西梅田":13,"福島":14,"天満":14,"北新地":14,"中津":14,"中崎町":15,"新大阪":15,"塚本":15,"桜ノ宮":16,"南森町":16,"新福島":16,"大阪天満宮":16,"淀屋橋":16,"野田":17,"天神橋筋六丁目":17,"肥後橋":17,"東淀川":17,"十三":17,"西中島南方":17,"都島":18,"海老江":18,"心斎橋":18,"本町":19,"北浜":19,"西九条":20,"大阪城公園":20,"京橋":20,"野江内代":20,"御幣島":20,"吹田":20,"尼崎":20,"神崎川":20,"淡路":20,"江坂":20,"野田阪神":20,"天満橋":21,"四ツ橋":21,"森ノ宮":22,"西大橋":22,"阿波座":22,"堺筋本町":22,"関目高殿":22,"なんば":22,"加島":22,"三国":22,"弁天町":24,"玉造":24,"谷町四丁目":24,"千林大宮":24,"鴫野":24,"岸辺":24,"庄内":24,"園田":24,"相川":24,"日本橋":24,"大国町":25,"鶴橋":26,"九条":26,"太子橋今市":26,"谷町六丁目":27,"千里丘":27,"豊中":27,"塚口":27,"動物園前":27,"大正":28,"桃谷":28,"花園町":28,"放出":28,"正雀":28,"芦原橋":30,"寺田町":30,"朝潮橋":30,"緑橋":30,"守口":30,"谷町九丁目":30,"岸里玉出":30,"だいどう豊里":30,"清水":30,"茨木":30,"岡町":30,"武庫之荘":30,"摂津市":30,"新今宮":31,"今宮":32,"天王寺":32,"大阪港":32,"四天王寺前夕陽丘":32,"瑞光四丁目":32,"新森古市":32,"関目成育":32,"服部天神":32,"千里山":32,"コスモスクエア":34,"深江橋":34,"大日":34,"阿倍野":34,"井高野":34,"蒲生四丁目":34,"今里":34,"摂津富田":34,"曽根":34,"西宮北口":34,"南茨木":34,"関大前":34,"文の里":36,"住之江公園":36,"茨木市":37,"北千里":37,"長居":37,"住道":37,"高井田":38,"田辺":38,"高槻":39,"布施":39,"三宮":39,"駒川中野":40,"西田辺":40,"鴻池新田":40,"京都":40,"長田":42,"針中野":42,"三国ヶ丘":42,"万代":44,"堺":44,"近鉄八尾":46,"堺市":47,"中百舌鳥":50,"奈良":64},
+    rent:{"1R1K":47000,"1DK1LDK":57000,"2LDK":108000,"3LDK":138000},
+    tags:["梅田・三宮両アクセス","家賃安い","再開発進行","コスパ最強"],
+    desc:"梅田まで10分、三宮まで20分。両拠点へのアクセスが抜群で家賃は大阪市内より安い。コスパ派に最強エリア。",
+    priority:{cheap:5,short:5,shopping:3,quiet:3,cafe:2,nature:2,safety:3,family:3,nightlife:2,new:3}
+  },
+  {
+    name:"布施・東大阪",hub:"なんば",
+    nearStations:["布施","近鉄八尾","八尾","鶴橋"],
+    commute:{"なんば":15,"京橋":18,"心斎橋":18,"日本橋":18,"四ツ橋":19,"大国町":19,"天王寺":20,"本町":20,"西大橋":21,"新今宮":22,"大阪城公園":22,"堺筋本町":22,"花園町":22,"鴫野":22,"動物園前":22,"今宮":23,"寺田町":23,"阿波座":23,"阿倍野":23,"肥後橋":23,"淀屋橋":23,"森ノ宮":24,"放出":24,"芦原橋":25,"桃谷":25,"谷町四丁目":25,"谷町九丁目":25,"四天王寺前夕陽丘":25,"文の里":25,"西梅田":25,"岸里玉出":25,"梅田":25,"北浜":25,"大阪":26,"緑橋":26,"天満橋":26,"大正":27,"鶴橋":27,"九条":27,"谷町六丁目":27,"北新地":27,"玉造":28,"桜ノ宮":28,"田辺":28,"蒲生四丁目":28,"大阪天満宮":28,"長居":28,"福島":29,"東梅田":29,"今里":29,"新福島":29,"中津":29,"弁天町":30,"天満":30,"深江橋":30,"都島":30,"南森町":30,"駒川中野":30,"西田辺":30,"野田阪神":30,"布施":30,"朝潮橋":31,"中崎町":31,"住之江公園":31,"海老江":31,"新大阪":31,"野田":32,"野江内代":32,"天神橋筋六丁目":32,"針中野":32,"関目成育":32,"塚本":32,"十三":32,"住道":32,"西九条":33,"大阪港":33,"御幣島":33,"東淀川":33,"西中島南方":33,"高井田":34,"関目高殿":34,"万代":34,"新森古市":34,"コスモスクエア":35,"加島":35,"千林大宮":36,"吹田":36,"江坂":36,"鴻池新田":36,"尼崎":37,"神崎川":37,"淡路":37,"近鉄八尾":37,"堺":37,"三国ヶ丘":37,"長田":38,"太子橋今市":38,"清水":38,"三国":39,"中百舌鳥":40,"岸辺":40,"堺市":40,"庄内":41,"園田":41,"相川":41,"だいどう豊里":42,"千里丘":43,"守口":44,"瑞光四丁目":44,"豊中":44,"塚口":44,"正雀":45,"井高野":46,"茨木":46,"岡町":47,"武庫之荘":47,"摂津市":47,"大日":48,"服部天神":49,"千里山":49,"摂津富田":50,"曽根":51,"西宮北口":51,"南茨木":51,"関大前":51,"三宮":52,"茨木市":54,"北千里":54,"高槻":55,"奈良":55,"京都":57},
+    rent:{"1R1K":45000,"1DK1LDK":55000,"2LDK":97000,"3LDK":124000},
+    tags:["家賃安い","難波15分","下町","近鉄沿線"],
+    desc:"近鉄沿線の下町エリア。難波まで近鉄で15分と都心へのアクセス良好。家賃相場が低くコスパは関西有数。",
+    priority:{cheap:5,short:3,shopping:3,quiet:3,cafe:2,nature:2,safety:3,family:3,nightlife:2,new:1}
+  },
+  {
+    name:"堺・三国ヶ丘",hub:"天王寺",
+    nearStations:["堺","三国ヶ丘","中百舌鳥","堺市"],
+    commute:{"天王寺":20,"寺田町":23,"阿倍野":23,"新今宮":25,"桃谷":25,"四天王寺前夕陽丘":25,"文の里":25,"なんば":25,"今宮":28,"鶴橋":28,"谷町九丁目":28,"田辺":28,"花園町":28,"岸里玉出":28,"心斎橋":28,"日本橋":28,"動物園前":28,"長居":28,"四ツ橋":29,"大国町":29,"玉造":30,"本町":30,"駒川中野":30,"西田辺":30,"西大橋":31,"芦原橋":32,"森ノ宮":32,"京橋":32,"堺筋本町":32,"谷町六丁目":32,"針中野":32,"阿波座":33,"肥後橋":33,"淀屋橋":33,"大阪城公園":34,"万代":34,"大正":35,"谷町四丁目":35,"西梅田":35,"梅田":35,"北浜":35,"大阪":36,"東梅田":36,"住之江公園":36,"鴫野":36,"福島":37,"天満":37,"九条":37,"北新地":37,"中津":37,"弁天町":38,"中崎町":38,"天満橋":38,"放出":38,"新大阪":38,"塚本":38,"堺":38,"三国ヶ丘":38,"桜ノ宮":39,"南森町":39,"今里":39,"新福島":39,"大阪天満宮":39,"野田":40,"西九条":40,"緑橋":40,"天神橋筋六丁目":40,"中百舌鳥":40,"東淀川":40,"十三":40,"西中島南方":40,"野田阪神":40,"布施":40,"朝潮橋":41,"都島":41,"海老江":41,"蒲生四丁目":42,"堺市":42,"大阪港":43,"野江内代":43,"御幣島":43,"吹田":43,"尼崎":43,"神崎川":43,"淡路":43,"江坂":43,"深江橋":44,"コスモスクエア":45,"関目高殿":45,"加島":45,"三国":45,"関目成育":46,"住道":46,"千林大宮":47,"岸辺":47,"庄内":47,"園田":47,"相川":47,"近鉄八尾":47,"高井田":48,"新森古市":48,"太子橋今市":49,"千里丘":50,"豊中":50,"塚口":50,"鴻池新田":50,"正雀":51,"長田":52,"清水":52,"守口":53,"だいどう豊里":53,"茨木":53,"岡町":53,"武庫之荘":53,"摂津市":53,"瑞光四丁目":55,"服部天神":55,"千里山":55,"大日":57,"井高野":57,"摂津富田":57,"曽根":57,"西宮北口":57,"南茨木":57,"関大前":57,"茨木市":60,"北千里":60,"高槻":62,"三宮":62,"京都":65,"奈良":65},
+    rent:{"1R1K":44000,"1DK1LDK":54000,"2LDK":95000,"3LDK":121000},
+    tags:["天王寺20分","家賃安い","世界遺産近く","ファミリー向け"],
+    desc:"百舌鳥古墳群（世界遺産）のある歴史のまち。天王寺まで南海・JRで20〜25分。家賃安くファミリーに人気。",
+    priority:{cheap:5,short:2,shopping:2,quiet:4,cafe:1,nature:3,safety:4,family:5,nightlife:1,new:2}
+  },
+  {
+    name:"住道・鴻池新田",hub:"京橋",
+    nearStations:["住道","鴻池新田","放出"],
+    commute:{"京橋":15,"大阪城公園":19,"鴫野":19,"森ノ宮":21,"放出":21,"大阪":23,"緑橋":23,"天満橋":23,"玉造":25,"桜ノ宮":25,"蒲生四丁目":25,"大阪天満宮":25,"北浜":25,"天満":27,"本町":27,"谷町四丁目":27,"深江橋":27,"都島":27,"北新地":27,"梅田":27,"新大阪":28,"鶴橋":29,"西大橋":29,"堺筋本町":29,"野江内代":29,"天神橋筋六丁目":29,"谷町六丁目":29,"肥後橋":29,"関目成育":29,"新福島":29,"塚本":29,"中津":29,"淀屋橋":29,"住道":29,"東淀川":30,"心斎橋":30,"福島":31,"九条":31,"阿波座":31,"高井田":31,"関目高殿":31,"中崎町":31,"東梅田":31,"南森町":31,"谷町九丁目":31,"西梅田":31,"四ツ橋":31,"新森古市":31,"今里":31,"海老江":31,"日本橋":31,"西中島南方":31,"十三":32,"桃谷":33,"千林大宮":33,"四天王寺前夕陽丘":33,"なんば":33,"御幣島":33,"吹田":33,"江坂":33,"鴻池新田":33,"野田":34,"寺田町":35,"朝潮橋":35,"長田":35,"太子橋今市":35,"阿倍野":35,"大国町":35,"清水":35,"加島":35,"尼崎":35,"神崎川":35,"淡路":35,"動物園前":35,"西九条":37,"弁天町":37,"今宮":37,"新今宮":37,"天王寺":37,"大阪港":37,"文の里":37,"花園町":37,"岸辺":37,"三国":37,"野田阪神":37,"布施":37,"芦原橋":39,"田辺":39,"岸里玉出":39,"だいどう豊里":39,"庄内":39,"園田":39,"相川":39,"千里丘":40,"大正":41,"コスモスクエア":41,"守口":41,"駒川中野":41,"瑞光四丁目":41,"長居":41,"豊中":42,"塚口":42,"針中野":43,"井高野":43,"茨木":43,"正雀":43,"西田辺":43,"三国ヶ丘":43,"近鉄八尾":44,"大日":45,"万代":45,"住之江公園":45,"岡町":45,"武庫之荘":45,"摂津市":45,"堺":45,"摂津富田":47,"服部天神":47,"千里山":47,"堺市":48,"曽根":49,"西宮北口":49,"南茨木":49,"関大前":49,"中百舌鳥":51,"高槻":52,"茨木市":52,"北千里":52,"三宮":55,"京都":57,"奈良":63},
+    rent:{"1R1K":45000,"1DK1LDK":55000,"2LDK":70000,"3LDK":78000},
+    tags:["学研都市線","家賃安い","静かな住宅地","京橋17分"],
+    desc:"JR学研都市線沿いの静かな住宅地。京橋まで約17分で都心へのアクセス良。家賃安く広い物件が多い穴場。",
+    priority:{cheap:5,short:3,shopping:2,quiet:4,cafe:1,nature:3,safety:4,family:4,nightlife:1,new:2}
+  },
+];;
+
+// ===========================
+// 駅別家賃データ（1K/1DK マンション）
+// 出典：SUUMO 2026年4月13日更新
+// ===========================
+const STATION_RENT = {
+  // ===== 主要駅（エイリアス） =====
+  "梅田":6.6,"大阪梅田":6.6,"東梅田":6.5,"西梅田":6.5,
+  "難波":6.3,"なんば":6.3,"心斎橋":6.5,"日本橋":5.8,
+  "本町":7.0,"堺筋本町":6.5,"肥後橋":6.5,"四ツ橋":6.0,"阿波座":5.8,
+  "淀屋橋":7.8,"北浜":6.8,
+  "天満橋":6.6,"天満":6.0,"桜ノ宮":5.8,
+  "中津":6.2,"南森町":6.0,
+  "新大阪":6.0,"西中島南方":5.8,"江坂":5.5,"十三":6.0,
+  "鶴橋":5.5,"今里":5.5,"桃谷":5.5,"玉造":5.8,"森ノ宮":5.8,
+  "大阪城公園":5.5,"谷町四丁目":6.0,"谷町六丁目":5.5,"谷町九丁目":5.5,
+  "動物園前":5.5,"西田辺":5.0,"大正":5.5,"九条":5.9,
+  "布施":4.8,"近鉄八尾":4.5,"八尾":5.0,
+  "野田阪神":5.5,"天神橋筋六丁目":6.1,"柴島":6.1,
+  // ===== JR関西本線 =====
+  "JR難波":6.2,"東都市場前":5.2,
+  "平野":4.3,"加美":4.0,"久宝寺":4.9,
+  "志紀":4.0,"柏原":4.1,"河内堅上":3.0,"三郷":3.0,
+  "王寺":3.8,"法隆寺":3.3,"大和小泉":4.1,"郡山":3.9,
+  "奈良":4.2,"平城山":4.2,"木津":4.7,"加茂":4.2,
+  // ===== JR片町線（学研都市線）=====
+  "京橋":6.1,"鴫野":5.9,"放出":5.8,"徳庵":5.0,"鴻池新田":4.8,
+  "住道":4.3,"野崎":4.0,"四条畷":3.7,"忍ケ丘":3.7,"寝屋川公園":3.6,
+  "星田":4.7,"河内磐船":5.1,"津田":4.1,"藤阪":4.0,"長尾":4.2,
+  "松井山手":4.4,"大住":4.7,"京田辺":4.8,"同志社前":3.9,
+  "JR三山木":4.2,"下狛":3.8,"祝園":5.3,"西木津":3.9,
+  // ===== JR阪和線 =====
+  "天王寺":6.0,"美章園":5.9,"南田辺":5.6,"鶴ケ丘":5.2,"長居":5.0,
+  "我孫子町":4.8,"杉本町":4.5,"浅香":5.2,"堺市":5.4,"三国ケ丘":5.5,
+  "三国ヶ丘":5.5,"百舌鳥":5.2,"上野芝":4.7,"津久野":4.7,"鳳":4.7,
+  "東羽衣":4.8,"富木":4.5,"北信太":3.6,"信太山":3.9,"和泉府中":4.0,
+  "久米田":3.8,"下松":3.7,"東岸和田":3.9,"東貝塚":3.8,
+  "和泉橋本":3.5,"東佐野":4.5,"熊取":4.5,"日根野":4.7,
+  // ===== JR福知山線 =====
+  "大阪":6.5,"尼崎":5.7,"塚口":5.5,"猪名寺":5.2,"伊丹":5.7,
+  "北伊丹":5.2,"川西池田":5.6,"中山寺":5.4,"宝塚":5.9,"生瀬":4.7,
+  "西宮名塩":4.4,"武田尾":4.2,"道場":4.2,"三田":5.4,"新三田":5.0,
+  "広野":4.7,"相野":4.6,"藍本":4.2,"草野":4.2,"古市":4.2,
+  // ===== 阪神なんば線 =====
+  "大阪難波":6.4,"桜川":6.2,"ドーム前":5.9,
+  "千鳥橋":5.9,"伝法":5.7,"福":5.6,"出来島":5.2,"大物":5.6,
+  // ===== 阪神本線 =====
+  "野田":6.4,"淀川":6.2,"姫島":5.9,"千船":5.6,"杭瀬":5.5,
+  "武庫川":5.7,"甲子園":5.9,"久寿川":5.8,"今津":5.9,"西宮":6.1,
+  "香櫨園":5.8,"打出":6.2,"芦屋":6.0,"深江":5.6,"青木":5.6,"魚崎":5.3,
+  // ===== 阪堺電気軌道 =====
+  "恵美須町":6.3,"新今宮駅前":5.4,"今池":5.3,"今船":4.8,"松田町":5.3,
+  "北天下茶屋":5.0,"聖天坂":4.6,"天神ノ森":5.0,"東玉出":4.3,"塚西":4.5,
+  "東粉浜":5.2,"住吉":5.0,"住吉鳥居前":5.2,"細井川":4.7,"安立町":5.5,
+  "我孫子道":5.3,"大和川":5.0,"高須神社":5.6,"綾ノ町":5.5,
+  "神明町":6.0,"妙国寺前":5.9,"花田口":6.1,"大小路":5.7,"宿院":5.5,
+  "寺地町":5.4,"天王寺駅前":6.5,"阿倍野":5.9,"松虫":6.0,
+  "東天下茶屋":6.2,"北畠":5.6,"姫松":4.8,"帝塚山三丁目":5.0,
+  "帝塚山四丁目":4.5,"神ノ木":4.3,
+  // ===== 京阪中之島線 =====
+  "中之島":6.5,"渡辺橋":7.2,"大江橋":7.8,"なにわ橋":7.0,
+  // ===== 京阪交野線 =====
+  "宮之阪":4.8,"星ケ丘":4.3,"村野":3.8,"郡津":4.3,"交野市":5.0,
+  "河内森":5.1,"私市":4.7,
+  // ===== 京阪本線 =====
+  "野江":6.0,"関目":5.9,"森小路":5.6,"千林":5.2,"滝井":5.2,
+  "土居":5.2,"守口市":5.3,"西三荘":5.0,"門真市":4.5,"古川橋":4.1,
+  "大和田":3.9,"萱島":3.8,"寝屋川市":3.7,"香里園":3.9,"光善寺":4.2,
+  "枚方公園":5.0,"枚方市":4.8,"御殿山":4.6,"牧野":4.5,"樟葉":4.7,"橋本":5.0,
+  // ===== 大阪モノレール =====
+  "大阪空港":4.8,"蛍池":5.4,"柴原阪大前":5.0,"少路":5.5,
+  "千里中央":5.7,"山田":5.8,"万博記念公園":5.6,"宇野辺":5.9,
+  "南茨木":5.9,"沢良宜":5.7,"摂津":5.5,"南摂津":4.6,"太日":4.2,
+  "公園東口":5.2,"阪大病院前":5.3,"豊川":5.0,"彩都西":4.4,
+  // ===== 阪急京都線 =====
+  "南方":6.2,"崇禅寺":6.2,"淡路":5.5,"上新庄":4.0,"相川":4.5,
+  "正雀":5.8,"摂津市":5.7,"茨木市":5.4,"総持寺":5.0,"富田":4.7,
+  "高槻市":5.4,"上牧":5.6,"水無瀬":5.8,"大山崎":4.6,"西山天王山":5.3,
+  "長岡天神":5.2,"西向日":5.0,"東向日":5.0,"洛西口":5.0,"桂":5.0,
+  "西京極":5.6,"西院":5.5,"大宮":5.8,"烏丸":6.0,"京都河原町":6.0,
+  // ===== 阪急千里線 =====
+  "下新庄":4.5,"吹田":6.0,"豊津":6.6,"関大前":5.5,
+  "千里山":4.6,"南千里":4.7,"北千里":5.2,
+  // ===== 阪急箕面線 =====
+  "石橋阪大前":4.9,"桜井":4.4,"牧落":3.9,"箕面":4.0,
+  // ===== 阪急宝塚線 =====
+  "三国":6.2,"庄内":5.6,"服部天神":5.6,"曽根":5.2,"岡町":5.4,
+  "豊中":5.3,"池田":5.6,"川西能勢口":5.6,"雲雀丘花屋敷":5.2,
+  "山本":5.3,"中山観音":5.6,"売布神社":5.5,"清荒神":5.6,
+  // ===== 阪急神戸線 =====
+  "神崎川":5.9,"園田":4.9,"武庫之荘":5.5,"西宮北口":6.1,
+  "夙川":5.7,"芦屋川":6.0,"岡本":5.6,"御影":5.2,"六甲":5.4,
+  "王子公園":5.3,"春日野道":6.0,"神戸三宮":6.6,
+  // ===== 南海泉北線 =====
+  "中百舌鳥":5.3,"深井":4.9,"泉ケ丘":4.2,"栂・美木多":4.0,
+  "光明池":3.9,"和泉中央":3.9,
+  // ===== 南海汐見橋・高野線 =====
+  "汐見橋":6.2,"芦原町":6.1,"木津川":5.9,"津守":4.5,"西天下茶屋":5.5,
+  "今宮戎":6.3,"萩ノ茶屋":5.1,"天下茶屋":5.3,"岸里玉出":4.9,
+  "帝塚山":4.7,"住吉東":4.9,"沢ノ町":4.4,"我孫子前":4.5,"浅香山":5.2,
+  "堺東":5.5,"百舌鳥八幡":5.6,"白鷺":4.7,"初芝":4.5,"萩原天神":4.4,
+  "北野田":4.2,"狭山":4.0,"大阪狭山市":4.0,"金剛":4.0,"滝谷":3.8,
+  "千代田":3.6,"河内長野":3.9,
+  // ===== 南海本線 =====
+  "粉浜":4.6,"住吉大社":4.5,"住ノ江":5.5,"七道":5.6,"堺":5.5,
+  "湊":5.5,"石津川":5.5,"諏訪ノ森":5.4,"浜寺公園":4.8,"羽衣":4.4,
+  "高石":3.8,"北助松":4.0,"松ノ浜":4.2,"泉大津":4.5,"忠岡":4.0,
+  "春木":3.9,"和泉大宮":4.1,"岸和田":4.0,
+  // ===== 南海多奈川・高師浜・空港線 =====
+  "みさき公園":3.5,"深日町":4.2,"深日港":4.2,"多奈川":4.2,
+  "伽羅橋":3.8,"高師浜":4.1,"泉佐野":5.0,"りんくうタウン":4.7,
+  // ===== 水間鉄道 =====
+  "貝塚":4.1,"貝塚市役所前":3.9,"近義の里":3.5,"石才":3.5,
+  "名越":2.5,"三ツ松":3.4,"三ケ山口":3.0,"水間観音":3.0,
+  // ===== 能勢電鉄妙見線 =====
+  "鶯橋":5.6,"滝山":5.3,"鴬の森":5.0,"絹延橋":4.5,"多田":4.4,
+  "一の鳥居":3.5,"笹部":4.1,"光風台":4.2,"ときわ台":4.2,"妙見口":4.2,
+};
+
+function getAreaRent1K(area) {
+  const stations = area.nearStations || [];
+  const pairs = stations
+    .map(s => ({ s, r: STATION_RENT[s] }))
+    .filter(p => p.r != null);
+  if (!pairs.length) return '';
+  const min = Math.min(...pairs.map(p => p.r)).toFixed(1);
+  const max = Math.max(...pairs.map(p => p.r)).toFixed(1);
+  const items = pairs.map(p =>
+    `<span class="rent-station-item">${p.s} <strong>${p.r}万</strong></span>`
+  ).join('');
+  return `<div class="rent-row">
+    <span class="rent-row-label">🏷️ 近隣駅の家賃目安（1K/1DK）</span>
+    <div class="rent-station-list">${items}</div>
+  </div>`;
+}
+
+// ===========================
+// オートコンプリート
+// ===========================
+const input = document.getElementById('workStation');
+const acList = document.getElementById('autocompleteList');
+
+function normalize(str) {
+  return str.replace(/[\s　]/g,'').toLowerCase()
+    .replace(/[ァ-ン]/g, s => String.fromCharCode(s.charCodeAt(0) - 0x60));
+}
+
+input.addEventListener('input', function() {
+  const q = this.value.trim();
+  if (!q) { acList.classList.remove('show'); return; }
+  const qn = normalize(q);
+  const res = STATIONS.filter(s =>
+    normalize(s.name).includes(qn) || s.yomi.includes(qn) || s.name.includes(q)
+  ).slice(0, 8);
+  if (!res.length) { acList.classList.remove('show'); return; }
+  acList.innerHTML = res.map((s,i) =>
+    `<div class="autocomplete-item${i===0?' highlighted':''}" onclick="selectStation('${s.name}')">
+      ${s.name}<span class="line-badge">${s.lines[0]||'その他'}</span>
+    </div>`
+  ).join('');
+  acList.classList.add('show');
+});
+
+function selectStation(name) {
+  input.value = name;
+  acList.classList.remove('show');
+  state.workStation = name;
+}
+
+document.addEventListener('click', e => {
+  if (!e.target.closest('#workStation') && !e.target.closest('#autocompleteList'))
+    acList.classList.remove('show');
+});
+
+// ===========================
+// クイズ制御
+// ===========================
+function startQuiz() {
+  const val = input.value.trim();
+  if (!val) {
+    input.style.borderColor = '#F47B2D';
+    input.focus();
+    setTimeout(() => input.style.borderColor = '', 2000);
+    return;
+  }
+  state.workStation = val;
+  quizIndex = 0;
+  quizAnswers = {};
+  document.getElementById('progressWrap').style.display = 'block';
+  showScreen('screenQuiz');
+  renderQ(false);
+}
+
+function renderQ(goBack) {
+  const visible = getVisibleQuestions();
+  const q = QUESTIONS[quizIndex];
+  const visIdx = visible.findIndex(vq => vq.id === q.id);
+  const total   = visible.length;
+  document.getElementById('progressFill').style.width = `${((visIdx + 1) / total) * 100}%`;
+  document.getElementById('quizCounter').textContent = `${visIdx + 1} / ${total}`;
+
+  const el = document.getElementById('quizContent');
+  el.className = goBack ? 'back' : '';
+  void el.offsetWidth;
+
+  if (q.type === 'single')    el.innerHTML = renderSingle(q);
+  if (q.type === 'multi')     el.innerHTML = renderMulti(q);
+  if (q.type === 'contrast')  el.innerHTML = renderContrast(q);
+  if (q.type === 'mbtiSelect') el.innerHTML = renderMbtiSelect(q);
+
+  // 保存済みの回答を復元
+  const saved = quizAnswers[q.id];
+  if (saved !== undefined && saved !== null) {
+    if (q.type === 'single') {
+      el.querySelectorAll('.quiz-option').forEach(o => {
+        if (o.dataset.val == saved) o.classList.add('selected');
+      });
+    } else if (q.type === 'multi') {
+      (saved || []).forEach(v => {
+        const c = el.querySelector(`.quiz-chip[data-val="${v}"]`);
+        if (c) c.classList.add('selected');
+      });
+    } else if (q.type === 'contrast') {
+      el.querySelectorAll('[data-cval]').forEach(o => {
+        if (parseInt(o.dataset.cval) === saved) o.classList.add('selected');
+      });
+    } else if (q.type === 'mbtiSelect') {
+      el.querySelectorAll('.mbti-type-chip').forEach(c => {
+        if (c.dataset.val === saved) {
+          c.classList.add('selected');
+          const btn = document.getElementById('mbtiConfirmBtn');
+          if (btn) { btn.style.opacity='1'; btn.style.pointerEvents='auto'; }
+        }
+      });
+    }
+  }
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function renderMbtiSelect(q) {
+  const types = ['INTJ','INTP','ENTJ','ENTP','INFJ','INFP','ENFJ','ENFP',
+                 'ISTJ','ISFJ','ESTJ','ESFJ','ISTP','ISFP','ESTP','ESFP'];
+  const chips = types.map(t =>
+    `<div class="mbti-type-chip" data-val="${t}" onclick="selectMbtiChip(this,'${t}')">${t}</div>`
+  ).join('');
+  return `
+    <div class="quiz-q">${q.q}</div>
+    <div class="quiz-sub">タイプをタップして選んでください</div>
+    <div class="mbti-type-grid">${chips}</div>
+    <button class="btn-main" id="mbtiConfirmBtn"
+      style="margin-top:12px;opacity:0.4;pointer-events:none;"
+      onclick="quizNext()">選択して次へ　→</button>`;
+}
+
+function selectMbtiChip(el, type) {
+  document.querySelectorAll('.mbti-type-chip').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  quizAnswers.mbtiTypeInput = type;
+  const btn = document.getElementById('mbtiConfirmBtn');
+  if (btn) { btn.style.opacity='1'; btn.style.pointerEvents='auto'; }
+}
+
+function renderSingle(q) {
+  const opts = q.options.map(o => `
+    <div class="quiz-option" data-val="${o.val}" onclick="pickSingle(this,'${q.id}')">
+      <span class="q-icon">${o.icon}</span>
+      <span class="q-label">${o.label}</span>
+      ${o.sub ? `<span class="q-sub">${o.sub}</span>` : ''}
+    </div>`).join('');
+  return `
+    <div class="quiz-q">${q.q.replace(/\n/g,'<br>')}${q.optional ? '<span class="optional-badge">任意</span>' : ''}</div>
+    ${q.sub ? `<div class="quiz-sub">${q.sub}</div>` : ''}
+    <div class="quiz-options">${opts}</div>
+    ${q.optional ? `<div class="quiz-skip" onclick="quizSkip()">スキップ →</div>` : ''}`;
+}
+
+function renderMulti(q) {
+  const chips = q.options.map(o =>
+    `<div class="quiz-chip" data-val="${o.val}" onclick="toggleChip(this,'${q.id}')">${o.label}</div>`
+  ).join('');
+  return `
+    <div class="quiz-q">${q.q}${q.optional ? '<span class="optional-badge">任意・複数可</span>' : ''}</div>
+    <div class="quiz-sub">${q.sub||''}</div>
+    <div class="quiz-chips">${chips}</div>
+    <button class="btn-main" onclick="quizNext()" style="margin-top:4px;">次へ　→</button>
+    <div class="quiz-skip" onclick="quizSkip()">何もなければスキップ →</div>`;
+}
+
+function renderContrast(q) {
+  return `
+    <div class="quiz-q">${q.q}</div>
+    <div class="quiz-sub" style="margin-bottom:18px;">どちらに近いか直感で選んでください</div>
+    <div class="contrast-options">
+      <div class="contrast-card left" data-cval="-1" onclick="pickContrast(this,'${q.id}')">
+        <div class="c-icon">${q.left.icon}</div>
+        <div class="c-text">${q.left.text.replace(/\n/g,'<br>')}</div>
+      </div>
+      <div class="contrast-neutral" data-cval="0" onclick="pickContrast(this,'${q.id}')">どちら<br>でも</div>
+      <div class="contrast-card right" data-cval="1" onclick="pickContrast(this,'${q.id}')">
+        <div class="c-icon">${q.right.icon}</div>
+        <div class="c-text">${q.right.text.replace(/\n/g,'<br>')}</div>
+      </div>
+    </div>
+    <div class="contrast-caption"><span>${q.leftLabel}</span><span>${q.rightLabel}</span></div>`;
+}
+
+// ===========================
+// 選択ハンドラ
+// ===========================
+function pickSingle(el, id) {
+  document.querySelectorAll('#quizContent .quiz-option').forEach(o => o.classList.remove('selected','flash'));
+  el.classList.add('flash');
+  quizAnswers[id] = el.dataset.val;
+  setTimeout(() => { el.classList.remove('flash'); el.classList.add('selected'); }, 100);
+  setTimeout(quizNext, 320);
+}
+
+function toggleChip(el, id) {
+  el.classList.toggle('selected');
+  quizAnswers[id] = Array.from(
+    document.querySelectorAll('#quizContent .quiz-chip.selected')
+  ).map(c => c.dataset.val);
+}
+
+function pickContrast(el, id) {
+  document.querySelectorAll('#quizContent [data-cval]').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  const pairIdx = QUESTIONS.findIndex(q => q.id === id);
+  quizAnswers[id] = parseInt(el.dataset.cval);
+  setTimeout(quizNext, 300);
+}
+
+function quizNext() {
+  const skip = getSkippedIds();
+  let next = quizIndex + 1;
+  while (next < QUESTIONS.length && skip.has(QUESTIONS[next].id)) next++;
+
+  if (next >= QUESTIONS.length) {
+    buildState();
+    document.getElementById('progressFill').style.width = '100%';
+    setTimeout(() => {
+      document.getElementById('progressWrap').style.display = 'none';
+      showResult();
+    }, 400);
+  } else {
+    quizIndex = next;
+    renderQ(false);
+  }
+}
+
+function quizSkip() {
+  quizAnswers[QUESTIONS[quizIndex].id] = null;
+  quizNext();
+}
+
+function quizBack() {
+  const skip = getSkippedIds();
+  let prev = quizIndex - 1;
+  while (prev > 0 && skip.has(QUESTIONS[prev].id)) prev--;
+
+  if (prev < 0) {
+    document.getElementById('progressWrap').style.display = 'none';
+    showScreen('screen1');
+    return;
+  }
+  quizIndex = prev;
+  renderQ(true);
+
+  if (false) { // placeholder to keep brace structure
+  }
+}
+
+function restartQuiz() {
+  state = { workStation: null, commuteMax: 30, rentMax: 70000, roomType: '1R1K', gender: null, ageGroup: null, dislikes: [], contrasts: [0,0,0,0,0], commuteMethod:'train', cooking:'sometimes', homeTime:0, firstMove:null, movingCostKnown:null, mbtiKnown:'no', mbtiTypeInput:null };
+  input.value = '';
+  quizAnswers = {};
+  showScreen('screen1');
+}
+
+// ===========================
+// 回答→ステート変換
+// ===========================
+function buildState() {
+  state.commuteMax      = parseInt(quizAnswers.commute)        || 30;
+  state.rentMax         = parseInt(quizAnswers.rent)           || 70000;
+  state.roomType        = quizAnswers.roomType                 || '1R1K';
+  state.gender          = quizAnswers.gender                   || null;
+  state.ageGroup        = quizAnswers.ageGroup                 || null;
+  state.dislikes        = quizAnswers.dislikes                 || [];
+  state.contrasts       = ['contrast0','contrast1','contrast2','contrast3','contrast4']
+    .map(k => quizAnswers[k] != null ? parseInt(quizAnswers[k]) : 0);
+  state.commuteMethod   = quizAnswers.commuteMethod            || 'train';
+  state.cooking         = quizAnswers.cooking                  || 'sometimes';
+  state.homeTime        = quizAnswers.homeTime != null ? parseInt(quizAnswers.homeTime) : 0;
+  state.firstMove       = quizAnswers.firstMove                || null;
+  state.movingCostKnown = quizAnswers.movingCostKnown          || null;
+  state.mbtiKnown       = quizAnswers.mbtiKnown                || 'no';
+  state.mbtiTypeInput   = quizAnswers.mbtiTypeInput            || null;
+  // 車通勤の場合は乗車時間制限を緩和
+  if (state.commuteMethod === 'car') state.commuteMax = 60;
+}
+
+// ===========================
+// 画面切り替え
+// ===========================
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ===========================
+// スコアリング
+// ===========================
+function calcCommute(area) {
+  const ws = state.workStation;
+  if (area.commute[ws] !== undefined) return area.commute[ws];
+  const areaHub = area.hub || area.name.split('・')[0];
+  const HUB_DIST = {
+    // ※根拠：提供ダイヤ資料（阪急特急27分・阪神なんば線+本線37分・近鉄快速急行40分等）
+    "梅田":  {"梅田":0,"なんば":10,"本町":7,"天王寺":20,"新大阪":5,"三宮":27,"京都":30,"堺":30,"奈良":55,"京橋":12,"大阪":2},
+    "なんば": {"梅田":10,"なんば":0,"本町":5,"天王寺":12,"新大阪":18,"三宮":37,"京都":40,"堺":20,"奈良":40,"京橋":18},
+    "天王寺": {"梅田":20,"なんば":12,"本町":18,"天王寺":0,"新大阪":25,"三宮":43,"京都":50,"堺":20,"奈良":45,"京橋":22},
+    "新大阪": {"梅田":5,"なんば":18,"本町":12,"天王寺":25,"新大阪":0,"三宮":30,"京都":25},
+    "三宮":  {"梅田":27,"なんば":37,"本町":34,"天王寺":43,"新大阪":32,"三宮":0,"姫路":40},
+    "本町":  {"梅田":7,"なんば":5,"本町":0,"天王寺":18,"新大阪":12,"三宮":34,"京都":35,"京橋":12},
+    "京橋":  {"梅田":12,"なんば":18,"本町":12,"天王寺":22,"新大阪":18,"京都":45,"京橋":0},
+    "京都":  {"梅田":30,"なんば":42,"本町":38,"天王寺":52,"新大阪":25,"三宮":55,"京都":0},
+    "堺":   {"梅田":30,"なんば":22,"本町":28,"天王寺":18,"新大阪":38,"堺":0},
+    "奈良":  {"梅田":52,"なんば":40,"本町":45,"天王寺":47,"新大阪":58,"奈良":0,"京都":45},
+  };
+  const station = STATIONS.find(s => s.name === ws || s.yomi === ws);
+  if (station) {
+    for (const [hubName, dists] of Object.entries(HUB_DIST)) {
+      if (station.lines && station.lines.some(l =>
+        STATIONS.find(s => s.name === hubName)?.lines?.some(ll => ll === l)
+      )) {
+        const baseTime = dists[areaHub] || dists[area.hub] || 99;
+        return Math.max(5, baseTime - 5 + Math.floor(Math.random() * 10));
+      }
+    }
+  }
+  return 35;
+}
+
+function showResult() {
+  const [c0, c1, c2, c3, c4] = state.contrasts;
+  const commuteMult = c2 > 0 ? 1.4 : (c2 < 0 ? 0.7 : 1.0);
+  const rentMult    = c2 < 0 ? 1.4 : (c2 > 0 ? 0.7 : 1.0);
+
+  const results = AREAS.map(area => {
+    const commuteTime = calcCommute(area);
+    const rent = area.rent[state.roomType] || area.rent['1R1K'];
+
+    const rawCommute = commuteTime <= state.commuteMax
+      ? Math.max(0, 40 - commuteTime)
+      : Math.max(0, 40 - commuteTime - (commuteTime - state.commuteMax) * 2);
+    const commuteScore = rawCommute * commuteMult;
+
+    const rentRatio = rent / state.rentMax;
+    const rawRent = rentRatio <= 1.0
+      ? Math.max(0, 30 - (rentRatio * 10))
+      : Math.max(0, 30 - (rentRatio * 25));
+    const rentScore = rawRent * rentMult;
+
+    let ls = 20;
+    if (c0 < 0) ls += area.priority.quiet    * Math.abs(c0) * 3;
+    if (c0 > 0) ls += area.priority.nightlife * c0 * 3;
+    if (c1 < 0) ls += area.priority.nature    * Math.abs(c1) * 3;
+    if (c1 > 0) ls += area.priority.shopping  * c1 * 3;
+    if (c3 < 0) ls += area.priority.cheap     * Math.abs(c3) * 2;
+    if (c3 > 0) ls += area.priority.short     * c3 * 2;
+    if (c4 < 0) ls += (area.priority.safety + area.priority.quiet) * Math.abs(c4) * 1.5;
+    if (c4 > 0) ls += area.priority.cafe      * c4 * 3;
+    // 自炊スコア
+    if (state.cooking === 'often')  ls += area.priority.shopping * 2;
+    if (state.cooking === 'rarely') ls += area.priority.nightlife * 0.5;
+    // インドア/アウトドアスコア
+    if (state.homeTime < 0) ls += area.priority.quiet * Math.abs(state.homeTime) * 2;
+    if (state.homeTime > 0) ls += (area.priority.shopping + area.priority.nature) * state.homeTime;
+    const lifestyleScore = Math.max(0, Math.min(50, ls));
+
+    let pb = 0;
+    if (state.gender === 'female') pb += area.priority.safety * 2;
+    if (state.ageGroup === 'teen' || state.ageGroup === '20s') pb += area.priority.cafe + area.priority.nightlife;
+    if (state.ageGroup === '30s'  || state.ageGroup === '40s') pb += area.priority.family * 2;
+    if (state.ageGroup === '50s')  pb += area.priority.quiet * 2 + area.priority.nature;
+    const personBonus = Math.min(15, pb);
+
+    let penalty = 0;
+    state.dislikes.forEach(d => {
+      if (DISLIKE_PENALTY[d]?.includes(area.name)) penalty += 28;
+    });
+
+    const total = commuteScore + rentScore + lifestyleScore + personBonus - penalty;
+    return { ...area, commuteTime, rent, score: total, penalty };
+  });
+
+  results.sort((a, b) => b.score - a.score);
+  const top3 = results.slice(0, 3);
+
+  // サブタイトル
+  const rentLabel = state.rentMax === 999999 ? '上限なし' : state.rentMax.toLocaleString() + '円';
+  document.getElementById('resultSubtitle').textContent =
+    `職場：${state.workStation} ／ 乗車時間${state.commuteMax}分以内 ／ 〜${rentLabel}`;
+
+  // プロフィールサマリー
+  const gL = {male:'男性',female:'女性',other:''};
+  const aL = {teen:'10代以下','20s':'20代','30s':'30代','40s':'40代','50s':'50代以上'};
+  const cL = [['静か','賑やか'],['自然','都会'],['家賃重視','アクセス重視'],['広さ重視','立地重視'],['落ち着き','おしゃれ']];
+  const dL = {noisy:'騒音NG',crowd:'人混みNG',nightlife:'夜の街NG',hills:'坂道NG',old:'古い物件NG',unsafe:'治安重視',traffic:'幹線道路NG',far:'駅遠NG'};
+  const parts = [];
+  if (state.gender && gL[state.gender]) parts.push(gL[state.gender]);
+  if (state.ageGroup) parts.push(aL[state.ageGroup] || '');
+  state.contrasts.forEach((v,i) => { if (v < 0) parts.push(cL[i][0]); if (v > 0) parts.push(cL[i][1]); });
+  state.dislikes.forEach(d => { if (dL[d]) parts.push(dL[d]); });
+
+  const medals = ['🥇','🥈','🥉'];
+  const profileHtml = parts.length
+    ? `<div class="result-profile">診断プロフィール：<strong>${parts.join(' / ')}</strong></div>` : '';
+
+  // MBTIカード
+  const mbtiType = deriveMBTI();
+  const mbtiInfo = MBTI_DATA[mbtiType] || { name: '—', emoji: '🧠', desc: '' };
+  const mbtiHtml = `
+  <div class="mbti-card">
+    <div class="mbti-label">✨ あなたの住まいMBTIタイプ</div>
+    <div class="mbti-row">
+      <div class="mbti-emoji">${mbtiInfo.emoji}</div>
+      <div class="mbti-type-wrap">
+        <div class="mbti-type">${mbtiType}</div>
+        <div class="mbti-name">${mbtiInfo.name}</div>
+      </div>
+    </div>
+    <div class="mbti-desc">${mbtiInfo.desc}</div>
+    <div class="mbti-dims">${mbtiDimLabels(mbtiType)}</div>
+  </div>`;
+
+  document.getElementById('resultCards').innerHTML = mbtiHtml + profileHtml + top3.map((area, idx) => {
+    const rentDisp  = area.rent[state.roomType] ? area.rent[state.roomType].toLocaleString() : '要確認';
+    const maxScore  = top3[0].score;
+    const pct       = maxScore > 0 ? Math.min(99, Math.max(45, Math.round((area.score / maxScore) * 99))) : 80;
+    const matchLbl  = idx === 0 ? '最適' : idx === 1 ? 'おすすめ' : '候補';
+    const warnHtml  = area.penalty > 0 ? `<div><span class="warn-tag">⚠️ 苦手条件に近い可能性があります</span></div>` : '';
+    const firstMoveHtml = (idx === 0 && state.firstMove === 'yes') ? `
+      <div class="firstmove-info">
+        <div class="firstmove-title">🏠 はじめての引っ越しの方へ</div>
+        <div>初期費用概算は公式LINEからお伝えさせていただきます！当店では初期費用を大幅に抑えられる物件も多数ご用意しています！</div>
+        <div class="firstmove-note">💬 費用の詳細もLINEでお気軽にご相談ください。</div>
+      </div>` : '';
+    return `
+    <div class="result-card rank-${idx+1}">
+      <div>
+        <span class="rank-badge">${medals[idx]}</span>
+        <span class="result-name">${area.name}</span>
+        <span class="match-badge">${matchLbl}</span>
+      </div>
+      <div class="result-tags">
+        ${area.tags.slice(0,3).map(t=>`<span class="result-tag">${t}</span>`).join('')}
+      </div>
+      <div class="result-info">
+        🚃 乗車時間：<strong>約${area.commuteTime}分</strong>
+      </div>
+      <div class="result-desc">${area.desc}</div>
+      <div class="station-list">
+        ${(area.nearStations||[]).map(s=>`<span class="station-badge">🚉 ${s}</span>`).join('')}
+      </div>
+      ${getAreaRent1K(area)}
+      ${warnHtml}
+      ${firstMoveHtml}
+      <div class="score-bar-wrap">
+        <div class="score-label"><span>マッチ度</span><span>${pct}%</span></div>
+        <div class="score-bar"><div class="score-fill" style="width:0%" data-w="${pct}%"></div></div>
+      </div>
+    </div>`;
+  }).join('');
+
+  // ===========================
+  // Task #6: LINEボタンに診断結果を自動入力
+  // line.me/R/msg/text/ スキームで診断結果テキストをプリセット
+  // ===========================
+  const roomTypeLabels = {'1R1K':'1R・1K','1DK1LDK':'1DK・1LDK','2LDK':'2LDK','3LDK':'3LDK以上'};
+  const rentStr = state.rentMax === 999999 ? '上限なし' : Math.round(state.rentMax/10000) + '万円';
+  const mbtiLine = '◆ 住まいタイプ: ' + mbtiType + '（' + (MBTI_DATA[mbtiType]||{name:'—'}).name + '）';
+  const profileLine = parts.length ? '◆ プロフィール: ' + parts.join(' / ') : '';
+  const commuteMethodLabel = {'train':'電車・公共交通','car':'車・バイク','both':'両方'}[state.commuteMethod] || '';
+  const cookingLabel = {'often':'自炊派','sometimes':'たまに自炊','rarely':'外食・デリバリー派'}[state.cooking] || '';
+  const homeTimeLabel = state.homeTime < 0 ? 'インドア派' : (state.homeTime > 0 ? 'アウトドア派' : '');
+  const firstMoveLine = state.firstMove === 'yes'
+    ? '◆ はじめての引っ越し（費用相場：' + (state.movingCostKnown === 'no' ? '未確認・要相談' : '確認済み') + '）'
+    : '';
+  const lineMsg = [
+    '【住まらぼ 住まい診断結果】',
+    '',
+    '◆ 職場の最寄り駅: ' + state.workStation,
+    '◆ 通勤手段: ' + commuteMethodLabel,
+    state.commuteMethod !== 'car' ? '◆ 希望乗車時間: ' + state.commuteMax + '分以内' : '',
+    '◆ 希望間取り: ' + (roomTypeLabels[state.roomType] || state.roomType),
+    '◆ 家賃上限: ' + rentStr,
+    cookingLabel ? '◆ 生活スタイル: ' + cookingLabel + (homeTimeLabel ? ' / ' + homeTimeLabel : '') : '',
+    firstMoveLine,
+    mbtiLine,
+    profileLine,
+    '',
+    '▼ おすすめエリア TOP3',
+  ].concat(
+    top3.map((a,i) => ['1位','2位','3位'][i] + ': ' + a.name
+      + ' (乗車約' + a.commuteTime + '分 / 目安' + (a.rent[state.roomType]/10000).toFixed(1) + '万円)')
+  ).concat([
+    '',
+    '詳しくご提案をお願いします！'
+  ]).filter(s => s !== null && s !== undefined).join('\n');
+
+  // LINEボタン：診断結果をクリップボードにコピー → 公式LINEを開く
+  document.querySelectorAll('.btn-line').forEach(btn => {
+    btn.removeAttribute('href');
+    btn.style.cursor = 'pointer';
+    btn.onclick = async (e) => {
+      e.preventDefault();
+      // クリップボードにコピー
+      try {
+        await navigator.clipboard.writeText(lineMsg);
+      } catch(err) {
+        const ta = document.createElement('textarea');
+        ta.value = lineMsg;
+        ta.style.cssText = 'position:fixed;opacity:0;';
+        document.body.appendChild(ta);
+        ta.select(); document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+      // トースト表示
+      const toast = document.createElement('div');
+      toast.innerHTML = '✅ 診断結果をコピーしました！<br>LINEで<strong>貼り付けて</strong>送信してください';
+      toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#222;color:white;padding:14px 22px;border-radius:14px;font-size:0.8rem;z-index:9999;max-width:88%;text-align:center;line-height:1.6;box-shadow:0 4px 16px rgba(0,0,0,0.3);';
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 4000);
+      // 0.6秒後にLINE公式アカウントを開く
+      setTimeout(() => { if (navigator.share) { navigator.share({ title: '住まい診断結果', text: lineMsg }); }}, 600);
+    };
+  });
+
+  showScreen('screen4');
+  setTimeout(() => {
+    document.querySelectorAll('.score-fill').forEach(el => {
+      el.style.width = el.dataset.w;
+    });
+  }, 120);
+}
+
+// ===========================
+// 結果を画像化してLINEに送る
+// ===========================
+async function saveResultImage() {
+  const msg = document.getElementById('savingMsg');
+  const btn = document.querySelector('.btn-save-img');
+  msg.style.display = 'block';
+  btn.style.opacity = '0.5';
+  btn.style.pointerEvents = 'none';
+
+  try {
+    const target = document.getElementById('resultCards');
+    const canvas = await html2canvas(target, {
+      scale: 2,
+      backgroundColor: '#FFF8F3',
+      useCORS: true,
+      logging: false
+    });
+
+    canvas.toBlob(async (blob) => {
+      const file = new File([blob], '住まい診断結果.png', { type: 'image/png' });
+
+      // Web Share API（スマホで共有メニューが開く）
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({
+          title: '住まい診断結果｜住まらぼ',
+          text: '診断結果をご確認ください！',
+          files: [file]
+        });
+      } else {
+        // フォールバック：ダウンロード
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = '住まい診断結果.png';
+        a.click();
+        URL.revokeObjectURL(url);
+      }
+    }, 'image/png');
+  } catch(e) {
+    alert('画像の作成に失敗しました。スクリーンショットをご利用ください。');
+  } finally {
+    msg.style.display = 'none';
+    btn.style.opacity = '1';
+    btn.style.pointerEvents = 'auto';
+  }
+}
+</script>
+</body>
+</html>
+
+
