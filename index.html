@@ -4,21 +4,22 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>住まい診断｜住まらぼ</title>
+<meta name="color-scheme" content="light">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&family=Zen+Maru+Gothic:wght@700;900&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
   :root {
-    --primary: #F47B2D;
+    --primary: #DE6E3C;
     --primary-dark: #D96820;
     --primary-light: #F9A06A;
     --primary-bg: #FFF8F3;
-    --accent: #FF9F43;
+    --accent: #D96820;
     --card: #ffffff;
     --text: #2d2d2d;
     --muted: #999;
-    --border: #FFE0C8;
+    --border: #D9C6AC;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
@@ -30,7 +31,7 @@
 
   /* ===== ヘッダー ===== */
   .header {
-    background: linear-gradient(135deg, #7C3AED 0%, #F47B2D 100%);
+    background: linear-gradient(135deg, #7A4A2B 0%, #DE6E3C 100%);
     color: white;
     padding: 22px 20px 18px;
     text-align: center;
@@ -42,7 +43,7 @@
   /* ===== プログレスバー ===== */
   #progressWrap {
     height: 3px;
-    background: #FFE0C8;
+    background: #D9C6AC;
     display: none;
     position: sticky;
     top: 0;
@@ -50,7 +51,7 @@
   }
   #progressFill {
     height: 100%;
-    background: linear-gradient(90deg, #F47B2D, #FF9F43);
+    background: linear-gradient(90deg, #DE6E3C, #D96820);
     transition: width 0.45s cubic-bezier(0.4,0,0.2,1);
     border-radius: 0 2px 2px 0;
   }
@@ -62,7 +63,7 @@
 
   /* ===== 駅入力 (Screen1) ===== */
   .s1-card {
-    background: white;
+    background: #FBF5EA;
     border-radius: 20px;
     padding: 28px 22px;
     box-shadow: 0 4px 20px rgba(244,123,45,0.12);
@@ -76,7 +77,7 @@
     width: 100%; padding: 14px 16px;
     border: 2px solid #e8e8e8; border-radius: 12px;
     font-size: 1rem; color: var(--text);
-    background: white; transition: border-color 0.2s;
+    background: #FBF5EA; transition: border-color 0.2s;
     -webkit-appearance: none;
   }
   .s1-input:focus { outline: none; border-color: var(--primary); }
@@ -84,25 +85,25 @@
   .autocomplete-list {
     border: 2px solid var(--primary); border-top: none;
     border-radius: 0 0 12px 12px;
-    background: white; max-height: 200px; overflow-y: auto;
+    background: #FBF5EA; max-height: 200px; overflow-y: auto;
     display: none; position: relative; z-index: 20;
   }
   .autocomplete-list.show { display: block; }
   .autocomplete-item {
     padding: 12px 16px; font-size: 0.9rem;
-    cursor: pointer; border-bottom: 1px solid #f0f0f0;
+    cursor: pointer; border-bottom: 1px solid #E7D8C2;
   }
   .autocomplete-item:hover { background: var(--primary-bg); }
   .autocomplete-item:last-child { border-bottom: none; }
   .line-badge {
-    font-size: 0.65rem; background: #fff0e6; color: var(--primary);
+    font-size: 0.65rem; background: #F0E2CE; color: var(--primary);
     padding: 2px 6px; border-radius: 8px; margin-left: 6px;
   }
 
   /* ===== ボタン ===== */
   .btn-main {
     width: 100%; padding: 16px;
-    background: linear-gradient(135deg, #F47B2D, #FF9F43);
+    background: linear-gradient(135deg, #DE6E3C, #D96820);
     color: white; border: none; border-radius: 14px;
     font-size: 1.05rem; font-weight: 600;
     font-family: 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', sans-serif;
@@ -160,7 +161,7 @@
   .optional-badge {
     display: inline-block;
     font-size: 0.68rem; font-weight: 600;
-    background: #f0f0f0; color: var(--muted);
+    background: #E7D8C2; color: var(--muted);
     padding: 2px 8px; border-radius: 20px; margin-left: 8px;
     vertical-align: middle;
   }
@@ -170,7 +171,7 @@
   .quiz-option {
     width: 100%; padding: 16px 18px;
     border: 2px solid #ebebeb; border-radius: 14px;
-    cursor: pointer; background: white;
+    cursor: pointer; background: #FBF5EA;
     display: flex; align-items: center; gap: 14px;
     transition: all 0.15s;
     -webkit-tap-highlight-color: transparent;
@@ -179,12 +180,12 @@
   .quiz-option:active { transform: scale(0.98); }
   .quiz-option.selected {
     border-color: var(--primary);
-    background: #FFF3EA;
+    background: #FCE8D2;
   }
   .quiz-option.selected .q-label { color: var(--primary); }
   .quiz-option.flash {
     border-color: var(--primary);
-    background: #FFD5A8;
+    background: #CBB69A;
     transform: scale(0.98);
   }
   .q-icon { font-size: 1.3rem; line-height: 1; flex-shrink: 0; }
@@ -194,7 +195,7 @@
   }
   .q-sub {
     font-size: 0.7rem; color: var(--muted);
-    background: #f0f0f0; padding: 3px 8px; border-radius: 8px;
+    background: #E7D8C2; padding: 3px 8px; border-radius: 8px;
     flex-shrink: 0;
   }
   .quiz-option.selected .q-sub { background: rgba(244,123,45,0.15); color: var(--primary); }
@@ -205,14 +206,14 @@
     padding: 10px 16px;
     border: 2px solid #ebebeb; border-radius: 20px;
     font-size: 0.85rem; font-weight: 700;
-    cursor: pointer; background: white;
+    cursor: pointer; background: #FBF5EA;
     transition: all 0.15s;
     -webkit-tap-highlight-color: transparent;
     user-select: none;
   }
   .quiz-chip:active { transform: scale(0.96); }
   .quiz-chip.selected {
-    border-color: var(--primary); background: #FFF3EA; color: var(--primary);
+    border-color: var(--primary); background: #FCE8D2; color: var(--primary);
   }
   .quiz-skip {
     text-align: center; font-size: 0.8rem;
@@ -226,7 +227,7 @@
     flex: 1; padding: 16px 8px;
     border: 2px solid #ebebeb; border-radius: 14px;
     text-align: center; cursor: pointer;
-    background: white; display: flex; flex-direction: column;
+    background: #FBF5EA; display: flex; flex-direction: column;
     align-items: center; justify-content: center; gap: 6px;
     min-height: 90px; transition: all 0.15s;
     -webkit-tap-highlight-color: transparent; user-select: none;
@@ -234,21 +235,21 @@
   .contrast-card:active { transform: scale(0.97); }
   .c-icon { font-size: 1.5rem; line-height: 1; }
   .c-text { font-size: 0.73rem; font-weight: 700; line-height: 1.5; color: var(--text); }
-  .contrast-card.left.selected  { border-color: #F47B2D; background: #FFF3EA; }
-  .contrast-card.left.selected  .c-text { color: #F47B2D; }
-  .contrast-card.right.selected { border-color: #6C5CE7; background: #F0EDFF; }
-  .contrast-card.right.selected .c-text { color: #6C5CE7; }
+  .contrast-card.left.selected  { border-color: #DE6E3C; background: #FCE8D2; }
+  .contrast-card.left.selected  .c-text { color: #DE6E3C; }
+  .contrast-card.right.selected { border-color: #D96820; background: #F0E2CE; }
+  .contrast-card.right.selected .c-text { color: #D96820; }
   .contrast-neutral {
     flex-shrink: 0; width: 56px;
     padding: 8px 4px; border: 2px solid #ebebeb; border-radius: 14px;
     font-size: 0.65rem; font-weight: 700; cursor: pointer;
-    background: white; color: var(--muted);
+    background: #FBF5EA; color: var(--muted);
     text-align: center; line-height: 1.4;
     display: flex; align-items: center; justify-content: center;
     transition: all 0.15s;
     -webkit-tap-highlight-color: transparent; user-select: none;
   }
-  .contrast-neutral.selected { border-color: var(--primary); background: #FFF3EA; color: var(--primary); }
+  .contrast-neutral.selected { border-color: var(--primary); background: #FCE8D2; color: var(--primary); }
   .contrast-caption {
     display: flex; justify-content: space-between;
     font-size: 0.65rem; color: var(--muted); padding: 0 4px;
@@ -261,22 +262,22 @@
   .result-header p  { font-size: 0.8rem; color: var(--muted); margin-top: 5px; font-family: 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', sans-serif; }
 
   .result-profile {
-    background: #FFF3EA; border-radius: 12px;
+    background: #FCE8D2; border-radius: 12px;
     padding: 10px 14px; font-size: 0.76rem;
     color: var(--muted); margin-bottom: 14px; line-height: 1.7;
   }
   .result-profile strong { color: var(--text); }
 
   .result-card {
-    background: white; border-radius: 16px;
-    border: 2px solid #f0f0f0; padding: 18px 16px;
+    background: #FBF5EA; border-radius: 16px;
+    border: 2px solid #E7D8C2; padding: 18px 16px;
     margin-bottom: 12px; position: relative; overflow: hidden;
   }
   .result-card::before {
     content: ''; position: absolute; top: 0; left: 0;
     width: 4px; height: 100%;
   }
-  .result-card.rank-1::before { background: #F47B2D; }
+  .result-card.rank-1::before { background: #DE6E3C; }
   .result-card.rank-2::before { background: #aaa; }
   .result-card.rank-3::before { background: #D4956A; }
   .rank-badge {
@@ -284,13 +285,13 @@
     width: 26px; height: 26px; border-radius: 50%;
     font-size: 0.8rem; font-weight: 800; margin-right: 8px;
   }
-  .rank-1 .rank-badge { background: #FFF0D9; color: #F47B2D; }
-  .rank-2 .rank-badge { background: #eee; color: #777; }
+  .rank-1 .rank-badge { background: #FFF0D9; color: #DE6E3C; }
+  .rank-2 .rank-badge { background: #eee; color: #8A7A65; }
   .rank-3 .rank-badge { background: #FAE8D8; color: #D4956A; }
   .result-name { font-size: 1.1rem; font-weight: 600; font-family: 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', sans-serif; }
   .match-badge {
     font-size: 0.7rem; margin-left: 8px;
-    background: #FFF3EA; color: var(--primary);
+    background: #FCE8D2; color: var(--primary);
     padding: 2px 8px; border-radius: 8px; font-weight: 700;
   }
   .result-tags { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 10px; }
@@ -306,7 +307,7 @@
   .station-list { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
   .station-badge {
     font-size: 0.7rem; padding: 3px 8px; border-radius: 8px;
-    background: #F0F8FF; color: #3a7bd5; font-weight: 600;
+    background: #F0F8FF; color: #8FB8F0; font-weight: 600;
     border: 1px solid #c8e0f8;
   }
   .score-bar-wrap { margin-top: 12px; }
@@ -317,7 +318,7 @@
   .score-bar { height: 5px; background: #eee; border-radius: 3px; overflow: hidden; }
   .score-fill {
     height: 100%;
-    background: linear-gradient(90deg, #F47B2D, #FF9F43);
+    background: linear-gradient(90deg, #DE6E3C, #D96820);
     border-radius: 3px; transition: width 0.8s ease;
   }
   .warn-tag {
@@ -328,7 +329,7 @@
 
   /* ===== MBTI カード ===== */
   .mbti-card {
-    background: linear-gradient(135deg, #FFF3EA 0%, #FFF8F3 100%);
+    background: linear-gradient(135deg, #FCE8D2 0%, #FFF8F3 100%);
     border: 2px solid var(--border);
     border-radius: 20px;
     padding: 22px 18px 18px;
@@ -340,7 +341,7 @@
   .mbti-card::after {
     content: '';
     position: absolute; top: 0; left: 0; right: 0; height: 3px;
-    background: linear-gradient(90deg, #F47B2D, #FF9F43, #F47B2D);
+    background: linear-gradient(90deg, #DE6E3C, #D96820, #DE6E3C);
   }
   .mbti-label {
     font-size: 0.68rem; font-weight: 700; letter-spacing: 2px;
@@ -384,7 +385,7 @@
   .mbti-type-chip {
     padding: 10px 4px; text-align: center; font-weight: 700;
     font-size: 0.82rem; letter-spacing: 1px;
-    background: white; border: 2px solid #e8e8e8;
+    background: #FBF5EA; border: 2px solid #e8e8e8;
     border-radius: 10px; cursor: pointer; transition: all 0.15s;
   }
   .mbti-type-chip:hover { border-color: var(--primary); background: #FFF8F3; }
@@ -395,12 +396,12 @@
     background: #F0F9FF; border: 1px solid #B3E0FF; border-radius: 10px;
     padding: 12px 14px; margin: 10px 0; font-size: 0.78rem; line-height: 1.6;
   }
-  .firstmove-title { font-weight: 700; color: #0066CC; margin-bottom: 6px; font-size: 0.82rem; }
-  .firstmove-note { color: #0066CC; margin-top: 6px; font-size: 0.72rem; }
+  .firstmove-title { font-weight: 700; color: #7FB8FF; margin-bottom: 6px; font-size: 0.82rem; }
+  .firstmove-note { color: #7FB8FF; margin-top: 6px; font-size: 0.72rem; }
 
   /* LINE CTA */
   .line-cta {
-    background: linear-gradient(145deg, #00c94f 0%, #00a83c 50%, #007f2d 100%);
+    background: linear-gradient(145deg, #00c94f 0%, #37D07C 50%, #007f2d 100%);
     border-radius: 20px; padding: 26px 20px 22px;
     text-align: center; color: white; margin-top: 20px;
     box-shadow: 0 8px 28px rgba(0,140,50,0.45), inset 0 1px 0 rgba(255,255,255,0.2);
@@ -432,7 +433,7 @@
   .line-perk-select {
     display: inline-block;
     background: #FFD700;
-    color: #1a6600;
+    color: #7BD89E;
     font-size: 0.78rem; font-weight: 900;
     padding: 4px 14px; border-radius: 20px;
     margin: 4px auto 10px;
@@ -443,7 +444,7 @@
   .line-stores { display: flex; gap: 10px; margin-top: 10px; justify-content: center; }
   .btn-line {
     flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px;
-    padding: 16px 10px; background: white; color: #00a83c;
+    padding: 16px 10px; background: #FBF5EA; color: #37D07C;
     border: none; border-radius: 14px; font-size: 0.92rem; font-weight: 800;
     cursor: pointer; text-decoration: none;
     box-shadow: 0 4px 14px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.8);
@@ -456,7 +457,7 @@
   .rent-row {
     margin: 8px 0 4px;
     background: #FFF8F3;
-    border: 1px solid #FFE0C8;
+    border: 1px solid #D9C6AC;
     border-radius: 10px;
     padding: 8px 12px;
     font-size: 0.78rem;
@@ -469,7 +470,7 @@
     display: flex; flex-wrap: wrap; gap: 5px; margin-top: 4px;
   }
   .rent-station-item {
-    background: white; border: 1px solid #FFD0B0; border-radius: 6px;
+    background: #FBF5EA; border: 1px solid #FFD0B0; border-radius: 6px;
     padding: 3px 8px; font-size: 0.74rem; color: var(--text);
   }
   .rent-station-item strong { color: var(--primary); }
@@ -481,7 +482,7 @@
   .btn-save-img {
     display: flex; align-items: center; justify-content: center; gap: 8px;
     width: 100%; padding: 14px;
-    background: white; color: #333;
+    background: #FBF5EA; color: #6B5947;
     border: 2px solid #e0e0e0; border-radius: 14px;
     font-size: 0.88rem; font-weight: 700;
     cursor: pointer; margin-bottom: 12px;
@@ -497,6 +498,78 @@
     .container { padding: 16px 12px 60px; }
     .quiz-q { font-size: 1.05rem; }
   }
+
+/* ▼ 住まらぼ本サイト連携パーツ */
+.mbti-caticon{width:64px;height:64px;border-radius:50%;border:3px solid #D96820;background:#fff;object-fit:cover;flex:none;}
+.mbti-hint{margin-top:10px;padding:10px 12px;background:#fff;border:1.5px dashed #DE6E3C;border-radius:12px;font-size:.85rem;line-height:1.6;color:#4A392C;text-align:left;}
+.step-guide{margin:10px 0 14px;text-align:left;}
+.step-row{display:flex;gap:10px;align-items:flex-start;margin:10px 0;line-height:1.6;}
+.step-num{flex:none;width:26px;height:26px;border-radius:50%;background:#D96820;color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;font-size:.85rem;}
+.reports-box{margin-top:16px;padding:14px 16px;background:#fff;border:1.5px solid #EDE0E6;border-radius:14px;text-align:left;}
+.reports-title{font-weight:700;color:#4A392C;margin-bottom:8px;font-size:.9rem;}
+.reports-box a{display:block;margin:8px 0;color:#DE6E3C;font-weight:700;text-decoration:none;font-size:.88rem;line-height:1.5;}
+.share-btn{border:2px solid #D96820;background:#fff;color:#D96820;font-weight:700;padding:10px 20px;border-radius:999px;cursor:pointer;font-size:.85rem;}
+
+/* ▼▼ 住まらぼ世界観スキン(夜の研究所) ▼▼ */
+:root{--primary:#D96820;--primary-dark:#E8925C;--primary-light:#FFC08F;--primary-bg:#F3E8D8;--accent:#D96820;--card:#FBF5EA;--text:#4A392C;--muted:#8A7863;--border:#D9C6AC;}
+body{background:#EDE0CE;background-image:linear-gradient(rgba(120,90,60,.10) 1px,transparent 1px),linear-gradient(90deg,rgba(120,90,60,.10) 1px,transparent 1px);background-size:34px 34px;color:#4A392C;}
+h1,h2,h3,.quiz-q,.mbti-type,.result-header h2,.line-cta h3{font-family:'Zen Maru Gothic','Noto Sans JP',sans-serif;}
+.quiz-q{color:#3A2C20;font-size:1.38rem;font-weight:800;line-height:1.55;letter-spacing:.2px;margin-bottom:10px;}
+.quiz-q .qq{background:linear-gradient(transparent 62%,rgba(233,130,62,.30) 62%);padding:0 2px;}
+@media (max-width:374px){.quiz-q{font-size:1.22rem;}}
+.quiz-option{border-color:#F5E4CF;color:#4A392C;}
+.quiz-option.selected{border-color:#D96820;background:#FCE8D2;color:#4A392C;}
+.q-sub{color:#7E6B56;}
+input,select{background:#F3E8D8;color:#4A392C;border-color:#F5E4CF;}
+.mbti-card{background:#FBF5EA !important;border:2px solid #D9C6AC;border-radius:18px;color:#4A392C;box-shadow:0 6px 18px rgba(120,90,60,.18);}
+.mbti-label{color:#D96820;}
+.mbti-type{color:#D96820;letter-spacing:.1em;}
+.mbti-name{color:#D96820;font-weight:700;}
+.mbti-desc{color:#7A6752;}
+.mbti-type-chip{background:#F0E2CE;color:#D96820;border:1px solid #CBB69A;}
+.mbti-caticon{width:76px;height:76px;border-width:3px;background:#fff;box-shadow:0 0 0 4px rgba(120,90,60,.15),0 4px 12px rgba(120,90,60,.2);}
+.mbti-hint{margin-top:10px;padding:10px 12px;background:#F3E8D8;border:1.5px dashed #D96820;border-radius:12px;font-size:.85rem;line-height:1.6;color:#4A392C;text-align:left;}
+.result-card{background:#FBF5EA;border:2px solid #D9C6AC;border-radius:16px;color:#4A392C;box-shadow:0 4px 14px rgba(120,90,60,.14);}
+.result-profile{background:#F3E8D8;border:1.5px dashed #C9611A;border-radius:12px;color:#5A4838;}
+.rank-badge{background:linear-gradient(135deg,#C9611A,#D96820);}
+.score-fill{background:linear-gradient(90deg,#C9611A,#D96820);}
+.line-cta{background:#EAF6EC;border:2px solid #58B27E;border-radius:18px;color:#2F5A3C;}
+.line-cta h3{color:#1F8A4C;}
+.step-guide{margin:10px 0 14px;text-align:left;}
+.step-row{display:flex;gap:10px;align-items:flex-start;margin:10px 0;line-height:1.6;color:#2F5A3C;}
+.step-num{flex:none;width:26px;height:26px;border-radius:50%;background:#2E9E5B;color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;font-size:.85rem;}
+.btn-addfriend{display:inline-block;background:#06C755;color:#fff;font-weight:700;padding:11px 26px;border-radius:999px;text-decoration:none;margin-top:8px;box-shadow:0 3px 12px rgba(6,199,85,.35);}
+.line-perk{background:#DDF0E1;color:#2E7D4F;}
+.btn-main{background:linear-gradient(135deg,#C9611A,#D96820);}
+.reports-box{margin-top:16px;padding:14px 16px;background:#FBF5EA;border:1.5px solid #D9C6AC;border-radius:14px;text-align:left;}
+.reports-title{font-weight:700;color:#4A392C;margin-bottom:8px;font-size:.9rem;}
+.reports-box a{display:block;margin:8px 0;color:#D96820;font-weight:700;text-decoration:none;font-size:.88rem;line-height:1.5;}
+.share-btn{border:2px solid #C9611A;background:transparent;color:#D96820;font-weight:700;padding:10px 20px;border-radius:999px;cursor:pointer;font-size:.85rem;}
+.retry-btn{color:#8A7863;}
+.saving-msg{color:#7A6752;}
+input::placeholder{color:#9A8871;}
+.area-nick{color:#D96820;font-weight:700;font-size:.95rem;margin:5px 0 2px;font-family:'Zen Maru Gothic','Noto Sans JP',sans-serif;}
+.area-insight{margin:9px 0;padding:9px 12px;background:#F3E8D8;border-left:3px solid #C9611A;border-radius:8px;font-size:.82rem;line-height:1.65;color:#5A4838;text-align:left;}
+.area-anaba{margin:6px 0;padding:8px 12px;background:#EFF6EE;border-left:3px solid #2E9E5B;border-radius:8px;font-size:.8rem;line-height:1.6;color:#33523F;text-align:left;}
+.result-card.darkhorse{border-style:dashed;border-color:#C9611A;}
+.rank-badge.dh{background:linear-gradient(135deg,#7A4A2B,#C9611A);}
+.q-label{color:#4A392C;}
+.answer-log{margin-top:26px;padding:12px 14px;background:rgba(120,90,60,.06);border:1.5px dashed #D9C6AC;border-radius:14px;text-align:left;}
+.alog-title{font-size:.78rem;color:#8A7863;font-weight:700;margin-bottom:6px;}
+.alog-chip{display:inline-block;background:#F3E8D8;border:1px solid #D9C6AC;color:#6B5947;border-radius:999px;padding:4px 11px;margin:3px 5px 0 0;font-size:.74rem;line-height:1.5;}
+html,body{background:#EDE0CE !important;}
+body::before{content:"";position:fixed;inset:0;z-index:-1;background:#EDE0CE;background-image:linear-gradient(rgba(120,90,60,.10) 1px,transparent 1px),linear-gradient(90deg,rgba(120,90,60,.10) 1px,transparent 1px);background-size:34px 34px;}
+/* ▼ v18: LINE特典枠リデザイン(クーポン風) */
+.line-cta{border:1.5px solid #C9E6D2;background:linear-gradient(180deg,#F2FAF4,#E6F4EA);box-shadow:0 8px 24px rgba(46,125,79,.12);}
+.line-perks{background:#FFFFFF;border:1px solid #DCEEE2;border-radius:16px;padding:4px 16px;box-shadow:0 2px 12px rgba(46,125,79,.08);}
+.line-perk{background:transparent;color:#33523F;font-size:.88rem;font-weight:600;line-height:1.6;padding:11px 2px;gap:9px;align-items:flex-start;border-bottom:1px dashed #DCEEE2;text-shadow:none;}
+.line-perk:last-child{border-bottom:none;}
+.line-perk strong{color:#1F8A4C;}
+.pk-check{flex:none;width:19px;height:19px;margin-top:2px;border-radius:50%;background:linear-gradient(135deg,#43C878,#2E9E5B);color:#fff;font-size:.68rem;font-weight:700;display:inline-flex;align-items:center;justify-content:center;box-shadow:0 1px 3px rgba(46,158,91,.35);}
+.perk-choice{position:relative;margin-top:20px;padding-top:16px;background:#FFFDF4;border:1.5px dashed #EBC27A;}
+.perk-ribbon{position:absolute;top:-13px;left:50%;transform:translateX(-50%);white-space:nowrap;}
+.line-perk-select{background:linear-gradient(135deg,#FFE3A8,#F6BF66);color:#7A4A12;font-size:.78rem;font-weight:700;padding:6px 18px;border-radius:999px;box-shadow:0 2px 8px rgba(200,140,40,.28);letter-spacing:.4px;margin:0;text-shadow:none;}
+/* ▲▲ スキンここまで ▲▲ */
 </style>
 </head>
 <body>
@@ -531,6 +604,7 @@
       <span class="quiz-counter" id="quizCounter">1 / 11</span>
     </div>
     <div id="quizContent"></div>
+    <div id="answerLog" class="answer-log" style="display:none"></div>
   </div>
 
   <!-- ===== SCREEN 4: 結果 ===== -->
@@ -545,47 +619,45 @@
     <div class="saving-msg" id="savingMsg">⏳ 画像を作成中です...</div>
     <div class="line-cta">
       <h3>📩 診断結果をスタッフに送ろう！</h3>
-      <p>下のボタンをタップすると<strong>診断結果が自動でコピー</strong>されてLINEが開きます。<br>トーク画面に<strong>貼り付けて送信</strong>するだけでスタッフがご提案！</p>
+      <div class="step-guide">
+        <div class="step-row"><span class="step-num">1</span><div>まだ友だちでない方は、まず<strong>友だち追加</strong><br><a href="https://lin.ee/o3OHmib" target="_blank" rel="noopener" class="btn-addfriend">💚 LINEで友だち追加</a></div></div>
+        <div class="step-row"><span class="step-num">2</span><div>下の緑ボタンで<strong>結果が自動コピー</strong>されます。開いたトークに<strong>貼り付けて送信！</strong></div></div>
+      </div>
       <div class="line-perks">
-        <div class="line-perk">✅ 来店不要・完全無料</div>
-        <div class="line-perk">✅ 冷蔵庫・洗濯機・電子レンジが無料でプレゼント✨</div>
-        <div class="line-perk">✅ お引越し費用無料✨</div>
+        <div class="line-perk"><span class="pk-check">✓</span><span>来店不要・<strong>完全無料</strong></span></div>
+        <div class="line-perk"><span class="pk-check">✓</span><span>内見予約・契約も<strong>LINEで完結</strong>可能</span></div>
       </div>
-      <div style="text-align:center;margin:6px 0 10px;">
-        <span class="line-perk-select">🎁 どちらか選べる！！</span>
-      </div>
-      <div class="line-perks" style="margin-top:0;">
-        <div class="line-perk">✅ 内見予約・契約もLINEで完結可能</div>
+      <div class="line-perks perk-choice">
+        <div class="perk-ribbon"><span class="line-perk-select">🎁 どちらか選べる！</span></div>
+        <div class="line-perk"><span class="pk-check">✓</span><span><strong>冷蔵庫・洗濯機・電子レンジ</strong>を無料でプレゼント</span></div>
+        <div class="line-perk"><span class="pk-check">✓</span><span><strong>お引越し費用</strong>が無料</span></div>
       </div>
       <div class="line-stores">
-        <a href="https://lin.ee/424jmwsb" class="btn-line" target="_blank" style="flex:none;width:100%;max-width:320px;margin:0 auto;">
+        <a href="https://lin.ee/o3OHmib" class="btn-line" target="_blank" style="flex:none;width:100%;max-width:320px;margin:0 auto;">
           <svg viewBox="0 0 24 24" fill="#06c755"><path d="M19.365 9.89c.499 0 .906.41.906.91s-.407.907-.906.907h-2.87v1.875h2.87c.499 0 .906.407.906.906 0 .5-.407.908-.906.908h-3.777c-.499 0-.906-.408-.906-.908V8.984c0-.5.407-.907.906-.907h3.777zm-12.77 4.6c0 .5-.408.907-.907.907-.499 0-.907-.407-.907-.907V8.984c0-.5.408-.907.907-.907.499 0 .907.407.907.907v5.505zm3.245.907c-.346 0-.668-.199-.828-.511l-2.631-4.994v4.598c0 .5-.408.907-.908.907-.499 0-.907-.407-.907-.907V8.984c0-.5.408-.907.908-.907.346 0 .668.198.827.51l2.632 4.996V8.984c0-.5.407-.907.907-.907.5 0 .907.407.907.907v5.505c0 .5-.407.907-.907.907zm3.97 0h-1.816c-.499 0-.907-.407-.907-.907V8.984c0-.5.408-.907.907-.907.5 0 .907.407.907.907v4.598h.909c.499 0 .906.407.906.907 0 .5-.407.907-.906.907zM12 2C6.477 2 2 6.145 2 11.25c0 4.557 3.524 8.35 8.272 9.093.322.07.76.213.87.49.1.25.066.643.032.896l-.14.847c-.043.25-.196.978.857.533 1.054-.444 5.68-3.354 7.752-5.744C21.01 15.434 22 13.44 22 11.25 22 6.145 17.523 2 12 2z"/></svg>
-          公式LINEに送って相談する📩
+          診断結果をLINEで送る📩
         </a>
       </div>
     </div>
+    <p style="text-align:center;margin:14px 0 4px;"><button class="share-btn" onclick="shareQuiz()">🔗 この診断を友だちに教える</button></p>
     <p class="retry-btn" onclick="restartQuiz()">🔄 もう一度診断する</p>
   </div>
 
 </div>
 
 <script>
+
+const TYPE_ICONS = {INTJ:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEgAAABICAMAAABiM0N1AAABIFBMVEX///////7///z//v///v7+///+//7+//3+/v/+/v7+/vz9/v7//f7+/f7+/f39/f/9/f79/f3+/fr9/P3++/j8/f38/P38/Pz8/Pr8+/z7+/z6+/z7+vv6+vr6+fr7+PL39/j09PX07+vt7e705dPi4eDZ1tfQyc7py6DuuGrDxcC7uLO8sca5scP/qA3/pgL+ogb+ogH+oAT9oAH9oAD+ngX9nwH+nQH+ngD7ogv8nwL7ngL7nQK8p6PloTOmpKD8mwf8mgD4mQLwmQz3lALnkAfdggHKewyulYibkKqbiaesfFWRjpGKfXhiiTpeekOzbRyjWhSBb5qEY299aqF6bI1zW3VuTFdOZjlbTWBaPWtJO1xRMTszKz8wHi8cDhS6tzhOAAAM20lEQVR42qVYaXuiWNMugjgcibYn7kZRgkLEjmviblBa0W4kkc5MNJv+/3/x1AGTng/vh/e6ppKgLOem1rvqBEgM4K9EGv6zxEKE5AD0m5//f/n1f1wDQsVL0P5+/vs/CpBIEfTnG/k/myaQvPK3DhBPZ2g6k0nTRIIGx0QaDzSdTrCzRDydllIZvIDXM5lcAu+yyzSBa9LpWBrQQd9/gRwPx6OESZgSIETAHw7PIAx4xv44EgnxJOx/ZzcITyX87p/yhEQB0uKvG1EmROTZRd5/iN2PhgnPc2wtCaCIwA6IRsQQL0bZo8CzFWHwv6bjf3+HAhrJXo6aA2AcQ4JwzuNbISqRqAAcL1KBUISCEMLFBRIPRc8hFMUV5yQUDodFgEwAFOiLEP4nDdHgE0hgKYnSQDFfb1RCQO/SiL8szG4AyZ80IiJeo5S9F2+EmCHBWoEZBTGWcExZGizDi4lshDA8In4T8XX5KALJ7B3UB4r5PhJJyHczRiAU9o0NkfNYmL2cAMe8LCYQjxM4BsujouRkGg/oDaaTgBBMYQFRokTyLQTmYsATnmMQIjtJguZMLy+ifoRYqHPx3wyIreFJUDJ+WMO+8cH7mC2oKc+fi8y0b4SVVd2zt1PI+tnAYpQOgAjH+04BvMbjCfUdEaER/21Ewr8wx3LCd28sC6Y3b1iOchHlRT+zSSb6m/mIRr/yxU8MKepHI8bBWTYqkCALAaQgBwuw9vrWornSQllIl1HQNAZUIFHfCwAsUmGeWU39C6oqAZejJMzQgUeXoIUy6jNc3Ndm9hqyys305uYGTSMsamEuHPKNAT/AsRiIPA9Z0B3HqSsAWYrVgRmRSGRprIz+ac1mldKPpaNwqnnz/ft3EHzTCsBiTGMn64ALopVMO/atvXLWKmpFaC55FlS65lnDRS2ZrC22GhQ0NTCN/A7yiJdOaY1yjlpxIF0ozrI1aFur7VSFC0S4VKuarus7e7hoVEp/XfdXBsiaAmGO+chPSBFrB4JkpsBhrMOYWWcINLsfDhqtlaNLqjF1tp4vk/GiBqWz69lqihopfDSCPgpMA1bNlP+kCUzVMBEZ0LBSuZ8PG4uts13Zy8Wg2Wy3m+Nup1GrCJWZ7VyeoUbfMNlPPuKDvKKfxctEZKY1KsJVbW612rbVbrc6o/6ESa/Tn89q1w0bvY1AcfJVtDwfR6BohCILwSmdoxdlBlQqRa5n1qR15yP053jsT3rjO2vRaCwcFRAoQ0FMf2rECoO5mKUyowtegGRqbbeuz0rJ69lkNJmM+v3eZDIYTMaTea/X79/NWz6QKqboV62FRJHVuxRjtOn7HE1Mwtru185KtcVk1OsN8BdV6k3w2B8M+v3RXWPhqTFdjaaxrk8+4r5h9JF3gPolyhgtBDJMV/PaBeL0e0xG4xHCIQpCDnp99FdztRZ09TyDnJD7JLYv8RksxlKzAPp2fl+zJt1ur9sb9Ubd3ngcqDZgKk3mVtvTNVWI5774CN3rExgfgGHsOU7IgLqd3w163e6oe4tHhvQpE+b0yby1dKoKpOELSBARh7EtCNggsKrYaSR56SxanQ4D6vXY7y3i9W4Ht+PxeGJZk9Fg3NiaZzJoX84+0RwQQQiLPOfXXFxgTmqM213fNKZY77bry+0I86E/GfTuGvbTZVb9yYD8EglxUawLjjmIcth0OF4SJUkGY9v0gUa97kkG3Xa7275tLlZ2t9/rDNuOGlEU4E/OFs5jMeYfIURTrD5EIRIXUaO13ZyMuqMRgo3GPtAIlWq3GivHXbUwqUbtLXZ8fPdJozCPHQh9JLI+GUaz8IeXkoJjtyYY9G6n28Qq6417CNoadYYN78XwmtZ8jjTpTtfKybQiholHWEIyoJmpDNNNJFz8Ap09nozZ8ubSWy3HTYREL1tWwzseveYCHb7ynKkm/6tBCoxApJTi7g3I+8kdplj+405vNEKLkJWOO8drjOfDWq3WaNs+EMrKruGgBuIp/KLIYc2KBTAeHh7VFA4tVBITZ6rT7oxGqNRo0lweD4dVc1i7fnqfXl03VtvZbHY/W1i31+XSzZezRRy5sP1gm3l42Jsgp1MJSUwzjVosnceI1vJQB2QVdXeoC1LlvjMc3tfuF1bzvsTdQCgfOJtDXoxHs+Er9+HhwY0W46l0FCkSnGajjYU/Hty12stVo3UNpQtwroSkcI0KzeaLub1aGdVfED5pRENxTMg8s2yPtkUymJwSqMYOidXuonNrtftGY3yfDCVjlftaJXJRacxnyHKD5cpz15gBuc+xhrV0Ztnj/mGvQxELOgH61FnZ9tKysIldX99b89rZhVCpXVUqJaj8sPp3d71Jw3aRb4DPByWCIxSQVPEEpElhfwAAfLzNom1hqH4sJlajlLgolUCQaPJ+MUMu6bSa2xtsLF/hx+oKZwtl39doGlQ3dSHD0QKtLa12tz+ZYaCtuYXNA/whq1Jj5/3BHaNtTat+ZTbHMjKhhDQG5EJ971bzMRovkOsfP1bL1h0SKzItsm2tUkHLasOFNehb1rw13laDrpkOgKREvFwtA827+/1eMx81vJXP52Xxauttf3T6/f6gP+p0Oq35uNFoDNqtobWyLcxsz4CiQBMgnkzDAUPbP5oKVB8PpvGsVOt1NV2QI9XNGpPHYkC9TrvdHo0sCwO+ssfsgHVjQFny+cfvtAVC8lz1EVNIg7qrusb6cX/AV6VBreLEsGygu+eDXvv2djTBdFoubXvlNeyV7e10yCPBxz+JTZTohcqAHqr6xnTRT/u9msozfmMjyWrQ7FiYlkhL4+bSxmbbtuyW7a11Y2OWISfR0xDB8qiY2mCZPbi66zKH712+nMDOFM3EIhsX02nS7rQmIzy0UB17YU3ulo5kqMTcKOIlcmJGCkwjQVajn9xH/HhADijgpAfYADYGaK7jMccwnGFrtWVlbzVX5lSR0RcKkivk2KBVYDSdUlku7h+f9gzHLWbZZJuJqRsNuKupotWnT569mC1mttecYxKNhs2tIQGOXZtigs2QDCgk8HwRjD2TR/+ghjPIdJQoGx3KyN11zAcFK2bRX3jbEeIM+uPmamOq2EbNKZJtAISjd5iVLIIcHx/3jxscDBjlZsCsQzlXvEyuNShHQHnyVt4/jt3p3w56VgvrXsvSvIwvw73Ib0a1OD3wWGpK3di8G1UVUsUEThhFVBvKhZSUIVfrKmr2hGm13XvNYaczmFg9nPygVEryVZcNo0HRYu2nykoRwHivnmXLco7SjExUVy0WKY2LGaw+Dcyn3Wrr7Xb2bNiZLxorV5LTkCxhiWIdSD6QxPaGfs0Y76r/yUNaphs0DKevuAgMabOBjWd7JhpoN1vNpaNe5Cluii+L6Jsgs3E+ymXKdROffTrgwTQ1oGytgjMUJ9EwFXKg1stUMN/dS6rqaw+nXe0sj3vNsCQV5VM7YnyU4bS398OnvD2rpJjBDCoCFxKTEZKRcuwhKmyqUDyDS3OHk24OguGF4lye/mRICtrzv+RFBVJ10S5AOr8q+1u5PLY9o67iK8pwtZYhy/a9bFRkk4K/hSgiGyVAe/mD8/qi5ljoMZm4TLauAg12IXnT0BUS5crlaR1kbFqfG+jPIQJbbVTF5UxeUd7csqy4VYidf/smKKbi768jeaqYmsoGumpdw3yQaTwYqFOnviYzfpbh59sfywwgultIRcTkVVI15Wwa+16cAak4VsWgommGqWRyIoOh+TxEA2Jj+zCZ1F+fmTY+EOZq3YSMSJDsq6YMUMxn4hQjp+tFEotclSoVwyyHZJYcFKMW/WTIaE6J3ny8neT1ReOgrmO7I/w3ztiU62hH3gcyXR0KtIKS1HEKyWVz+WI59zWx0TxG1z18+LH/+Ph4UWNQx1xCVeVidWMeXxR0CANyXYUmUqjQVRmMtR78V0UD4dSy8xnF/Oft4wT0+vEsy0yjBL1kT5rHw9FFwsCNYL1eR7IgkiQJLGOndd0wtPoLZrY/H0XQ04fD8e31JB9PxXy+bpJyWRb0jfuEQJuUkrnMqKaqFeWCXJZlOU9lkKqG62KMPqdaKv/1/GE8/wEywfhwkUyAmrsttvfj4TpoX6aGrebfclY3X39uIBI4OyEXn1/1P0AH13g5fuxMJPenKe6vEMibohGGsdHMuuGLrgefG/f1n3+Q2HygaK74/GG+fAK9vZjmx+H48o6ynuLhcDy+B7K7cg+nr64ZiIthPnXaApHh12HzpdHbT4DN8eNpt1476+nTdH1kQOv61D2sr6bvzvV0uva8NdaNSNI/MUYfn5ktyZnqK0brCwgHHFzrMJnu3B0CHXb4fe1OK3V3zWTn7bSEovDaxwcifU4jIgag+vwHyBRE93h08Hl3PXWmLwxoup6yU31aXzs+0DvScBl0P4v/B9vqzZNEOz1/AAAAAElFTkSuQmCC',INTP:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEgAAABICAMAAABiM0N1AAABIFBMVEX////+//////7+//7///z//v///v7+/v/+/v7+/f7+/v3//vv+/f3++/X9///9/v78/v/9/f79/f38/f78/f39/fv9/P38/P38+/z9/Pn8+vf7/Pz7+/v6+vn3+vv49/X79er09fbz8/D08Or26tr52qz8ukv8qCX9pQn+pgT9oAT+pAH9oAH+nwH7nwHn7/Li5+rk4eHS3uPX1NPSyce/zdWjyNfBvLvJq5aqtr2npqaLucyKoL11s8pfpsH8nQX8nQL9ngH7nQH9nQD7nQD8mwH6mwH8lgL4mwPymgP1kwLnkQPFlVWhl5GOmKdrmbPbhQfPdgW5fCu4bhKSe2Vsf5Viha5Sd5uqYhJ/WyZLXWwtXINSRTYuRFg3NjYmGg6QLfgfAAANV0lEQVR42q1XB2LiyBItYQNChtEgE4wROYlkJIvMMCSTrRlE2AEW4/vf4r9uvPsvsGUDiq9f5Wry038k0Ubnx38h9Nefv/4ToUb8v9KN5MdHfzjg9wdu4g/j5NH/iCOcKfgJhQK4puAizv38kj+s4GKUv6Dwl0glh4s8Ar5ELh6XWxQJJ3RHtwNBdOCL3yan6GKXcMHh8uIRdlEBGQdRWGTX+UsuF7vjEXHs5C8BR+CYThIVDkT8NXbmxG0nkRO/TuedmyiA1XCGRwWS7tgSCoQ9jEccOHApJDjv7pwcQCSFsCo5PaLodTkFj+QVSPGwe1iJgUNkkXHBv8LVopuuLnD0iPw6l9sNtqDLhTVdIK942XU/9HP4sfJN+9srArnx/M1sgusfTGIgpGAdpitWVrx3ni+iRP7b0c0+iix62SN3LoVzYYZjBBlFEt2weyjIOTEDKi7BQ3fMkgIznf9fzljqtrbXRcxzHMlFAjMbHOKGG0L34Mm15E7griQPcw2Dl//V/8vDLBZufmd3XKLEF3C7Yeh4ux2H28He5XTfDHeLi5tqDNnrkhVGyg1oZkvly6wOnN2Cg1RHbW/bLYoRN6fLwS4LDmY0RpNdEhBdjIDCv7kNHA76x8A3b1KI9P1GW25rksxjy+1gFoA+Dv6gB4byEujCCcwuTF9FUtw3/zkdTkYHynnCwdR+ra1KdltQiQHc8bh1K5y4C3EkkPhlV4lp73CEvCEv4oxYCPGIgqHdgUgcfAb5wur98RmvOhgAIy2xsAIRmQQeL4yO6HFyjpCHIH/w7suSBMNYtrYq+PLVrSGxe0oojEQR79yg5oTVAqL4/0Bkbg6R2a4b34hUBakhkjsUCqmRZ2odS8tlzpEb2hZQFZWlUUhVWCB9ATF4hDtUdDKTevXjZnd8b9VwLHqCqnQrNrXTQpvnfcksdIs/A0XRjTSuh728GnhIcRKPF57yAeab+q5Ynm3sbVsnChLFdbPVttp7u6gNcpRM5ldbgyTT2p8v531XJ3fwy2vOr6AiFxzkEoMAKg3mE22x2Vq1R6P9vrVte7NZD0tVLZ/zUX61q+v7y/UmFytF6lcy89BzuWE1MRV1xAA0z+cK84E2tbf7rb0ul8slyBQyH+RzuflmfwbCwepa+L2eDXeMRVuApbEsu5iBUk2dbkCUzA3ms/J6Uy2WBtPpbDadTvA3GE5LBW1zvVwOJjN2uguosy6HOR/xlv9OWUg1m/Gne3M7zft89yC1qJYWi9l0MhpN8MHXdDiYVdaX86UDKz+FQwqlgXTwx3g9cgtxvSa775yPVGvEQ/fGdlpIJpNCfg4ub2+zMSCmwKlWJ6PxbFE+fVxOdYqhqoXCcQrvr9cORZl58H6v4ZdRKDxhxet9qG1XWg7emQ8Yi7fpaDyeAIwhjUaLsn39OBW3+oPqYFVBDYPTORVVmN/lR70GZgKLBxIj8ffNKvctP59OmIxG48lkCJTR5KVarQ6LILTRbEuI3MpljLrXSx1R4ydZvuOx7ZSR0SQ+U9te5XOr+RAozDzMOMMq+FSq1VIJmp0qpenp1aEyEkpMMS5XFut+8ihiMIAEQ3FAV0Gjq9vzQmE1m46H08mYmxkowKlUKwNtffk4rY8723qM8QqsqOrhemBJIyqekFdWog34Pix6FfVe307nc0TNbPp2o8TpgE/lpaRtLtdTfv953KYegrzrqXS4nmMqc79XlqP02uv1XFE5EA48R1F3BvA1t9FkPByOOJ9K5a283NjX6+n98vm5a1D0yS95wzEGFI4Sb0qi31/r9V+hHQSJbmvMY1zGs3F1wmEqk9L6ZB2h2ifE3hvZWDwaVmPRw+eBOCPG8JFem2JUSDXiQpCyyxH304i7qTjhFqpWZsXj9fVyOZ8Y0u5iJWPqkxz1w9hdbiPegwOeWkON02u/iWu5+WI2nnCccnGzrk7H48HL7G2g7T6vn4jrzelzt96ZeJL5Bu43KcwZoeuqpPd00pvNBlTLrRaz2RBQw+r6tH9fl2bDWbVQ0MobUIFux+ISedjyPosIcBaQsDVLWnQoJZDq9fvN11oqShHOaDYev40Xb8vPQ/eozYb5/LuVyxeOn8fp5eO6Ky6LmxY9h1PB8IGlSAx6CX5FDqvwGvyGQUdSIgKAFrMhMmI6WjIORS1H1ufVELL5yXRqXy9A2hwtIxOmGnAOCnDgKI/nO3SFdfrwKNrMM4CWyxmiuKQNtCMcpOWEZNZqU5KShflc212Rtvax1TJ4Gdmn1ZDIuog/iqx/bb7iU6OwQJFAblouFpmrpgOttLPLeSGZpPY2l0R9nAxWA/vy8XG5WNbhjMpkJciPSgAbhb8z+9QYq6YeIPEe7t/Y9mI003L5/EDTJjnJl8y1cyi0Un46KA2K69NXqWWeV6Mk+kPIFxDq9/spJA01+834XbrVPiKZFuNVIQ9ZadMc+bK5JPmSUlablaqVkqZtTofzGXp9WvfPIUXx87EmSo2eLsJ98R4L73Q9m69oWmmyXAGnMC/NC9lvPoI3v6EXLSaVSnmg2V1KpaPnz8vVTH2TggERc6OoRG+tKwCL91IB5Em2UNJKo8WisFqvptPFqpD1SZFkFqjj8XhUqWir91QkFqfu5XLavrdTIYS14sEAwsbl6GM0LtVSQVUJRuR8WVtWh+PprDhEFVisNMZNm1ZLlcnoZVYqI6xVNI/69Vh8WWCsiDAaAsY+P596MQGJIVkMIbbto10ewhZr3ocGqCuoLKUSy93Fy+KIIckdJHN7XBeXWjkfe0Dxx3SMOSf6CtFxhjHzSTXap2NxOoIpdnZJK5bK1Sm6yRBmrpRKxRVwEk6KfG8v1rvl4mWJeH0AozuHMwBz93rN3itORZSqejvDWrS2PGr2Zrler5fVGQRAgN1s92aCQo7I9/fV8oj+qU3y0I1NU3i90WwCSEdoI+/UADnie0b7iJDZoWUfNxzppVhc76wsAsSg0LPcxo1isaiVC74gKaypsI6k640ehVmd83tE1WNY3f1xY4PNG3v2+FIejhfLzXFv+rJEhsVGyQ6KyVorFiuFpMTHEBSRWjP1XW8K0ZDHq4RDKCqW6TNM67hcLhbrTdHeaTD4amOfUpTMuiKUarUzre57eWNjmSUHcnglP+bVZir+2qSo4vH7YSSjm6FE8nm/HiyWizUCfcXctppv2krMl/W6ggqZlhVvr5e75XIzz8sPxAZuT1RgjBgQq5aikrFY+TP39styPHqrFI/rOUca2SYlsllBEoMqZVLo7m+b4+m0zUpeNmffSUi3Xjxea/r98m1chAWC2dZ+PXyrlMsvy6MNIJSC5Xsqmc3KAa9X9kQeUGbN7WZ3Ou1Z0WUDuzus9l7jqe+NBvyH2y2LEr5sNo4i+4LhCJ5bV1HFh8VNm7JJIRIMekFc9qJP6NZ2f3qPBG+Dloow+l7TUynmf0WpWXoomUyo36y1Viq/IFt2ZQwks0UFs0MgmwxHEcSCA+3dj1odT7+3vSHW+0VVgWJUe42jAcSfYmIXQ4svIsccDRTZRXFjb/ab4qA0KW2sx0gkmxRlrw8bCAGDvRgO3rsS3xW0fMxHUUI0Mun3eqi2mVZC9N5h+o6QtasU11urnbIwq5eKO6QGVJOcUjIi8E0ZDOxVSGLbET/2PHqz/7P/k0mvGZdjEnYibhf6uBq3drt9PYnhGF1cm73HI3CZB5ucZIK82HFKyhNRVMUehG2OQaj3s9/8yT9ItxhiXcKojlQJktGu3+dyWXo9zjQbps4KQUWSxCS6bEhB8yE9A4dh74CRy10DEJN+n1F6jAUURbrnWycFPS4jStlcztfaYUzLZqGGFAwGE0nyqLGYarT23ZbJp1r1CenR/9m8qQagVDCqiOgL5HBiXjdNivgCiWwua9ltDJb3Do8UVNWE1a3FBKofOrW02W2JYWI9gDHqMz69PgOKBGUEKtuSBQmGf/bhD1DZfd2H4UMNygjr2B5Tdhf/LWwjzG4sjN7vVwNfqnFGDZHZCFt9h6AK6XaG7lnpvA/LiXadV9H7YFgKkmXGjJbZMeutVr3bQdUgyaGGa8z1XJqN7yTH3HJYEj1PrkTLMPAknsW2pL63dNM0+U6Gxxr2oy2T6i2X0YLL4P5AnOLNP79//PiBVtVtGOnntIPv0DJtTt7EslbXzFgWlOniywRWqyU+UawLoLpodlQ28mMA1Tvnv/8v58Mvi72Nd1pGgm24SUoZXZxkErFYqmYCNmV20f/wBBahutUF5bDX+PUPxJ+vz98fVwsszi2KJG6SJrND6QwknVCldKtrmnrXMiO60e2mdNPAXb/+98c/OAf+zaAOMErnkHjGe2ARSyScLT2RSadxmkqkMaV1UOUzZhqUMka3of/4Tf7a7z8fkP+r9nH+ZbbSz0rHfMikGQUQetC76TQ/ZBIPdw9io/PwbFqteufHX79f//qJTHPojV+H899fWB8fB9MwOml67Sg3XSCZe5jiH5hUWn0+/KJGx6d3W2T8QQQ2fvdJlqLscf218esPUD7+NAzDMP80Yl1D4qokAJdQOrr6L6G0L3OGah3JaNVE/Xe//xtg/wO8/spPjhXEEgAAAABJRU5ErkJggg==',ENTJ:'data:image/png;base64,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',ENTP:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEgAAABICAMAAABiM0N1AAABIFBMVEX////+/////v/+/v////7+//7//v7+/v7+/v3+/vv9/v79/vz//f7+/f7+/f39/f79/f39/P3//fz+/fz+/Pz9/Pz9/fv+/Pf8/Pz8/Pr6/P38+/v7+vr8+/f8+fP5+vv5+fj5+Pb08/b58+j07eTr6uro5OL33rHh4OLc2s/9y379y1f7wpD8wWjW0NHfya7LycDCwbH7tmn5sGfFuLLFq539rxj+pwf9owz9owKwr66trKWpqKmtpqKoqKiVrGSfpZL9nwj+nwT+nwP+nwL+nwH9nAX8nAH9mwD6ngT6nAL6mgX6mgH1mwfEnWSUnX34lQfxjQbQiSfehgChk4yohWyNh4Ryh0zOdg2wdDK2aRnDVSGPb09qblNrV0FFMCI9YMNxAAANnUlEQVR42q1Xe3/h3BZecduhRUpFNKGEuI7IvEXQ0XFL3aJDE4pBv/+3OGsnOu+c3+/8eVZLYrOfrPWs64Z7BgAYYJwLFQD3xfy7xFwvf65/vnR3ursKpW//D4Hq09M//1Oe/nn6S+jC9ep8+d+b8Auo5kOOba78pf114br6ZYNrrPP+dXddYoCwXDARi7C3bDwRR4nE8BVP4Dsb51k2gkuJIBu/CnsbjMQjbOSWXhNxlo3FYvH72wgkI4z3BgjxAPHiH8Fb5x08+B7lwOsF4vcBLrsvhvFBNOJFHTzeaBQ8AFEv0F9FcBNLOEIFnHeOIwHiwV/gepQEArjqI35cIB76EPojLuzxB5gAwV8QEg4E6N5YlKPfuf8cQIAhwLKMFzgmcEvIrQ8Votp5/CSMfwEPCXv9IRK+QW5IKBS5AfAHCOeBiJeQL0Wo+Lz0kQHnE94x+Ee+fOFofb16PO4nusPjaOR1DHM5wBv6oMgt2h7wOZ85DpFRd45cgdzdqBwgc7jq93DcDS4GQ1FK7ZUel6cAEhNgifNspMgf8KPR3BUDApzLA36g/BF/gqVax76e4xJ+tSjCMQ5jFBTon7sR/MTDxeJUyS8/csBCgOobZ7689QVHqUVWXf4jFIUhPg+56n0HoQfgvFeVnF3lR5JAIK/LMsAXYOA2TD9F/WgFCaNueM/6rtskKG+3Cnvn9ZIENZa755RT/1FEV1ONgOOuSBxhwwQjjCH404ijXSBA9WGdh0mgHqz99iEtRIUoEcJhkmB2l4uSuAK5zv7inMYoBq4HGbmyRELOQ0BEnE1ndFSD0qMgy6IUBoGonztUFOI0gByDnUskwAClh4uEyZ949/j8js6oz9HsmEOrBaIE2lmWJDRQPmsgcsgROOHg8gMBvwddEkmALyVy//rA0TbhKx82w3W1bR7kWDyrXWzIpURQmjJqgV5zgK6CGYZA4QgoCi6LCaoUMuSlQGFJ3lrDzRPUjaMKiShR7EpQklIE+IA3CvHQ12PRHi6A6Ukp1Q6HVrMMwCc8PnKX4IMYxTz097o5LCVLr2ibxLAQLKZSIcbLA5O4gxjjUuQQ4iNeTAySlLebhbU/2OUQ8CKPIMyDrMjqUe/M6pl8qWNRv6FjgWcypWq1lGdECDJXEM5P6wYF9QTlw3o4686t41ZFC+Vyc3s6HA7HvT7sFCBfaG8OSlwiPrhnCrVqtVarlQBifg6F1go/Ohm5wFBGoE3nqWO0dYTSbESwrPXM6HYnxrBWLUB9jSRlMeTYfK0ULNXqtVoB4lHijQa84PFf/cYwxAEqFGqzpW7sj/uNoeuj0evrYmpMZ6bZrlZHxyZkiZBkSrUSVahe+0bJRu2jVCEOyxN4gfFQjjqlYL663qzGRne0MM3ZdGoY44kxXS5Ns6Pve5COJvgk6nIVzH7w+RjChZzSFeZ8WMWSD28IlClkvi3NxXSBr+kUQYzx2MBPy9epvqduS7D/DYS5zklAlGK5KGPs3N1F00xr8/otmc/Xl6PxeOrKYjGdTMajIZrZ0TdbmU/4+BQCddptahxGNokKIlT6dq/ZtPtlEIREDlr7WT2ZqZlDBJqgUJzFYjIZdjZHS+902paNiZeEb7Vauz1HjkoQDwMXFnt9LUcdrQ2acIMpqO1n7UzVfJ0Y49F4NBohOXOqkr66DE6WPh7q6DcpBiXHrHqtnseAJJw46HGQcEiSe88gpKCMyVlfr03TmIx1fa6P0MDFfDrWVw0obVZTE417SLLePMWp1uoFBnNNIv0+pCSuUJGJJMCPJjzeP2w3rybKYjofro6XY3c4mhoTYzStBZmqMZwaY32PofSQd9j+lkE17gWmbGeFhBBqbRuQEgXZLkaRJGuEONPZbKHvT9X3xQjJGk/mi2rh2+G4GU6nXWsbzd1lixhHJSCY+veiD3nJsvxd6w2BhEdQm5DDwmMsZzPDMEbdDhI6QcrH3cncrNXfmhoWE3O5Ocgg5irlciMfTGD03EflvszdEd7bfKtAghNI8TmbCmC2vc6mE2MyGnd1c7My0bJJt7vQ38+fuyaqu1xsGm8NWVM13OX1sejEYg9EL+GhscUlLE1yXwmBcjSXJvp9bBhd62371jbH42HXmOvvn5+f2rsx7FrH90aBrWhlCRsdFlURyj0iEgzJxrbISFEuhEAJdJtBqZ5iaswP2vnyPluODL3d7rYp0AYDytrUgJU4WWBD4MP2xEOxCRIhWUbdFkIIFFD6MhbnfReBzOnUHG3eXnCzvlm23w+Hent/aj5t1hiT3fpdUhA5KXVLixjEiNzLidwNYhezkoCtotxjsxRo6WSGMTKftM/P06Rdyl8+zw/5aru9Wa+fOrreLkDgTvI/PACdaGIcPGuQvcsSbVsJSUSA7xr12l5f0bKBHHc7lR/2P+0Cm6nsKnATqpuv5no91FdWQ86JceW0lRPcDcRCpNgXHjGaG4cKZLGTDnKpLKFlFdOTInXH7Wp9iFUFYGtrjUBpOJyasxHWT7tV9D1s98cepLBCYqlv9iCQILmiwD1mpYEafXwE5TC39phUhjnsDF9nZjsfrLS278dTBUrT4SvaPOwe5GAWO1T32AtIhOaalHruy9exVoBeBeRQpXU5HjHPR8YMy8RyOOyUmELr0N60IFUz59MJOsFqhXJBaFrzQxmyYYgDJ0re3k4rK4pS1npltZ/N3WiNraXr+gSzvrNeL82RWcc2VXlryfn6eomxaZjzo+qLy62T1d2jmiICkQjmRbk3sAeDnqb+sHfIPUD5XV8h2RNapbFGzqf1fJLJKo32erEwxt2xbm0fMw9ba4UEWAc55fb+kAiQU5zuCmVVEQQ++YgqrTY0Jl+nGE7z0bRdox1ptsSy1B22zVP5PiMf5p2VtRpaDcBcIyEczTjBmTIFwWkFIUZkteP+aBkmzTeaZyOsHdZ+vxyZWOAWehcLG01tdAmqtH6SIBFiI9ggGZz2orRdO8OJl4icevm00KaJU2qxDEyxLOodrJXYU7qrgwbpm4p9mOt7RDLfZTQtygbCIc6dHhkm4MPRHpNPtjUbYwmbGe0fhoElm8b5ZDydd439qZ9PR0EtNvZda7PfL75hhQyFwxF3hHBmGxwaPR4PJ2Sz8NA/bvTudEFbGtY0RDKcLmIdT0qhkAmGwRdq7Zer0fq9gBMF4BQPOD4Qjg6KEWobTnR3UXRd+XQ6Wma3OzYc25zMW9Eu3kqGmGQGB/TIg33cWAeccpy+Bt7rKArhgDMlkRvOg61kV5RxfMCevZp3R8gVRsIaEyME/SKbTqZ5ng3FQH07qRhGFMiLUz4eGnDg9N1GnFEPMUWKA8FgRWn2US9s1RRms9kcy0lo4dabFM/zsWAKJ7aciJYE0RQuGhWceQtHYTzI4Bjg4CggRsKNAobWAbnqjkcItcQeC+pAIVyQD/JJnuVixSIkcFaMuQcWQRIj3B09EvhvUEUskYgjsSkoNjBeaEyhm1fDV91qya1+EcKsL3jD8zdxEs8Ae8OF8XGDZqXo5GxAkLCyOWN3JLfDthXkU6l0o5IvCPZvlAstLUdVsTFJiY/1scEgf88ngzhdRRCosnPkh+qi0ZELuev3KM4Nn/JmKhW7vEWc9ua40lcnOVjcKVwmzfkIIsWTPIfupgexcg9l4KLZzWLWIVrdiSIlLYrHU9Caobffv/e6vj/qVh985Z2cyORTKQHTKsVH3EhGoJcfKBTtxaZgPekxyw2oR9kIsBkhldAGMgKdVvrmSFNMQat5Pp9E7SsVdyCOki+gf8FedqrXo9oSzqYo+UYulfM1d79/H9RDtzPcnB6lXRNEwhQKRa1vF3Gipgd1rNm+ysvLiwv044Xe7gYg0iae4CoVBVtVTsLQRIVCvaPe3TfB7mPMo/Hnna3J9EBAIwbjCDV6cWFcrB/9XVa2FS6dTqt08pKBz4gItJNht9cPygDPDRjTUD4reDiRUkKCsMhSyAFytfmyb1dWBpBJptM47Fd6yFYUmr9/4ygmn/bbgS2mM8kkD1m77Es5bpYkPoEGXsl+cQXvmraqDkgOAzeVDgLg0WVrt35vcUTo9S/2SySVTOJD0vFnpL33a/C9KOIsDHhqVwcO0Hf12VWtZzdVG1I+lrB8Nquc9tbGOl7KMbSmf/5euEnEkoiVgV7/+QPl8oFgqoIBqdkOkFrUXlwL7Z0yINkUH/SzaWZ3xFl9ujn2Q7kcNE9vLYmLoLI3mcLg/PHxE+XDkV9omu3Y1SyqLtBL/4zNCVLBlJRNKKfNcGZ2LetQ5nOcfTq0nHkcDzbVPyA/nTuIF3cuQxhDLlDvfD5ftGLOaSlHfTlCnP3R7tmDU+utlcN5XPvV+vhLHeeKAX8e9P6Q7SDau+bufNrtnrHLHRejpXXY2k1NVVXNWbf75w8H4XKhKM79rybORxUbdfkDg2z3z3av92zvzhcUbGVnRXZrTTD4+GyXFeHXx+C7o40D9XHefVfyIAoKAr38BfSjd/m8nHcDjM3B7rJrXjTIoOQyuVyWxxKSukM9vjcajatpv9RCsVgAZHSwowT9Zdv5k8q5j0qdNa2fyjiSS2NH7CdSWehdKDGD1vfGYPDzQyoUCxWcQ7MPRfy9/fLsZghV6vyJNmEhwOVKwVaSLlAmLUkvZRwT1fMnPupMSR58//gpF4v46P8AJKvmEnXmPY4AAAAASUVORK5CYII=',INFJ:'data:image/png;base64,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',INFP:'data:image/png;base64,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',ENFJ:'data:image/png;base64,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',ENFP:'data:image/png;base64,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',ISTJ:'data:image/png;base64,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',ISFJ:'data:image/png;base64,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',ESTJ:'data:image/png;base64,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',ESFJ:'data:image/png;base64,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',ISTP:'data:image/png;base64,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',ISFP:'data:image/png;base64,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',ESTP:'data:image/png;base64,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',ESFP:'data:image/png;base64,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'};
+const TYPE_COLORS = {INTJ:'#48337d',INTP:'#37578d',ENTJ:'#b83333',ENTP:'#f99c48',INFJ:'#715191',INFP:'#64983a',ENFJ:'#225eae',ENFP:'#e09664',ISTJ:'#288592',ISFJ:'#f5bcc1',ESTJ:'#9ebad8',ESFJ:'#f69453',ISTP:'#437f29',ISFP:'#1f8c8c',ESTP:'#eb7622',ESFP:'#f1a4b4'};
+const TYPE_HINTS = {INTJ:'静かに集中できる遮音性・書斎になる1K',INTP:'散らかりにくい省スペース＋快適なネット環境',ENTJ:'職住近接で時間効率のいい駅',ENTP:'刺激のある繁華街近く・模様替えしやすい間取り',INFJ:'日当たりと静けさで回復できる部屋',INFP:'好きなものに囲まれる内装自由度・実家と行き来しやすい沿線',ENFJ:'友人を呼びやすいアクセスと間取り',ENFP:'駅近で夜道も安心・手続きはプロに相談',ISTJ:'実績のある定番エリアの手堅い物件',ISFJ:'治安と管理体制のいい物件',ESTJ:'通勤効率のいい駅・設備のバランス型',ESFJ:'にぎわいのある商店街エリア',ISTP:'自転車で動きやすい下町',ISFP:'内見で「ここだ」と思える部屋をじっくり',ESTP:'都心アクセスでフットワークが活きる駅',ESFP:'家賃を抑えて「楽しみ予算」を確保できる駅'};
 // ===========================
 // 質問定義
 // ===========================
 const QUESTIONS = [
   {
-    id: 'commuteMethod', type: 'single',
-    q: '通勤・通学の手段は？',
-    options: [
-      { val: 'train', icon: '🚃', label: '電車・公共交通' },
-      { val: 'car',   icon: '🚗', label: '車・バイク', sub: '駅距離は気にしない' },
-      { val: 'both',  icon: '🔄', label: '両方使う' },
-    ]
-  },
-  {
     id: 'commute', type: 'single',
     q: '電車の乗車時間、何分以内なら\n許容できますか？',
+    sub: '🚗 車通勤の方は長め（45〜60分）を選ぶと候補が広がります',
     options: [
       { val: 15,  icon: '⚡', label: '15分以内', sub: '駅近重視' },
       { val: 20,  icon: '🚶', label: '20分以内' },
@@ -598,7 +670,6 @@ const QUESTIONS = [
     id: 'rent', type: 'single',
     q: '毎月の家賃の上限は？',
     options: [
-      { val: 40000,  icon: '💴', label: '4万円まで',  sub: '節約重視' },
       { val: 55000,  icon: '💰', label: '5.5万円まで' },
       { val: 70000,  icon: '🏠', label: '7万円まで',  sub: '標準的' },
       { val: 90000,  icon: '🏡', label: '9万円まで' },
@@ -607,68 +678,73 @@ const QUESTIONS = [
     ]
   },
   {
-    id: 'roomType', type: 'single',
-    q: '希望の間取りは？',
+    id: 'mbtiKnown', type: 'single',
+    q: 'MBTIタイプを知っていますか？',
+    sub: '知っている場合は入力して相性診断8問をスキップできます',
     options: [
-      { val: '1R1K',    icon: '🛏', label: '1R・1K',    sub: '一人暮らし' },
-      { val: '1DK1LDK', icon: '🛋', label: '1DK・1LDK', sub: '余裕の一人暮らし' },
-      { val: '2LDK',    icon: '👫', label: '2LDK',      sub: '二人暮らし' },
-      { val: '3LDK',    icon: '👨‍👩‍👦', label: '3LDK以上',  sub: 'ファミリー' },
+      { val: 'yes', icon: '✅', label: '知っている（入力する）' },
+      { val: 'no',  icon: '🔍', label: '知らない（今から診断する）' },
     ]
   },
   {
-    id: 'gender', type: 'single', optional: true,
-    q: '性別を教えてください',
-    sub: '診断精度の向上に使用します',
-    options: [
-      { val: 'male',   icon: '👔', label: '男性' },
-      { val: 'female', icon: '👗', label: '女性' },
-      { val: 'other',  icon: '🙅', label: '回答しない' },
-    ]
+    id: 'mbtiTypeInput', type: 'mbtiSelect',
+    q: 'あなたのMBTIタイプを選んでください',
   },
   {
-    id: 'ageGroup', type: 'single', optional: true,
-    q: '年代を教えてください',
-    sub: '診断精度の向上に使用します',
-    options: [
-      { val: 'teen', icon: '🎒', label: '10代以下' },
-      { val: '20s',  icon: '🎓', label: '20代' },
-      { val: '30s',  icon: '💼', label: '30代' },
-      { val: '40s',  icon: '🏆', label: '40代' },
-      { val: '50s',  icon: '🌸', label: '50代以上' },
-    ]
+    id: 'ei1', type: 'contrast',
+    q: '休日、エネルギーがたまるのは？',
+    left:  { icon: '🏠', text: '家でゆっくり\n過ごす\n時間' },
+    right: { icon: '🚶', text: '外に出かけて\n人と会う\n時間' },
+    leftLabel: 'おうち充電派', rightLabel: 'おでかけ充電派'
   },
   {
-    id: 'cooking', type: 'single',
-    q: '自炊はどのくらいしますか？',
-    options: [
-      { val: 'often',     icon: '🍳', label: 'よくする',     sub: 'スーパー近いと嬉しい' },
-      { val: 'sometimes', icon: '🥡', label: 'たまにする' },
-      { val: 'rarely',    icon: '🍜', label: 'ほぼしない',   sub: '外食・デリバリー派' },
-    ]
+    id: 'sn1', type: 'contrast',
+    q: '部屋の内見で、まず見るのは？',
+    left:  { icon: '🔍', text: '収納・設備など\n実際の\n使い勝手' },
+    right: { icon: '💭', text: '住んだあとの\n暮らしの\nイメージ' },
+    leftLabel: '現実チェック派', rightLabel: '想像ふくらむ派'
   },
   {
-    id: 'homeTime', type: 'contrast',
-    q: '休日・自由な時間の過ごし方は？',
-    left:  { icon: '🏠', text: '家にいることが\n多い\n（インドア派）' },
-    right: { icon: '🚶', text: '外に出ることが\n多い\n（アウトドア派）' },
-    leftLabel: 'インドア派', rightLabel: 'アウトドア派'
+    id: 'tf1', type: 'contrast',
+    q: 'ふたつの物件で迷ったら？',
+    left:  { icon: '📊', text: '家賃や広さを\n数字で比べて\n決める' },
+    right: { icon: '💖', text: '「なんか好き」\nの直感で\n決める' },
+    leftLabel: '数字で決める派', rightLabel: '直感で決める派'
   },
   {
-    id: 'firstMove', type: 'single', optional: true,
-    q: '引っ越しは初めてですか？',
-    options: [
-      { val: 'yes', icon: '🏠', label: 'はじめての引っ越し' },
-      { val: 'no',  icon: '📦', label: '経験あり' },
-    ]
+    id: 'jp1', type: 'contrast',
+    q: '引っ越しの準備、あなたは？',
+    left:  { icon: '📅', text: '早めに計画を\n立てて\n進めたい' },
+    right: { icon: '⚡', text: '期限が近づいたら\n一気に\n仕上げる' },
+    leftLabel: 'コツコツ計画派', rightLabel: '追い込み集中派'
   },
   {
-    id: 'movingCostKnown', type: 'single', optional: true,
-    q: '引っ越し費用の相場を知っていますか？',
-    options: [
-      { val: 'yes', icon: '💡', label: '大体知っている' },
-      { val: 'no',  icon: '❓', label: 'あまり知らない' },
-    ]
+    id: 'ei2', type: 'contrast',
+    q: '仕事おわりの帰り道は？',
+    left:  { icon: '🌙', text: '静かな道で\nひとりの時間に\n切り替えたい' },
+    right: { icon: '✨', text: 'にぎやかな通りで\n気分を\n上げたい' },
+    leftLabel: '静かな帰り道派', rightLabel: 'にぎやか帰り道派'
+  },
+  {
+    id: 'sn2', type: 'contrast',
+    q: '住む街を選ぶなら？',
+    left:  { icon: '🏘️', text: 'みんなが知ってる\n定番で\n安心な街' },
+    right: { icon: '🌈', text: 'まだ知られて\nいない\n個性的な街' },
+    leftLabel: '定番安心派', rightLabel: '個性開拓派'
+  },
+  {
+    id: 'tf2', type: 'contrast',
+    q: '部屋にいちばん求めるのは？',
+    left:  { icon: '🧮', text: 'コスパと\n機能性' },
+    right: { icon: '🛋️', text: '居心地と\n雰囲気' },
+    leftLabel: 'コスパ機能派', rightLabel: '居心地・雰囲気派'
+  },
+  {
+    id: 'jp2', type: 'contrast',
+    q: 'ふだんの生活リズムは？',
+    left:  { icon: '⏰', text: '決まった\nリズムだと\n落ち着く' },
+    right: { icon: '🎈', text: 'その日の気分で\n自由に\n動きたい' },
+    leftLabel: 'リズム安定派', rightLabel: '気分フリー派'
   },
   {
     id: 'dislikes', type: 'multi', optional: true,
@@ -684,54 +760,6 @@ const QUESTIONS = [
       { val: 'traffic',  label: '交通量の多い道路沿い' },
       { val: 'far',      label: '駅から遠い' },
     ]
-  },
-  {
-    id: 'mbtiKnown', type: 'single',
-    q: 'MBTIタイプを知っていますか？',
-    sub: '知っている場合は入力して対比診断5問をスキップできます',
-    options: [
-      { val: 'yes', icon: '✅', label: '知っている（入力する）' },
-      { val: 'no',  icon: '🔍', label: '知らない（今から診断する）' },
-    ]
-  },
-  {
-    id: 'mbtiTypeInput', type: 'mbtiSelect',
-    q: 'あなたのMBTIタイプを選んでください',
-  },
-  {
-    id: 'contrast0', type: 'contrast',
-    q: '住む場所の雰囲気は？',
-    left:  { icon: '🔇', text: '静かで\n落ち着いた\n環境がいい' },
-    right: { icon: '🎉', text: '賑やかで\n活気ある\n環境がいい' },
-    leftLabel: '静か重視', rightLabel: '賑やか重視'
-  },
-  {
-    id: 'contrast1', type: 'contrast',
-    q: '周辺環境の好みは？',
-    left:  { icon: '🌿', text: '自然・緑が\n豊かな\n環境がいい' },
-    right: { icon: '🏙️', text: '都会的で\n便利な\n環境がいい' },
-    leftLabel: '自然重視', rightLabel: '都会重視'
-  },
-  {
-    id: 'contrast2', type: 'contrast',
-    q: 'コストとアクセス、どちら重視？',
-    left:  { icon: '💰', text: '多少遠くても\n家賃を\n安くしたい' },
-    right: { icon: '🚇', text: '多少高くても\n駅近・\n好立地がいい' },
-    leftLabel: '家賃重視', rightLabel: 'アクセス重視'
-  },
-  {
-    id: 'contrast3', type: 'contrast',
-    q: '部屋の広さと立地、どちらが大事？',
-    left:  { icon: '🛋️', text: '広くて\nゆったりした\n部屋がいい' },
-    right: { icon: '📍', text: '狭くても\n立地・駅近\nを優先したい' },
-    leftLabel: '広さ重視', rightLabel: '立地重視'
-  },
-  {
-    id: 'contrast4', type: 'contrast',
-    q: '好きな街のイメージは？',
-    left:  { icon: '🏡', text: '落ち着いた\n品のある\n街がいい' },
-    right: { icon: '✨', text: 'おしゃれで\nトレンディな\n街がいい' },
-    leftLabel: '落ち着き重視', rightLabel: 'おしゃれ重視'
   },
 ];
 
@@ -758,10 +786,9 @@ let quizAnswers = {};
 // スキップすべき質問IDを返す
 function getSkippedIds() {
   const skip = new Set();
-  if (quizAnswers.commuteMethod === 'car') skip.add('commute');
   if (quizAnswers.mbtiKnown !== 'yes') skip.add('mbtiTypeInput');
   if (quizAnswers.mbtiKnown === 'yes') {
-    ['contrast0','contrast1','contrast2','contrast3','contrast4'].forEach(id => skip.add(id));
+    ['ei1','sn1','tf1','jp1','ei2','sn2','tf2','jp2'].forEach(id => skip.add(id));
   }
   return skip;
 }
@@ -773,7 +800,7 @@ function getVisibleQuestions() {
 const DISLIKE_PENALTY = {
   noisy:     ['梅田・福島','難波・心斎橋','天王寺・阿倍野','鶴橋・今里'],
   crowd:     ['梅田・福島','難波・心斎橋','天王寺・阿倍野'],
-  nightlife: ['梅田・福島','難波・心斎橋','鶴橋・今里','本町・堀江','福島・野田・西区'],
+  nightlife: ['梅田・福島','難波・心斎橋','鶴橋・今里','本町・堀江','福島・野田・西区','三国・十三'],
   hills:     [],
   old:       ['鶴橋・今里','布施・東大阪','住道・鴻池新田'],
   unsafe:    ['鶴橋・今里','布施・東大阪'],
@@ -806,16 +833,12 @@ const MBTI_DATA = {
 // MBTIタイプを導出（直接入力優先）
 function deriveMBTI() {
   if (state.mbtiTypeInput) return state.mbtiTypeInput;
-  const [c0, c1, c2, , c4] = state.contrasts;
-  // I/E: c0 (静か=-1=I, 賑やか=+1=E, 0=E)
-  const E = c0 >= 0;
-  // S/N: c1 (自然=-1=S, 都会=+1=N, 0=N)
-  const N = c1 >= 0;
-  // T/F: c2 (家賃重視=-1=T, アクセス重視=+1=F, 0=F)
-  const F = c2 >= 0;
-  // J/P: c4 (落ち着き=-1=J, おしゃれ=+1=P, 0=P)
-  const P = c4 >= 0;
-  return (E ? 'E' : 'I') + (N ? 'N' : 'S') + (F ? 'F' : 'T') + (P ? 'P' : 'J');
+  // 4軸×2問の合計（各軸 -2〜+2）。同点はE/N/F/P側（従来と同じ既定）
+  const a = state.axes || { ei: 0, sn: 0, tf: 0, jp: 0 };
+  return (a.ei >= 0 ? 'E' : 'I')
+       + (a.sn >= 0 ? 'N' : 'S')
+       + (a.tf >= 0 ? 'F' : 'T')
+       + (a.jp >= 0 ? 'P' : 'J');
 }
 
 // MBTI各軸ラベル
@@ -984,148 +1007,259 @@ const STATIONS = [
 // ===========================
 const AREAS = [
   {
-    name:"梅田・福島",hub:"梅田",
+    name:"梅田・福島",anaba:"野田阪神・海老江(福島から1駅ずらしで家賃ダウン)",hub:"梅田",
+    nick:"大阪のど真ん中で暮らす",insight:"実は福島側に入ると、梅田徒歩圏なのに家賃が一段下がる「裏梅田」ゾーンがあります",
+    anaba:"快速・新快速が全部通過する「各停の正義」駅",
     nearStations:["梅田","大阪","西梅田","東梅田","福島","野田阪神"],
     commute:{"梅田":0,"大阪":1,"東梅田":1,"西梅田":1,"福島":2,"天満":2,"北新地":2,"中津":2,"中崎町":3,"新大阪":3,"塚本":3,"桜ノ宮":4,"南森町":4,"新福島":4,"大阪天満宮":4,"淀屋橋":4,"野田":5,"天神橋筋六丁目":5,"肥後橋":5,"東淀川":5,"十三":5,"西中島南方":5,"都島":6,"海老江":6,"心斎橋":6,"本町":7,"北浜":7,"西九条":8,"大阪城公園":8,"京橋":8,"野江内代":8,"御幣島":8,"吹田":8,"尼崎":8,"神崎川":8,"淡路":8,"江坂":8,"野田阪神":8,"天満橋":9,"四ツ橋":9,"森ノ宮":10,"西大橋":10,"阿波座":10,"堺筋本町":10,"関目高殿":10,"なんば":10,"加島":10,"三国":10,"弁天町":12,"玉造":12,"谷町四丁目":12,"千林大宮":12,"鴫野":12,"岸辺":12,"庄内":12,"園田":12,"相川":12,"日本橋":12,"九条":13,"大国町":13,"鶴橋":14,"太子橋今市":14,"谷町六丁目":15,"千里丘":15,"豊中":15,"塚口":15,"動物園前":15,"大正":16,"桃谷":16,"花園町":16,"放出":16,"正雀":16,"新今宮":17,"朝潮橋":17,"谷町九丁目":17,"芦原橋":18,"今宮":18,"寺田町":18,"緑橋":18,"守口":18,"岸里玉出":18,"だいどう豊里":18,"清水":18,"茨木":18,"岡町":18,"武庫之荘":18,"摂津市":18,"天王寺":20,"大阪港":20,"四天王寺前夕陽丘":20,"瑞光四丁目":20,"新森古市":20,"関目成育":20,"服部天神":20,"千里山":20,"コスモスクエア":22,"深江橋":22,"大日":22,"阿倍野":22,"井高野":22,"蒲生四丁目":22,"今里":22,"摂津富田":22,"曽根":22,"西宮北口":22,"南茨木":22,"関大前":22,"文の里":24,"住之江公園":24,"茨木市":25,"北千里":25,"長居":25,"布施":25,"住道":25,"高井田":26,"田辺":26,"高槻":27,"三宮":27,"駒川中野":28,"西田辺":28,"鴻池新田":28,"長田":30,"針中野":30,"三国ヶ丘":30,"京都":30,"万代":32,"近鉄八尾":32,"堺":32,"堺市":35,"中百舌鳥":38,"奈良":50},
-    rent:{"1R1K":56000,"1DK1LDK":68000,"2LDK":150000,"3LDK":172000},
+    rent:{"1R1K":67000,"1DK1LDK":68000,"2LDK":150000,"3LDK":172000},
     tags:["ターミナル直結","買い物便利","夜も賑やか","新築多い"],
-    desc:"大阪最大のターミナル直結エリア。どこへも乗り換えなしでアクセス可能。飲食・商業施設が充実。",
+    desc:"日本第2の都心に住む選択。飲みも買い物も終電も、ぜんぶ徒歩圏になる生活は一度知ると戻れません。",
     priority:{cheap:1,short:5,shopping:5,quiet:1,cafe:3,nature:1,safety:3,family:2,nightlife:5,new:4}
   },
   {
-    name:"中津・天神橋",hub:"梅田",
+    name:"中津・天神橋",anaba:"中津(阪急は各停のみ・梅田まで1駅)",hub:"梅田",
+    nick:"日本一長い商店街のふもと",insight:"天神橋筋商店街2.6kmが冷蔵庫代わり。外食単価が安く、自炊しない派ほど生活費が下がる逆転エリア",
     nearStations:["中津","天神橋筋六丁目","南森町","天満","桜ノ宮"],
     commute:{"梅田":5,"大阪":6,"東梅田":6,"西梅田":6,"福島":7,"天満":7,"北新地":7,"中津":7,"中崎町":8,"新大阪":8,"塚本":8,"桜ノ宮":9,"南森町":9,"新福島":9,"大阪天満宮":9,"淀屋橋":9,"野田":10,"本町":10,"天神橋筋六丁目":10,"肥後橋":10,"東淀川":10,"十三":10,"西中島南方":10,"都島":11,"海老江":11,"心斎橋":11,"北浜":12,"西九条":13,"大阪城公園":13,"京橋":13,"西大橋":13,"堺筋本町":13,"野江内代":13,"四ツ橋":13,"御幣島":13,"吹田":13,"尼崎":13,"神崎川":13,"淡路":13,"江坂":13,"野田阪神":13,"阿波座":14,"天満橋":14,"森ノ宮":15,"谷町四丁目":15,"関目高殿":15,"なんば":15,"加島":15,"三国":15,"九条":16,"弁天町":17,"玉造":17,"千林大宮":17,"鴫野":17,"岸辺":17,"庄内":17,"園田":17,"相川":17,"日本橋":17,"谷町六丁目":18,"大国町":18,"鶴橋":19,"太子橋今市":19,"朝潮橋":20,"谷町九丁目":20,"千里丘":20,"豊中":20,"塚口":20,"動物園前":20,"大正":21,"桃谷":21,"花園町":21,"放出":21,"正雀":21,"新今宮":22,"芦原橋":23,"今宮":23,"寺田町":23,"緑橋":23,"守口":23,"岸里玉出":23,"だいどう豊里":23,"清水":23,"茨木":23,"岡町":23,"武庫之荘":23,"摂津市":23,"大阪港":24,"四天王寺前夕陽丘":24,"天王寺":25,"瑞光四丁目":25,"新森古市":25,"関目成育":25,"蒲生四丁目":25,"服部天神":25,"千里山":25,"阿倍野":26,"コスモスクエア":27,"深江橋":27,"大日":27,"井高野":27,"今里":27,"摂津富田":27,"曽根":27,"西宮北口":27,"南茨木":27,"関大前":27,"文の里":28,"住之江公園":29,"住道":29,"田辺":30,"茨木市":30,"北千里":30,"長居":30,"布施":30,"高井田":31,"駒川中野":32,"高槻":32,"西田辺":32,"三宮":32,"鴻池新田":33,"京都":33,"針中野":34,"長田":35,"三国ヶ丘":35,"万代":36,"近鉄八尾":37,"堺":37,"堺市":40,"中百舌鳥":42,"奈良":55},
-    rent:{"1R1K":52000,"1DK1LDK":63000,"2LDK":128000,"3LDK":162000},
+    rent:{"1R1K":75000,"1DK1LDK":63000,"2LDK":128000,"3LDK":162000},
     tags:["梅田徒歩圏","天神橋商店街","下町感","コスパ良い"],
-    desc:"梅田から1〜2駅。天神橋筋商店街が近く生活利便性抜群。梅田より家賃が手頃でコスパ重視の方に人気。",
+    desc:"梅田まで1～2駅なのに下町価格。食べ歩きと銭湯文化が残る、暮らして楽しい街です。",
     priority:{cheap:4,short:4,shopping:5,quiet:3,cafe:3,nature:2,safety:3,family:3,nightlife:3,new:2}
   },
   {
     name:"新大阪・西中島",hub:"新大阪",
+    nick:"出張族と食いしん坊の拠点",insight:"新幹線駅の隣なのに1Kは梅田より約1万円安い。実は西中島は大阪屈指の飲食店密集地",
+    anaba:"東淀川(JR各停のみ・新大阪まで1駅)",
     nearStations:["新大阪","西中島南方","江坂","十三"],
     commute:{"新大阪":0,"西中島南方":2,"大阪":3,"東淀川":3,"北新地":5,"吹田":5,"塚本":5,"梅田":5,"江坂":5,"東梅田":6,"西梅田":6,"新福島":6,"福島":7,"天満":7,"大阪天満宮":7,"中津":7,"中崎町":8,"海老江":8,"十三":8,"桜ノ宮":9,"南森町":9,"岸辺":9,"淀屋橋":9,"野田":10,"天神橋筋六丁目":10,"肥後橋":10,"御幣島":10,"尼崎":10,"淡路":10,"都島":11,"神崎川":11,"心斎橋":11,"本町":12,"加島":12,"千里丘":12,"北浜":12,"西九条":13,"大阪城公園":13,"京橋":13,"野江内代":13,"三国":13,"野田阪神":13,"天満橋":14,"四ツ橋":14,"相川":14,"森ノ宮":15,"西大橋":15,"阿波座":15,"堺筋本町":15,"関目高殿":15,"なんば":15,"茨木":15,"庄内":15,"園田":15,"弁天町":17,"玉造":17,"谷町四丁目":17,"千林大宮":17,"鴫野":17,"日本橋":17,"九条":18,"大国町":18,"豊中":18,"塚口":18,"正雀":18,"鶴橋":19,"太子橋今市":19,"摂津富田":19,"谷町六丁目":20,"摂津市":20,"動物園前":20,"大正":21,"桃谷":21,"花園町":21,"だいどう豊里":21,"放出":21,"岡町":21,"武庫之荘":21,"朝潮橋":22,"谷町九丁目":22,"千里山":22,"芦原橋":23,"寺田町":23,"緑橋":23,"守口":23,"岸里玉出":23,"瑞光四丁目":23,"清水":23,"服部天神":23,"高槻":24,"南茨木":24,"関大前":24,"今宮":25,"新今宮":25,"天王寺":25,"大阪港":25,"四天王寺前夕陽丘":25,"井高野":25,"新森古市":25,"関目成育":25,"蒲生四丁目":25,"曽根":25,"西宮北口":25,"京都":25,"コスモスクエア":27,"深江橋":27,"大日":27,"阿倍野":27,"今里":27,"茨木市":27,"北千里":27,"住道":28,"文の里":29,"住之江公園":29,"長居":30,"三宮":30,"高井田":31,"田辺":31,"鴻池新田":31,"駒川中野":33,"西田辺":33,"布施":33,"長田":35,"針中野":35,"三国ヶ丘":35,"万代":37,"堺":37,"近鉄八尾":40,"堺市":40,"中百舌鳥":43,"奈良":57},
-    rent:{"1R1K":52000,"1DK1LDK":63000,"2LDK":124000,"3LDK":155000},
+    rent:{"1R1K":65000,"1DK1LDK":63000,"2LDK":124000,"3LDK":155000},
     tags:["新幹線利用者向け","御堂筋線直通","出張族に人気","乗り換え便利"],
-    desc:"新幹線・御堂筋線の拠点。出張が多いビジネスパーソンに最適。梅田まで御堂筋線で5分の好立地。",
+    desc:"移動が多い人の最強拠点。淀川の河川敷が近く、朝ランや夕焼け散歩ができるのも隠れた魅力。",
     priority:{cheap:3,short:4,shopping:3,quiet:3,cafe:2,nature:2,safety:4,family:3,nightlife:2,new:3}
   },
   {
-    name:"本町・堀江",hub:"本町",
+    name:"本町・堀江",anaba:"阿波座・西長堀(本町から1〜2駅で家賃ダウン)",hub:"本町",
+    nick:"職住近接×おしゃれの最適解",insight:"平日はオフィス街で静か、休日は堀江のカフェへ徒歩5分。オンオフが徒歩圏で切り替わる珍しい街",
     nearStations:["本町","堺筋本町","肥後橋","四ツ橋","阿波座"],
     commute:{"本町":0,"西大橋":3,"堺筋本町":3,"肥後橋":3,"四ツ橋":3,"心斎橋":3,"淀屋橋":3,"阿波座":4,"北浜":4,"谷町四丁目":5,"西梅田":5,"なんば":5,"九条":6,"東梅田":7,"北新地":7,"梅田":7,"日本橋":7,"大阪":8,"森ノ宮":8,"南森町":8,"天満橋":8,"谷町六丁目":8,"大国町":8,"福島":9,"天満":9,"中崎町":9,"新福島":9,"大阪天満宮":9,"中津":9,"弁天町":10,"玉造":10,"朝潮橋":10,"谷町九丁目":10,"新大阪":10,"塚本":10,"桜ノ宮":11,"天神橋筋六丁目":11,"海老江":11,"野田":12,"新今宮":12,"鶴橋":12,"大阪城公園":12,"京橋":12,"都島":12,"花園町":12,"東淀川":12,"十三":12,"動物園前":12,"西中島南方":12,"今宮":13,"御幣島":13,"桃谷":14,"大阪港":14,"緑橋":14,"野江内代":14,"四天王寺前夕陽丘":14,"岸里玉出":14,"野田阪神":14,"西九条":15,"芦原橋":15,"加島":15,"吹田":15,"尼崎":15,"神崎川":15,"淡路":15,"江坂":15,"寺田町":16,"関目高殿":16,"阿倍野":16,"鴫野":16,"大正":17,"天王寺":17,"三国":17,"コスモスクエア":18,"深江橋":18,"千林大宮":18,"文の里":18,"今里":18,"放出":18,"岸辺":19,"庄内":19,"園田":19,"相川":19,"太子橋今市":20,"田辺":20,"住之江公園":20,"蒲生四丁目":20,"長居":20,"布施":20,"高井田":22,"駒川中野":22,"関目成育":22,"千里丘":22,"豊中":22,"塚口":22,"西田辺":22,"正雀":23,"守口":24,"針中野":24,"だいどう豊里":24,"清水":24,"新森古市":24,"茨木":25,"岡町":25,"武庫之荘":25,"摂津市":25,"長田":26,"万代":26,"瑞光四丁目":26,"住道":26,"三国ヶ丘":26,"服部天神":27,"千里山":27,"近鉄八尾":27,"堺":27,"大日":28,"井高野":28,"摂津富田":29,"曽根":29,"西宮北口":29,"南茨木":29,"関大前":29,"鴻池新田":30,"堺市":30,"中百舌鳥":32,"茨木市":32,"北千里":32,"高槻":34,"三宮":34,"京都":37,"奈良":45},
-    rent:{"1R1K":57000,"1DK1LDK":69000,"2LDK":152000,"3LDK":190000},
+    rent:{"1R1K":74000,"1DK1LDK":69000,"2LDK":152000,"3LDK":190000},
     tags:["おしゃれ","堀江カフェ多数","ビジネス街","デザイナーズ多い"],
-    desc:"西区・南堀江のおしゃれエリア。カフェ・セレクトショップが集まる感度の高い街。ビジネス街にも隣接。",
+    desc:"御堂筋沿いの利便と、堀江・南船場のセンスが同居。通勤時間を限りなくゼロにしたい人の答え。",
     priority:{cheap:1,short:4,shopping:4,quiet:3,cafe:5,nature:2,safety:4,family:2,nightlife:3,new:4}
   },
   {
-    name:"難波・心斎橋",hub:"なんば",
+    name:"難波・心斎橋",anaba:"桜川・汐見橋(なんば徒歩圏の下町価格ゾーン)",hub:"なんば",
+    nick:"眠らない街を庭にする",insight:"ミナミは「住む場所じゃない」は昔の話。裏なんば周辺には意外と静かな住宅ゾーンが残っています",
     nearStations:["なんば","難波","心斎橋","日本橋","四ツ橋"],
     commute:{"なんば":0,"心斎橋":3,"日本橋":3,"四ツ橋":4,"大国町":4,"本町":5,"西大橋":6,"新今宮":7,"堺筋本町":7,"花園町":7,"動物園前":7,"今宮":8,"阿波座":8,"肥後橋":8,"淀屋橋":8,"北浜":9,"芦原橋":10,"谷町四丁目":10,"谷町九丁目":10,"西梅田":10,"岸里玉出":10,"梅田":10,"大阪":11,"九条":11,"東梅田":11,"福島":12,"大正":12,"天王寺":12,"鶴橋":12,"天満":12,"谷町六丁目":12,"四天王寺前夕陽丘":12,"北新地":12,"中津":12,"森ノ宮":13,"中崎町":13,"南森町":13,"天満橋":13,"新大阪":13,"塚本":13,"寺田町":14,"桜ノ宮":14,"阿倍野":14,"今里":14,"新福島":14,"大阪天満宮":14,"野田":15,"弁天町":15,"桃谷":15,"玉造":15,"朝潮橋":15,"天神橋筋六丁目":15,"東淀川":15,"十三":15,"西中島南方":15,"野田阪神":15,"布施":15,"都島":16,"文の里":16,"住之江公園":16,"海老江":16,"長居":16,"大阪城公園":17,"京橋":17,"西九条":18,"大阪港":18,"野江内代":18,"田辺":18,"御幣島":18,"吹田":18,"尼崎":18,"神崎川":18,"淡路":18,"西田辺":18,"江坂":18,"緑橋":19,"コスモスクエア":20,"関目高殿":20,"駒川中野":20,"加島":20,"三国":20,"鴫野":21,"千林大宮":22,"針中野":22,"蒲生四丁目":22,"岸辺":22,"庄内":22,"園田":22,"相川":22,"近鉄八尾":22,"堺":22,"三国ヶ丘":22,"深江橋":23,"太子橋今市":24,"万代":24,"関目成育":24,"放出":24,"千里丘":25,"豊中":25,"塚口":25,"堺市":25,"新森古市":26,"正雀":26,"高井田":27,"守口":28,"だいどう豊里":28,"清水":28,"茨木":28,"岡町":28,"武庫之荘":28,"摂津市":28,"中百舌鳥":30,"瑞光四丁目":30,"服部天神":30,"千里山":30,"長田":31,"大日":32,"井高野":32,"摂津富田":32,"曽根":32,"西宮北口":32,"南茨木":32,"関大前":32,"住道":32,"茨木市":35,"北千里":35,"鴻池新田":35,"高槻":37,"三宮":37,"京都":40,"奈良":40},
-    rent:{"1R1K":53000,"1DK1LDK":65000,"2LDK":133000,"3LDK":165000},
+    rent:{"1R1K":66000,"1DK1LDK":65000,"2LDK":133000,"3LDK":165000},
     tags:["繁華街直結","買い物天国","若者向け","グルメ充実"],
-    desc:"大阪最大の繁華街・ミナミの中心。どこへのアクセスも抜群。活気ある街が好きな方にはここ以上はない。",
+    desc:"遊び・食・買い物の中心地。夜型の仕事の人には、終電の概念が消える快適さがあります。",
     priority:{cheap:1,short:5,shopping:5,quiet:1,cafe:4,nature:1,safety:2,family:1,nightlife:5,new:3}
   },
   {
-    name:"谷町・上町台地",hub:"本町",
+    name:"谷町・上町台地",anaba:"松屋町(からほり路地の下町価格・谷六徒歩圏)",hub:"本町",
+    nick:"大阪の京都、上町台地",insight:"大阪市内屈指の高台で、寺町の静けさと空堀の路地カフェが同居。通は「谷六」に住む",
     nearStations:["谷町四丁目","谷町六丁目","谷町九丁目","天満橋"],
     commute:{"本町":8,"京橋":10,"西大橋":11,"堺筋本町":11,"肥後橋":11,"四ツ橋":11,"心斎橋":11,"淀屋橋":11,"阿波座":12,"なんば":12,"梅田":12,"北浜":12,"大阪":13,"谷町四丁目":13,"東梅田":13,"西梅田":13,"福島":14,"大阪城公園":14,"天満":14,"九条":14,"北新地":14,"鴫野":14,"中津":14,"天王寺":15,"中崎町":15,"新大阪":15,"塚本":15,"日本橋":15,"森ノ宮":16,"桜ノ宮":16,"南森町":16,"天満橋":16,"谷町六丁目":16,"大国町":16,"新福島":16,"大阪天満宮":16,"放出":16,"野田":17,"天神橋筋六丁目":17,"東淀川":17,"十三":17,"西中島南方":17,"弁天町":18,"寺田町":18,"玉造":18,"朝潮橋":18,"緑橋":18,"都島":18,"谷町九丁目":18,"阿倍野":18,"海老江":18,"新今宮":19,"花園町":19,"動物園前":19,"西九条":20,"今宮":20,"桃谷":20,"鶴橋":20,"野江内代":20,"四天王寺前夕陽丘":20,"文の里":20,"蒲生四丁目":20,"御幣島":20,"吹田":20,"尼崎":20,"神崎川":20,"淡路":20,"江坂":20,"野田阪神":20,"芦原橋":22,"大阪港":22,"深江橋":22,"関目高殿":22,"岸里玉出":22,"加島":22,"三国":22,"田辺":23,"長居":23,"大正":24,"千林大宮":24,"関目成育":24,"岸辺":24,"庄内":24,"園田":24,"相川":24,"住道":24,"駒川中野":25,"西田辺":25,"コスモスクエア":26,"高井田":26,"太子橋今市":26,"新森古市":26,"今里":26,"針中野":27,"千里丘":27,"豊中":27,"塚口":27,"布施":27,"住之江公園":28,"正雀":28,"鴻池新田":28,"万代":29,"長田":30,"守口":30,"だいどう豊里":30,"清水":30,"茨木":30,"岡町":30,"武庫之荘":30,"摂津市":30,"瑞光四丁目":32,"服部天神":32,"千里山":32,"堺":33,"三国ヶ丘":33,"大日":34,"井高野":34,"摂津富田":34,"曽根":34,"西宮北口":34,"南茨木":34,"関大前":34,"近鉄八尾":34,"中百舌鳥":35,"茨木市":37,"北千里":37,"堺市":37,"高槻":39,"三宮":39,"京都":42,"奈良":52},
-    rent:{"1R1K":53000,"1DK1LDK":65000,"2LDK":128000,"3LDK":158000},
+    rent:{"1R1K":69000,"1DK1LDK":65000,"2LDK":128000,"3LDK":158000},
     tags:["文教地区","静かな住宅街","寺社仏閣","落ち着いた雰囲気"],
-    desc:"歴史ある上町台地エリア。静かで落ち着いた住宅街。ファミリーや文化的な暮らしを好む方に人気のエリア。",
+    desc:"オフィス街に近いのに落ち着いた文教エリア。歴史と静けさを両取りしたい大人の選択です。",
     priority:{cheap:3,short:4,shopping:3,quiet:5,cafe:3,nature:4,safety:5,family:5,nightlife:1,new:2}
   },
   {
     name:"京橋・大阪城公園",hub:"京橋",
+    nick:"大阪城がマイジムになる",insight:"大阪城公園がランニングコースに。京橋は「安い酒場」とビジネス街、二つの顔を持つ二刀流",
+    anaba:"野江・関目(京阪の各停のみ・京橋2〜4分)",
     nearStations:["京橋","大阪城公園","森ノ宮","桜ノ宮","玉造"],
     commute:{"京橋":0,"大阪城公園":4,"鴫野":4,"森ノ宮":6,"放出":6,"大阪":8,"緑橋":8,"天満橋":8,"玉造":10,"桜ノ宮":10,"蒲生四丁目":10,"大阪天満宮":10,"梅田":10,"北浜":10,"東梅田":11,"西梅田":11,"福島":12,"天満":12,"本町":12,"谷町四丁目":12,"深江橋":12,"都島":12,"北新地":12,"中津":12,"中崎町":13,"新大阪":13,"塚本":13,"鶴橋":14,"西大橋":14,"堺筋本町":14,"野江内代":14,"天神橋筋六丁目":14,"南森町":14,"谷町六丁目":14,"肥後橋":14,"関目成育":14,"新福島":14,"淀屋橋":14,"住道":14,"野田":15,"四ツ橋":15,"東淀川":15,"十三":15,"心斎橋":15,"西中島南方":15,"九条":16,"阿波座":16,"高井田":16,"関目高殿":16,"谷町九丁目":16,"新森古市":16,"今里":16,"海老江":16,"日本橋":16,"なんば":17,"西九条":18,"桃谷":18,"千林大宮":18,"四天王寺前夕陽丘":18,"御幣島":18,"吹田":18,"尼崎":18,"神崎川":18,"淡路":18,"江坂":18,"野田阪神":18,"鴻池新田":18,"寺田町":20,"朝潮橋":20,"長田":20,"太子橋今市":20,"阿倍野":20,"大国町":20,"清水":20,"加島":20,"三国":20,"動物園前":20,"弁天町":22,"今宮":22,"新今宮":22,"天王寺":22,"大阪港":22,"文の里":22,"花園町":22,"岸辺":22,"庄内":22,"園田":22,"相川":22,"布施":22,"芦原橋":24,"田辺":24,"岸里玉出":24,"だいどう豊里":24,"千里丘":25,"豊中":25,"塚口":25,"大正":26,"コスモスクエア":26,"守口":26,"駒川中野":26,"瑞光四丁目":26,"正雀":26,"長居":26,"針中野":28,"井高野":28,"茨木":28,"岡町":28,"武庫之荘":28,"摂津市":28,"西田辺":28,"三国ヶ丘":28,"近鉄八尾":29,"大日":30,"万代":30,"住之江公園":30,"服部天神":30,"千里山":30,"堺":30,"摂津富田":32,"曽根":32,"西宮北口":32,"南茨木":32,"関大前":32,"堺市":33,"茨木市":35,"北千里":35,"中百舌鳥":36,"高槻":37,"三宮":37,"京都":40,"奈良":48},
-    rent:{"1R1K":51000,"1DK1LDK":62000,"2LDK":123000,"3LDK":135000},
+    rent:{"1R1K":75000,"1DK1LDK":62000,"2LDK":123000,"3LDK":135000},
     tags:["大阪城隣接","公園緑豊か","3路線利用可","コスパ良い"],
-    desc:"大阪城公園を望む緑豊かなエリア。JR・京阪・メトロの3路線が使えて交通利便性抜群。家賃コスパも高い。",
+    desc:"JR・京阪・地下鉄が集まる東の拠点。緑と利便のバランスがよく、走る人・歩く人に愛されます。",
     priority:{cheap:4,short:4,shopping:3,quiet:4,cafe:2,nature:5,safety:4,family:4,nightlife:2,new:2}
   },
   {
-    name:"天王寺・阿倍野",hub:"天王寺",
+    name:"天王寺・阿倍野",anaba:"寺田町・美章園(天王寺から1駅で家賃ダウン)",hub:"天王寺",
+    nick:"南の梅田、全部入り",insight:"ハルカスの足元なのに、一本入ると昭和の住宅街。都会機能と下町価格が同居するお得ゾーン",
     nearStations:["天王寺","動物園前","新今宮","長居","西田辺"],
     commute:{"天王寺":0,"寺田町":3,"阿倍野":3,"新今宮":5,"桃谷":5,"四天王寺前夕陽丘":5,"文の里":5,"今宮":8,"鶴橋":8,"谷町九丁目":8,"田辺":8,"花園町":8,"岸里玉出":8,"動物園前":8,"長居":8,"玉造":10,"駒川中野":10,"大国町":10,"西田辺":10,"芦原橋":12,"森ノ宮":12,"谷町六丁目":12,"針中野":12,"なんば":12,"大阪城公園":14,"万代":14,"日本橋":14,"大正":15,"谷町四丁目":15,"心斎橋":15,"四ツ橋":16,"住之江公園":16,"本町":17,"堺筋本町":17,"弁天町":18,"西大橋":18,"阿波座":18,"天満橋":18,"堺":18,"三国ヶ丘":18,"大阪":20,"西九条":20,"天満":20,"中百舌鳥":20,"肥後橋":20,"梅田":20,"淀屋橋":20,"北浜":20,"東梅田":21,"西梅田":21,"福島":22,"京橋":22,"桜ノ宮":22,"九条":22,"南森町":22,"今里":22,"北新地":22,"中津":22,"布施":22,"堺市":22,"中崎町":23,"新大阪":23,"塚本":23,"新福島":24,"大阪天満宮":24,"野田":25,"天神橋筋六丁目":25,"東淀川":25,"十三":25,"西中島南方":25,"野田阪神":25,"朝潮橋":26,"都島":26,"海老江":26,"鴫野":26,"大阪港":28,"緑橋":28,"野江内代":28,"蒲生四丁目":28,"御幣島":28,"放出":28,"吹田":28,"尼崎":28,"神崎川":28,"淡路":28,"江坂":28,"近鉄八尾":29,"コスモスクエア":30,"関目高殿":30,"加島":30,"三国":30,"関目成育":31,"深江橋":32,"千林大宮":32,"岸辺":32,"庄内":32,"園田":32,"相川":32,"新森古市":33,"太子橋今市":34,"清水":35,"千里丘":35,"豊中":35,"塚口":35,"住道":35,"高井田":36,"正雀":36,"守口":38,"だいどう豊里":38,"茨木":38,"岡町":38,"武庫之荘":38,"摂津市":38,"鴻池新田":38,"長田":40,"瑞光四丁目":40,"服部天神":40,"千里山":40,"大日":42,"井高野":42,"摂津富田":42,"曽根":42,"西宮北口":42,"南茨木":42,"関大前":42,"三宮":44,"茨木市":45,"北千里":45,"高槻":47,"奈良":47,"京都":50},
-    rent:{"1R1K":48000,"1DK1LDK":58000,"2LDK":118000,"3LDK":155000},
+    rent:{"1R1K":67000,"1DK1LDK":58000,"2LDK":118000,"3LDK":155000},
     tags:["難波・梅田両方便利","あべのハルカス","公園あり","ファミリー人気"],
-    desc:"天王寺公園・動物園など緑も豊富。ハルカスでショッピングも。梅田・難波どちらへも好アクセスの好立地。",
+    desc:"動物園も美術館も百貨店も徒歩圏。学生から社会人まで、天王寺は「南大阪の全部入り」です。",
     priority:{cheap:4,short:4,shopping:4,quiet:3,cafe:3,nature:4,safety:3,family:5,nightlife:3,new:3}
   },
   {
     name:"鶴橋・今里",hub:"なんば",
+    nick:"市場の煙と、うまいもの",insight:"近鉄の今里はなんばから3駅なのに普通のみ。鶴橋のにぎわいから1駅で、家賃の空気が変わります",
+    anaba:"今里(近鉄の各停のみ・なんば3駅)",
     nearStations:["鶴橋","今里","桃谷","玉造"],
     commute:{"なんば":10,"天王寺":12,"京橋":12,"本町":12,"心斎橋":13,"日本橋":13,"四ツ橋":14,"大国町":14,"寺田町":15,"西大橋":15,"堺筋本町":15,"阿倍野":15,"肥後橋":15,"淀屋橋":15,"大阪城公園":16,"阿波座":16,"鴫野":16,"北浜":16,"新今宮":17,"桃谷":17,"谷町四丁目":17,"四天王寺前夕陽丘":17,"文の里":17,"西梅田":17,"花園町":17,"動物園前":17,"今宮":18,"森ノ宮":18,"九条":18,"放出":18,"梅田":18,"大阪":19,"東梅田":19,"北新地":19,"福島":20,"芦原橋":20,"鶴橋":20,"天満":20,"緑橋":20,"南森町":20,"天満橋":20,"谷町六丁目":20,"谷町九丁目":20,"田辺":20,"岸里玉出":20,"中津":20,"長居":20,"中崎町":21,"新福島":21,"大阪天満宮":21,"新大阪":21,"塚本":21,"弁天町":22,"大正":22,"玉造":22,"桜ノ宮":22,"朝潮橋":22,"駒川中野":22,"蒲生四丁目":22,"西田辺":22,"野田":23,"天神橋筋六丁目":23,"海老江":23,"東淀川":23,"十三":23,"西中島南方":23,"深江橋":24,"都島":24,"針中野":24,"今里":24,"御幣島":25,"野田阪神":25,"布施":25,"西九条":26,"大阪港":26,"野江内代":26,"万代":26,"住之江公園":26,"関目成育":26,"吹田":26,"尼崎":26,"神崎川":26,"淡路":26,"江坂":26,"住道":26,"加島":27,"高井田":28,"関目高殿":28,"新森古市":28,"三国":28,"コスモスクエア":30,"千林大宮":30,"岸辺":30,"庄内":30,"園田":30,"相川":30,"鴻池新田":30,"堺":30,"三国ヶ丘":30,"長田":32,"太子橋今市":32,"中百舌鳥":32,"清水":32,"近鉄八尾":32,"千里丘":33,"豊中":33,"塚口":33,"正雀":34,"堺市":34,"守口":36,"だいどう豊里":36,"茨木":36,"岡町":36,"武庫之荘":36,"摂津市":36,"瑞光四丁目":38,"服部天神":38,"千里山":38,"大日":40,"井高野":40,"摂津富田":40,"曽根":40,"西宮北口":40,"南茨木":40,"関大前":40,"茨木市":43,"北千里":43,"高槻":45,"三宮":45,"京都":47,"奈良":50},
-    rent:{"1R1K":49000,"1DK1LDK":60000,"2LDK":121000,"3LDK":165000},
+    rent:{"1R1K":56000,"1DK1LDK":60000,"2LDK":121000,"3LDK":165000},
     tags:["家賃安め","コリアタウン","多国籍グルメ","JR・近鉄・メトロ"],
-    desc:"大阪のコリアタウン近く。家賃相場が低くコスパ抜群。JR・近鉄・メトロが使えて交通の利便性も高い。",
+    desc:"鶴橋の市場、桃谷の商店街。味の濃い暮らしがしたい人には天国で、家賃も市内屈指の手頃さ。",
     priority:{cheap:5,short:3,shopping:3,quiet:3,cafe:2,nature:2,safety:3,family:3,nightlife:2,new:1}
   },
   {
     name:"福島・野田・西区",hub:"梅田",
+    nick:"グルメ番長の住む街",insight:"環状線の快速が通過するのは野田・芦原橋・今宮の3駅だけ。快速停車の福島から野田側へ1駅ずれると、相場がすっと下がります",
+    anaba:"野田(環状線の快速が通過・福島の1駅隣)",
     nearStations:["福島","野田阪神","九条","大正","阿波座"],
     commute:{"梅田":7,"大阪":8,"本町":8,"東梅田":8,"西梅田":8,"福島":9,"天満":9,"北新地":9,"中津":9,"中崎町":10,"新大阪":10,"塚本":10,"桜ノ宮":11,"西大橋":11,"堺筋本町":11,"南森町":11,"肥後橋":11,"四ツ橋":11,"新福島":11,"大阪天満宮":11,"心斎橋":11,"淀屋橋":11,"野田":12,"阿波座":12,"天神橋筋六丁目":12,"なんば":12,"東淀川":12,"十三":12,"北浜":12,"西中島南方":12,"谷町四丁目":13,"都島":13,"海老江":13,"九条":14,"西九条":15,"大阪城公園":15,"京橋":15,"野江内代":15,"御幣島":15,"吹田":15,"尼崎":15,"神崎川":15,"淡路":15,"日本橋":15,"江坂":15,"野田阪神":15,"森ノ宮":16,"天満橋":16,"谷町六丁目":16,"大国町":16,"関目高殿":17,"加島":17,"三国":17,"弁天町":18,"玉造":18,"朝潮橋":18,"谷町九丁目":18,"新今宮":19,"千林大宮":19,"花園町":19,"鴫野":19,"岸辺":19,"庄内":19,"園田":19,"相川":19,"動物園前":19,"今宮":20,"鶴橋":20,"太子橋今市":21,"芦原橋":22,"桃谷":22,"大阪港":22,"緑橋":22,"四天王寺前夕陽丘":22,"岸里玉出":22,"千里丘":22,"豊中":22,"塚口":22,"大正":23,"放出":23,"正雀":23,"天王寺":24,"寺田町":24,"阿倍野":24,"守口":25,"だいどう豊里":25,"清水":25,"茨木":25,"岡町":25,"武庫之荘":25,"摂津市":25,"コスモスクエア":26,"深江橋":26,"文の里":26,"今里":26,"瑞光四丁目":27,"新森古市":27,"関目成育":27,"服部天神":27,"千里山":27,"布施":27,"田辺":28,"住之江公園":28,"蒲生四丁目":28,"長居":28,"大日":29,"井高野":29,"摂津富田":29,"曽根":29,"西宮北口":29,"南茨木":29,"関大前":29,"高井田":30,"駒川中野":30,"西田辺":30,"針中野":32,"茨木市":32,"北千里":32,"住道":32,"長田":34,"万代":34,"高槻":34,"近鉄八尾":34,"堺":34,"三国ヶ丘":34,"三宮":34,"鴻池新田":35,"京都":35,"堺市":37,"中百舌鳥":40,"奈良":52},
-    rent:{"1R1K":51000,"1DK1LDK":62000,"2LDK":111000,"3LDK":124000},
+    rent:{"1R1K":66000,"1DK1LDK":62000,"2LDK":111000,"3LDK":124000},
     tags:["梅田徒歩圏","再開発進行中","ビジネス街隣接","若者に人気"],
-    desc:"梅田・本町の両ビジネス街に近い西大阪エリア。再開発が進みカフェや飲食店も増加中の注目エリア。",
+    desc:"うまい店の数なら市内最強クラス。中央市場も近く、食にこだわる一人暮らしの理想郷です。",
     priority:{cheap:2,short:4,shopping:4,quiet:3,cafe:4,nature:2,safety:3,family:2,nightlife:3,new:5}
   },
   {
     name:"豊中・服部",hub:"梅田",
+    nick:"北摂ブランドの入口",insight:"「北摂に住んでいる」と言える手頃ゾーン。服部天神は駅前商店街が強い、阪急の穴場",
+    anaba:"服部天神・庄内(急行が通過する各停ゾーン)",
     nearStations:["豊中","服部天神","十三"],
     commute:{"梅田":17,"大阪":18,"東梅田":18,"西梅田":18,"福島":19,"天満":19,"北新地":19,"中津":19,"中崎町":20,"新大阪":20,"塚本":20,"桜ノ宮":21,"南森町":21,"新福島":21,"大阪天満宮":21,"淀屋橋":21,"野田":22,"天神橋筋六丁目":22,"肥後橋":22,"東淀川":22,"十三":22,"西中島南方":22,"都島":23,"海老江":23,"心斎橋":23,"本町":24,"北浜":24,"西九条":25,"大阪城公園":25,"京橋":25,"野江内代":25,"御幣島":25,"吹田":25,"尼崎":25,"神崎川":25,"淡路":25,"江坂":25,"野田阪神":25,"天満橋":26,"四ツ橋":26,"森ノ宮":27,"西大橋":27,"阿波座":27,"堺筋本町":27,"関目高殿":27,"なんば":27,"加島":27,"三国":27,"弁天町":29,"玉造":29,"谷町四丁目":29,"千林大宮":29,"鴫野":29,"岸辺":29,"庄内":29,"園田":29,"相川":29,"日本橋":29,"九条":30,"大国町":30,"鶴橋":31,"太子橋今市":31,"谷町六丁目":32,"千里丘":32,"豊中":32,"塚口":32,"動物園前":32,"大正":33,"桃谷":33,"花園町":33,"放出":33,"正雀":33,"新今宮":34,"朝潮橋":34,"谷町九丁目":34,"芦原橋":35,"今宮":35,"寺田町":35,"緑橋":35,"守口":35,"岸里玉出":35,"だいどう豊里":35,"清水":35,"茨木":35,"岡町":35,"武庫之荘":35,"摂津市":35,"天王寺":37,"大阪港":37,"四天王寺前夕陽丘":37,"瑞光四丁目":37,"新森古市":37,"関目成育":37,"服部天神":37,"千里山":37,"コスモスクエア":39,"深江橋":39,"大日":39,"阿倍野":39,"井高野":39,"蒲生四丁目":39,"今里":39,"摂津富田":39,"曽根":39,"西宮北口":39,"南茨木":39,"関大前":39,"文の里":41,"住之江公園":41,"茨木市":42,"北千里":42,"長居":42,"布施":42,"住道":42,"高井田":43,"田辺":43,"高槻":44,"三宮":44,"駒川中野":45,"西田辺":45,"鴻池新田":45,"京都":45,"長田":47,"針中野":47,"三国ヶ丘":47,"万代":49,"近鉄八尾":49,"堺":49,"堺市":52,"中百舌鳥":55,"奈良":67},
-    rent:{"1R1K":46000,"1DK1LDK":56000,"2LDK":100000,"3LDK":128000},
+    rent:{"1R1K":58000,"1DK1LDK":56000,"2LDK":100000,"3LDK":128000},
     tags:["閑静な住宅地","梅田15分","阪急沿線","ファミリー人気"],
-    desc:"阪急宝塚線・神戸線沿線の閑静な住宅地。梅田まで直通15分。治安・教育環境が良くファミリーに人気。",
+    desc:"文教地区の落ち着きと梅田20分圏。治安・環境重視なら、まずここから見るのが定石です。",
     priority:{cheap:3,short:3,shopping:3,quiet:5,cafe:2,nature:4,safety:5,family:5,nightlife:1,new:2}
   },
   {
     name:"吹田・江坂",hub:"新大阪",
+    nick:"梅田に出なくても完結する街",insight:"御堂筋線の始発圏で朝は座れるチャンス大。江坂はオフィスも飲食も揃う「独立国」",
+    anaba:"吹田・岸辺(JRの快速が通過・岸辺は大阪側の最安級)",
     nearStations:["江坂","吹田","西中島南方"],
     commute:{"新大阪":5,"西中島南方":7,"大阪":8,"東淀川":8,"梅田":8,"東梅田":9,"西梅田":9,"福島":10,"天満":10,"北新地":10,"吹田":10,"塚本":10,"中津":10,"江坂":10,"中崎町":11,"新福島":11,"桜ノ宮":12,"南森町":12,"大阪天満宮":12,"淀屋橋":12,"野田":13,"天神橋筋六丁目":13,"肥後橋":13,"海老江":13,"十三":13,"都島":14,"岸辺":14,"心斎橋":14,"本町":15,"御幣島":15,"尼崎":15,"淡路":15,"北浜":15,"西九条":16,"大阪城公園":16,"京橋":16,"野江内代":16,"神崎川":16,"野田阪神":16,"天満橋":17,"四ツ橋":17,"加島":17,"千里丘":17,"森ノ宮":18,"西大橋":18,"阿波座":18,"堺筋本町":18,"関目高殿":18,"なんば":18,"三国":18,"相川":19,"弁天町":20,"玉造":20,"谷町四丁目":20,"千林大宮":20,"鴫野":20,"茨木":20,"庄内":20,"園田":20,"日本橋":20,"大国町":21,"鶴橋":22,"九条":22,"太子橋今市":22,"谷町六丁目":23,"豊中":23,"塚口":23,"正雀":23,"動物園前":23,"大正":24,"桃谷":24,"花園町":24,"放出":24,"摂津富田":24,"摂津市":25,"芦原橋":26,"寺田町":26,"朝潮橋":26,"緑橋":26,"守口":26,"谷町九丁目":26,"岸里玉出":26,"だいどう豊里":26,"清水":26,"岡町":26,"武庫之荘":26,"千里山":27,"今宮":28,"新今宮":28,"天王寺":28,"大阪港":28,"四天王寺前夕陽丘":28,"瑞光四丁目":28,"新森古市":28,"関目成育":28,"服部天神":28,"高槻":29,"南茨木":29,"関大前":29,"コスモスクエア":30,"深江橋":30,"大日":30,"阿倍野":30,"井高野":30,"蒲生四丁目":30,"今里":30,"曽根":30,"西宮北口":30,"京都":30,"文の里":32,"住之江公園":32,"茨木市":32,"北千里":32,"長居":33,"住道":33,"高井田":34,"田辺":34,"三宮":35,"駒川中野":36,"西田辺":36,"布施":36,"鴻池新田":36,"長田":38,"針中野":38,"三国ヶ丘":38,"万代":40,"堺":40,"近鉄八尾":43,"堺市":43,"中百舌鳥":46,"奈良":60},
-    rent:{"1R1K":50000,"1DK1LDK":61000,"2LDK":116000,"3LDK":148000},
+    rent:{"1R1K":64000,"1DK1LDK":61000,"2LDK":116000,"3LDK":148000},
     tags:["大学街","静かな住宅地","公園多い","ファミリー向け"],
-    desc:"阪大・関大など大学が多い文教地区。静かな住宅地で子育てファミリーにも人気。御堂筋線で梅田へすぐ。",
+    desc:"北の副都心。転勤族に長年愛され続けるのは、生活に外れがないから。",
     priority:{cheap:3,short:3,shopping:3,quiet:5,cafe:2,nature:4,safety:5,family:5,nightlife:1,new:2}
   },
   {
     name:"尼崎・塚口",hub:"梅田",
+    nick:"実は便利な西の隣人",insight:"JR尼崎は大阪駅まで最短5分、快速が全部停まる優等生。県境をまたぐだけで家賃が下がります",
+    anaba:"杭瀬・大物(阪神の各停のみ・県境で家賃ダウン)",
     nearStations:["尼崎","塚口"],
     commute:{"梅田":12,"大阪":13,"東梅田":13,"西梅田":13,"福島":14,"天満":14,"北新地":14,"中津":14,"中崎町":15,"新大阪":15,"塚本":15,"桜ノ宮":16,"南森町":16,"新福島":16,"大阪天満宮":16,"淀屋橋":16,"野田":17,"天神橋筋六丁目":17,"肥後橋":17,"東淀川":17,"十三":17,"西中島南方":17,"都島":18,"海老江":18,"心斎橋":18,"本町":19,"北浜":19,"西九条":20,"大阪城公園":20,"京橋":20,"野江内代":20,"御幣島":20,"吹田":20,"尼崎":20,"神崎川":20,"淡路":20,"江坂":20,"野田阪神":20,"天満橋":21,"四ツ橋":21,"森ノ宮":22,"西大橋":22,"阿波座":22,"堺筋本町":22,"関目高殿":22,"なんば":22,"加島":22,"三国":22,"弁天町":24,"玉造":24,"谷町四丁目":24,"千林大宮":24,"鴫野":24,"岸辺":24,"庄内":24,"園田":24,"相川":24,"日本橋":24,"大国町":25,"鶴橋":26,"九条":26,"太子橋今市":26,"谷町六丁目":27,"千里丘":27,"豊中":27,"塚口":27,"動物園前":27,"大正":28,"桃谷":28,"花園町":28,"放出":28,"正雀":28,"芦原橋":30,"寺田町":30,"朝潮橋":30,"緑橋":30,"守口":30,"谷町九丁目":30,"岸里玉出":30,"だいどう豊里":30,"清水":30,"茨木":30,"岡町":30,"武庫之荘":30,"摂津市":30,"新今宮":31,"今宮":32,"天王寺":32,"大阪港":32,"四天王寺前夕陽丘":32,"瑞光四丁目":32,"新森古市":32,"関目成育":32,"服部天神":32,"千里山":32,"コスモスクエア":34,"深江橋":34,"大日":34,"阿倍野":34,"井高野":34,"蒲生四丁目":34,"今里":34,"摂津富田":34,"曽根":34,"西宮北口":34,"南茨木":34,"関大前":34,"文の里":36,"住之江公園":36,"茨木市":37,"北千里":37,"長居":37,"住道":37,"高井田":38,"田辺":38,"高槻":39,"布施":39,"三宮":39,"駒川中野":40,"西田辺":40,"鴻池新田":40,"京都":40,"長田":42,"針中野":42,"三国ヶ丘":42,"万代":44,"堺":44,"近鉄八尾":46,"堺市":47,"中百舌鳥":50,"奈良":64},
-    rent:{"1R1K":47000,"1DK1LDK":57000,"2LDK":108000,"3LDK":138000},
+    rent:{"1R1K":59000,"1DK1LDK":57000,"2LDK":108000,"3LDK":138000},
     tags:["梅田・三宮両アクセス","家賃安い","再開発進行","コスパ最強"],
-    desc:"梅田まで10分、三宮まで20分。両拠点へのアクセスが抜群で家賃は大阪市内より安い。コスパ派に最強エリア。",
+    desc:"再開発でキレイになった駅前と、昔ながらの商店街。コスパで選ぶ賢い人が流れ込んでいます。",
     priority:{cheap:5,short:5,shopping:3,quiet:3,cafe:2,nature:2,safety:3,family:3,nightlife:2,new:3}
   },
   {
     name:"布施・東大阪",hub:"なんば",
+    nick:"アーケードが傘代わり",insight:"布施は急行、河内小阪は準急、八戸ノ里は普通のみ——1駅ごとに家賃が階段状に下がる、教科書のような区間です",
+    anaba:"河内小阪(準急は停車)・八戸ノ里(各停のみ)",
     nearStations:["布施","近鉄八尾","八尾","鶴橋"],
     commute:{"なんば":15,"京橋":18,"心斎橋":18,"日本橋":18,"四ツ橋":19,"大国町":19,"天王寺":20,"本町":20,"西大橋":21,"新今宮":22,"大阪城公園":22,"堺筋本町":22,"花園町":22,"鴫野":22,"動物園前":22,"今宮":23,"寺田町":23,"阿波座":23,"阿倍野":23,"肥後橋":23,"淀屋橋":23,"森ノ宮":24,"放出":24,"芦原橋":25,"桃谷":25,"谷町四丁目":25,"谷町九丁目":25,"四天王寺前夕陽丘":25,"文の里":25,"西梅田":25,"岸里玉出":25,"梅田":25,"北浜":25,"大阪":26,"緑橋":26,"天満橋":26,"大正":27,"鶴橋":27,"九条":27,"谷町六丁目":27,"北新地":27,"玉造":28,"桜ノ宮":28,"田辺":28,"蒲生四丁目":28,"大阪天満宮":28,"長居":28,"福島":29,"東梅田":29,"今里":29,"新福島":29,"中津":29,"弁天町":30,"天満":30,"深江橋":30,"都島":30,"南森町":30,"駒川中野":30,"西田辺":30,"野田阪神":30,"布施":30,"朝潮橋":31,"中崎町":31,"住之江公園":31,"海老江":31,"新大阪":31,"野田":32,"野江内代":32,"天神橋筋六丁目":32,"針中野":32,"関目成育":32,"塚本":32,"十三":32,"住道":32,"西九条":33,"大阪港":33,"御幣島":33,"東淀川":33,"西中島南方":33,"高井田":34,"関目高殿":34,"万代":34,"新森古市":34,"コスモスクエア":35,"加島":35,"千林大宮":36,"吹田":36,"江坂":36,"鴻池新田":36,"尼崎":37,"神崎川":37,"淡路":37,"近鉄八尾":37,"堺":37,"三国ヶ丘":37,"長田":38,"太子橋今市":38,"清水":38,"三国":39,"中百舌鳥":40,"岸辺":40,"堺市":40,"庄内":41,"園田":41,"相川":41,"だいどう豊里":42,"千里丘":43,"守口":44,"瑞光四丁目":44,"豊中":44,"塚口":44,"正雀":45,"井高野":46,"茨木":46,"岡町":47,"武庫之荘":47,"摂津市":47,"大日":48,"服部天神":49,"千里山":49,"摂津富田":50,"曽根":51,"西宮北口":51,"南茨木":51,"関大前":51,"三宮":52,"茨木市":54,"北千里":54,"高槻":55,"奈良":55,"京都":57},
-    rent:{"1R1K":45000,"1DK1LDK":55000,"2LDK":97000,"3LDK":124000},
+    rent:{"1R1K":60000,"1DK1LDK":55000,"2LDK":97000,"3LDK":124000},
     tags:["家賃安い","難波15分","下町","近鉄沿線"],
-    desc:"近鉄沿線の下町エリア。難波まで近鉄で15分と都心へのアクセス良好。家賃相場が低くコスパは関西有数。",
+    desc:"下町人情と実用性の街。にぎやかな庶民派ライフが似合う人にハマります。",
     priority:{cheap:5,short:3,shopping:3,quiet:3,cafe:2,nature:2,safety:3,family:3,nightlife:2,new:1}
   },
   {
-    name:"堺・三国ヶ丘",hub:"天王寺",
+    name:"堺・三国ヶ丘",anaba:"浅香山(高野線の各停のみ・堺東の1駅隣)",hub:"天王寺",
+    nick:"古墳のある日常",insight:"世界遺産・百舌鳥古墳群が散歩コースに。三国ヶ丘は南海・JRの2路線使える通勤の隠れ優等生",
     nearStations:["堺","三国ヶ丘","中百舌鳥","堺市"],
     commute:{"天王寺":20,"寺田町":23,"阿倍野":23,"新今宮":25,"桃谷":25,"四天王寺前夕陽丘":25,"文の里":25,"なんば":25,"今宮":28,"鶴橋":28,"谷町九丁目":28,"田辺":28,"花園町":28,"岸里玉出":28,"心斎橋":28,"日本橋":28,"動物園前":28,"長居":28,"四ツ橋":29,"大国町":29,"玉造":30,"本町":30,"駒川中野":30,"西田辺":30,"西大橋":31,"芦原橋":32,"森ノ宮":32,"京橋":32,"堺筋本町":32,"谷町六丁目":32,"針中野":32,"阿波座":33,"肥後橋":33,"淀屋橋":33,"大阪城公園":34,"万代":34,"大正":35,"谷町四丁目":35,"西梅田":35,"梅田":35,"北浜":35,"大阪":36,"東梅田":36,"住之江公園":36,"鴫野":36,"福島":37,"天満":37,"九条":37,"北新地":37,"中津":37,"弁天町":38,"中崎町":38,"天満橋":38,"放出":38,"新大阪":38,"塚本":38,"堺":38,"三国ヶ丘":38,"桜ノ宮":39,"南森町":39,"今里":39,"新福島":39,"大阪天満宮":39,"野田":40,"西九条":40,"緑橋":40,"天神橋筋六丁目":40,"中百舌鳥":40,"東淀川":40,"十三":40,"西中島南方":40,"野田阪神":40,"布施":40,"朝潮橋":41,"都島":41,"海老江":41,"蒲生四丁目":42,"堺市":42,"大阪港":43,"野江内代":43,"御幣島":43,"吹田":43,"尼崎":43,"神崎川":43,"淡路":43,"江坂":43,"深江橋":44,"コスモスクエア":45,"関目高殿":45,"加島":45,"三国":45,"関目成育":46,"住道":46,"千林大宮":47,"岸辺":47,"庄内":47,"園田":47,"相川":47,"近鉄八尾":47,"高井田":48,"新森古市":48,"太子橋今市":49,"千里丘":50,"豊中":50,"塚口":50,"鴻池新田":50,"正雀":51,"長田":52,"清水":52,"守口":53,"だいどう豊里":53,"茨木":53,"岡町":53,"武庫之荘":53,"摂津市":53,"瑞光四丁目":55,"服部天神":55,"千里山":55,"大日":57,"井高野":57,"摂津富田":57,"曽根":57,"西宮北口":57,"南茨木":57,"関大前":57,"茨木市":60,"北千里":60,"高槻":62,"三宮":62,"京都":65,"奈良":65},
-    rent:{"1R1K":44000,"1DK1LDK":54000,"2LDK":95000,"3LDK":121000},
+    rent:{"1R1K":60000,"1DK1LDK":54000,"2LDK":95000,"3LDK":121000},
     tags:["天王寺20分","家賃安い","世界遺産近く","ファミリー向け"],
-    desc:"百舌鳥古墳群（世界遺産）のある歴史のまち。天王寺まで南海・JRで20〜25分。家賃安くファミリーに人気。",
+    desc:"政令市の充実したインフラと、歴史の残る街並み。落ち着いた南の拠点を探すならここ。",
     priority:{cheap:5,short:2,shopping:2,quiet:4,cafe:1,nature:3,safety:4,family:5,nightlife:1,new:2}
   },
   {
-    name:"住道・鴻池新田",hub:"京橋",
+    name:"住道・鴻池新田",anaba:"鴻池新田(快速が通過・住道の1駅隣)",hub:"京橋",
+    nick:"学研都市線の静かな実力派",insight:"京橋まで約10分で1Kは5万円前後。「大阪市外への一歩」が家賃を大きく変える見本です",
     nearStations:["住道","鴻池新田","放出"],
     commute:{"京橋":15,"大阪城公園":19,"鴫野":19,"森ノ宮":21,"放出":21,"大阪":23,"緑橋":23,"天満橋":23,"玉造":25,"桜ノ宮":25,"蒲生四丁目":25,"大阪天満宮":25,"北浜":25,"天満":27,"本町":27,"谷町四丁目":27,"深江橋":27,"都島":27,"北新地":27,"梅田":27,"新大阪":28,"鶴橋":29,"西大橋":29,"堺筋本町":29,"野江内代":29,"天神橋筋六丁目":29,"谷町六丁目":29,"肥後橋":29,"関目成育":29,"新福島":29,"塚本":29,"中津":29,"淀屋橋":29,"住道":29,"東淀川":30,"心斎橋":30,"福島":31,"九条":31,"阿波座":31,"高井田":31,"関目高殿":31,"中崎町":31,"東梅田":31,"南森町":31,"谷町九丁目":31,"西梅田":31,"四ツ橋":31,"新森古市":31,"今里":31,"海老江":31,"日本橋":31,"西中島南方":31,"十三":32,"桃谷":33,"千林大宮":33,"四天王寺前夕陽丘":33,"なんば":33,"御幣島":33,"吹田":33,"江坂":33,"鴻池新田":33,"野田":34,"寺田町":35,"朝潮橋":35,"長田":35,"太子橋今市":35,"阿倍野":35,"大国町":35,"清水":35,"加島":35,"尼崎":35,"神崎川":35,"淡路":35,"動物園前":35,"西九条":37,"弁天町":37,"今宮":37,"新今宮":37,"天王寺":37,"大阪港":37,"文の里":37,"花園町":37,"岸辺":37,"三国":37,"野田阪神":37,"布施":37,"芦原橋":39,"田辺":39,"岸里玉出":39,"だいどう豊里":39,"庄内":39,"園田":39,"相川":39,"千里丘":40,"大正":41,"コスモスクエア":41,"守口":41,"駒川中野":41,"瑞光四丁目":41,"長居":41,"豊中":42,"塚口":42,"針中野":43,"井高野":43,"茨木":43,"正雀":43,"西田辺":43,"三国ヶ丘":43,"近鉄八尾":44,"大日":45,"万代":45,"住之江公園":45,"岡町":45,"武庫之荘":45,"摂津市":45,"堺":45,"摂津富田":47,"服部天神":47,"千里山":47,"堺市":48,"曽根":49,"西宮北口":49,"南茨木":49,"関大前":49,"中百舌鳥":51,"高槻":52,"茨木市":52,"北千里":52,"三宮":55,"京都":57,"奈良":63},
-    rent:{"1R1K":45000,"1DK1LDK":55000,"2LDK":70000,"3LDK":78000},
+    rent:{"1R1K":59000,"1DK1LDK":55000,"2LDK":70000,"3LDK":78000},
     tags:["学研都市線","家賃安い","静かな住宅地","京橋17分"],
-    desc:"JR学研都市線沿いの静かな住宅地。京橋まで約17分で都心へのアクセス良。家賃安く広い物件が多い穴場。",
+    desc:"住道は駅前に商業施設がまとまるコンパクトシティ。静かに暮らして都心に通う堅実派の選択。",
     priority:{cheap:5,short:3,shopping:2,quiet:4,cafe:1,nature:3,safety:4,family:4,nightlife:1,new:2}
+  },
+  {
+    name:"塚本",hub:"梅田",
+    nick:"「各停しか停まらない」が正義",insight:"JRで梅田まで1駅なのに5万円台。快速が通過するおかげで家賃が崩れている、プロが黙っておきたい駅",
+    nearStations:["塚本"],
+    commute:{"梅田":4,"大阪":5,"東梅田":5,"西梅田":5,"福島":6,"天満":6,"北新地":6,"中津":6,"中崎町":7,"新大阪":7,"塚本":7,"桜ノ宮":8,"南森町":8,"新福島":8,"大阪天満宮":8,"淀屋橋":8,"野田":9,"天神橋筋六丁目":9,"肥後橋":9,"東淀川":9,"十三":9,"西中島南方":9,"都島":10,"海老江":10,"心斎橋":10,"本町":11,"北浜":11,"西九条":12,"大阪城公園":12,"京橋":12,"野江内代":12,"御幣島":12,"吹田":12,"尼崎":12,"神崎川":12,"淡路":12,"江坂":12,"野田阪神":12,"天満橋":13,"四ツ橋":13,"森ノ宮":14,"西大橋":14,"阿波座":14,"堺筋本町":14,"関目高殿":14,"なんば":14,"加島":14,"三国":14,"弁天町":16,"玉造":16,"谷町四丁目":16,"千林大宮":16,"鴫野":16,"岸辺":16,"庄内":16,"園田":16,"相川":16,"日本橋":16,"九条":17,"大国町":17,"鶴橋":18,"太子橋今市":18,"谷町六丁目":19,"千里丘":19,"豊中":19,"塚口":19,"動物園前":19,"大正":20,"桃谷":20,"花園町":20,"放出":20,"正雀":20,"新今宮":21,"朝潮橋":21,"谷町九丁目":21,"芦原橋":22,"今宮":22,"寺田町":22,"緑橋":22,"守口":22,"岸里玉出":22,"だいどう豊里":22,"清水":22,"茨木":22,"岡町":22,"武庫之荘":22,"摂津市":22,"天王寺":24,"大阪港":24,"四天王寺前夕陽丘":24,"瑞光四丁目":24,"新森古市":24,"関目成育":24,"服部天神":24,"千里山":24,"コスモスクエア":26,"深江橋":26,"大日":26,"阿倍野":26,"井高野":26,"蒲生四丁目":26,"今里":26,"摂津富田":26,"曽根":26,"西宮北口":26,"南茨木":26,"関大前":26,"文の里":28,"住之江公園":28,"茨木市":29,"北千里":29,"長居":29,"布施":29,"住道":29,"高井田":30,"田辺":30,"高槻":31,"三宮":31,"駒川中野":32,"西田辺":32,"鴻池新田":32,"長田":34,"針中野":34,"三国ヶ丘":34,"京都":34,"万代":36,"近鉄八尾":36,"堺":36,"堺市":39,"中百舌鳥":42,"奈良":54},
+    rent:{"1R1K":60000,"1DK1LDK":65000,"2LDK":110000,"3LDK":140000},
+    tags:["梅田1駅","各停の穴場","駅前商店街"],
+    desc:"神戸線の各駅停車のみ停車という一点で、都心1駅の家賃が下がっている稀有な駅。駅前商店街も現役です。",
+    priority:{"cheap":5,"short":5,"shopping":3,"quiet":3,"cafe":2,"nature":2,"safety":3,"family":3,"nightlife":1,"new":2}
+  },
+  {
+    name:"中崎町・天六",anaba:"柴島(千里線の各停・天六まで2駅)",hub:"梅田",
+    nick:"梅田徒歩圏のレトロ路地",insight:"長屋と古民家カフェが残る、梅田から徒歩15分の別世界。「都心×レトロ」は全国でも希少です",
+    nearStations:["中崎町","天神橋筋六丁目"],
+    commute:{"梅田":3,"大阪":4,"東梅田":4,"西梅田":4,"福島":5,"天満":5,"北新地":5,"中津":5,"中崎町":6,"新大阪":6,"塚本":6,"桜ノ宮":7,"南森町":7,"新福島":7,"大阪天満宮":7,"淀屋橋":7,"野田":8,"天神橋筋六丁目":8,"肥後橋":8,"東淀川":8,"十三":8,"西中島南方":8,"都島":9,"海老江":9,"心斎橋":9,"本町":10,"北浜":10,"西九条":11,"大阪城公園":11,"京橋":11,"野江内代":11,"御幣島":11,"吹田":11,"尼崎":11,"神崎川":11,"淡路":11,"江坂":11,"野田阪神":11,"天満橋":12,"四ツ橋":12,"森ノ宮":13,"西大橋":13,"阿波座":13,"堺筋本町":13,"関目高殿":13,"なんば":13,"加島":13,"三国":13,"弁天町":15,"玉造":15,"谷町四丁目":15,"千林大宮":15,"鴫野":15,"岸辺":15,"庄内":15,"園田":15,"相川":15,"日本橋":15,"九条":16,"大国町":16,"鶴橋":17,"太子橋今市":17,"谷町六丁目":18,"千里丘":18,"豊中":18,"塚口":18,"動物園前":18,"大正":19,"桃谷":19,"花園町":19,"放出":19,"正雀":19,"新今宮":20,"朝潮橋":20,"谷町九丁目":20,"芦原橋":21,"今宮":21,"寺田町":21,"緑橋":21,"守口":21,"岸里玉出":21,"だいどう豊里":21,"清水":21,"茨木":21,"岡町":21,"武庫之荘":21,"摂津市":21,"天王寺":23,"大阪港":23,"四天王寺前夕陽丘":23,"瑞光四丁目":23,"新森古市":23,"関目成育":23,"服部天神":23,"千里山":23,"コスモスクエア":25,"深江橋":25,"大日":25,"阿倍野":25,"井高野":25,"蒲生四丁目":25,"今里":25,"摂津富田":25,"曽根":25,"西宮北口":25,"南茨木":25,"関大前":25,"文の里":27,"住之江公園":27,"茨木市":28,"北千里":28,"長居":28,"布施":28,"住道":28,"高井田":29,"田辺":29,"高槻":30,"三宮":30,"駒川中野":31,"西田辺":31,"鴻池新田":31,"長田":33,"針中野":33,"三国ヶ丘":33,"京都":33,"万代":35,"近鉄八尾":35,"堺":35,"堺市":38,"中百舌鳥":41,"奈良":53},
+    rent:{"1R1K":75000,"1DK1LDK":72000,"2LDK":125000,"3LDK":155000},
+    tags:["レトロ路地","古民家カフェ","梅田徒歩圏"],
+    desc:"散歩が趣味になる街。天六側に寄れば日本一長い商店街も生活圏で、家賃も一段落ち着きます。",
+    priority:{"cheap":2,"short":5,"shopping":4,"quiet":2,"cafe":5,"nature":1,"safety":3,"family":2,"nightlife":3,"new":2}
+  },
+  {
+    name:"蒲生四丁目・関目",hub:"京橋",
+    nick:"リノベ下町「がもよん」",insight:"京阪は京橋を出ると、準急でも守口市まで停まりません。あいだの野江・関目は普通のみ＋JRおおさか東線も使える二刀流です",
+    anaba:"関目・森小路(京阪の各停のみ・千林商店街圏)",
+    nearStations:["蒲生四丁目","関目高殿","関目成育"],
+    commute:{"京橋":3,"大阪城公園":7,"鴫野":7,"森ノ宮":9,"放出":9,"大阪":11,"緑橋":11,"天満橋":11,"玉造":13,"桜ノ宮":13,"蒲生四丁目":13,"大阪天満宮":13,"梅田":13,"北浜":13,"東梅田":14,"西梅田":14,"福島":15,"天満":15,"本町":15,"谷町四丁目":15,"深江橋":15,"都島":15,"北新地":15,"中津":15,"中崎町":16,"新大阪":16,"塚本":16,"鶴橋":17,"西大橋":17,"堺筋本町":17,"野江内代":17,"天神橋筋六丁目":17,"南森町":17,"谷町六丁目":17,"肥後橋":17,"関目成育":17,"新福島":17,"淀屋橋":17,"住道":17,"野田":18,"四ツ橋":18,"東淀川":18,"十三":18,"心斎橋":18,"西中島南方":18,"九条":19,"阿波座":19,"高井田":19,"関目高殿":19,"谷町九丁目":19,"新森古市":19,"今里":19,"海老江":19,"日本橋":19,"なんば":20,"西九条":21,"桃谷":21,"千林大宮":21,"四天王寺前夕陽丘":21,"御幣島":21,"吹田":21,"尼崎":21,"神崎川":21,"淡路":21,"江坂":21,"野田阪神":21,"鴻池新田":21,"寺田町":23,"朝潮橋":23,"長田":23,"太子橋今市":23,"阿倍野":23,"大国町":23,"清水":23,"加島":23,"三国":23,"動物園前":23,"弁天町":25,"今宮":25,"新今宮":25,"天王寺":25,"大阪港":25,"文の里":25,"花園町":25,"岸辺":25,"庄内":25,"園田":25,"相川":25,"布施":25,"芦原橋":27,"田辺":27,"岸里玉出":27,"だいどう豊里":27,"千里丘":28,"豊中":28,"塚口":28,"大正":29,"コスモスクエア":29,"守口":29,"駒川中野":29,"瑞光四丁目":29,"正雀":29,"長居":29,"針中野":31,"井高野":31,"茨木":31,"岡町":31,"武庫之荘":31,"摂津市":31,"西田辺":31,"三国ヶ丘":31,"近鉄八尾":32,"大日":33,"万代":33,"住之江公園":33,"服部天神":33,"千里山":33,"堺":33,"摂津富田":35,"曽根":35,"西宮北口":35,"南茨木":35,"関大前":35,"堺市":36,"茨木市":38,"北千里":38,"中百舌鳥":39,"高槻":40,"三宮":40,"京都":43,"奈良":51},
+    rent:{"1R1K":63000,"1DK1LDK":66000,"2LDK":98000,"3LDK":125000},
+    tags:["がもよん","リノベ下町","京橋1駅"],
+    desc:"「がもよん」の愛称で人気上昇中。昔ながらの銭湯や市場と、新しい飲食店が混ざる面白さがあります。",
+    priority:{"cheap":5,"short":4,"shopping":3,"quiet":3,"cafe":4,"nature":2,"safety":3,"family":4,"nightlife":2,"new":2}
+  },
+  {
+    name:"下新庄・淡路",hub:"淡路",
+    nick:"今回の最安クラス",insight:"阪急2路線が交わる淡路のとなりで1K4万円台。再開発が進む前の「今だけ価格」の可能性があります",
+    anaba:"下新庄(千里線の各停・天六方面へ乗換なし)",
+    nearStations:["下新庄","淡路"],
+    commute:{"新大阪":7,"西中島南方":9,"大阪":10,"東淀川":10,"梅田":10,"東梅田":11,"西梅田":11,"福島":12,"天満":12,"北新地":12,"吹田":12,"塚本":12,"中津":12,"江坂":12,"中崎町":13,"新福島":13,"桜ノ宮":14,"南森町":14,"大阪天満宮":14,"淀屋橋":14,"野田":15,"天神橋筋六丁目":15,"肥後橋":15,"海老江":15,"十三":15,"都島":16,"岸辺":16,"心斎橋":16,"本町":17,"御幣島":17,"尼崎":17,"淡路":17,"北浜":17,"西九条":18,"大阪城公園":18,"京橋":18,"野江内代":18,"神崎川":18,"野田阪神":18,"天満橋":19,"四ツ橋":19,"加島":19,"千里丘":19,"森ノ宮":20,"西大橋":20,"阿波座":20,"堺筋本町":20,"関目高殿":20,"なんば":20,"三国":20,"相川":21,"弁天町":22,"玉造":22,"谷町四丁目":22,"千林大宮":22,"鴫野":22,"茨木":22,"庄内":22,"園田":22,"日本橋":22,"大国町":23,"鶴橋":24,"九条":24,"太子橋今市":24,"谷町六丁目":25,"豊中":25,"塚口":25,"正雀":25,"動物園前":25,"大正":26,"桃谷":26,"花園町":26,"放出":26,"摂津富田":26,"摂津市":27,"芦原橋":28,"寺田町":28,"朝潮橋":28,"緑橋":28,"守口":28,"谷町九丁目":28,"岸里玉出":28,"だいどう豊里":28,"清水":28,"岡町":28,"武庫之荘":28,"千里山":29,"今宮":30,"新今宮":30,"天王寺":30,"大阪港":30,"四天王寺前夕陽丘":30,"瑞光四丁目":30,"新森古市":30,"関目成育":30,"服部天神":30,"高槻":31,"南茨木":31,"関大前":31,"コスモスクエア":32,"深江橋":32,"大日":32,"阿倍野":32,"井高野":32,"蒲生四丁目":32,"今里":32,"曽根":32,"西宮北口":32,"京都":32,"文の里":34,"住之江公園":34,"茨木市":34,"北千里":34,"長居":35,"住道":35,"高井田":36,"田辺":36,"三宮":37,"駒川中野":38,"西田辺":38,"布施":38,"鴻池新田":38,"長田":40,"針中野":40,"三国ヶ丘":40,"万代":42,"堺":42,"近鉄八尾":45,"堺市":45,"中百舌鳥":48,"奈良":62},
+    rent:{"1R1K":63000,"1DK1LDK":60000,"2LDK":90000,"3LDK":115000},
+    tags:["最安クラス","阪急2路線","再開発前"],
+    desc:"梅田方面へも京都方面へも出やすい千里線の穴場。初めての一人暮らしに、コスパで応えます。",
+    priority:{"cheap":5,"short":3,"shopping":2,"quiet":4,"cafe":2,"nature":3,"safety":3,"family":3,"nightlife":1,"new":2}
+  },
+  {
+    name:"三国・十三",hub:"十三",
+    nick:"商店街がライフライン",insight:"宝塚線の急行は十三の次が豊中。2025年の改正で夕方に通勤急行ができても、三国・庄内は通過のまま＝この安さは「公式に守られて」います",
+    anaba:"三国(2025年の改正後も通過のまま)",
+    nearStations:["三国","十三"],
+    commute:{"梅田":13,"大阪":14,"東梅田":14,"西梅田":14,"福島":15,"天満":15,"北新地":15,"中津":15,"中崎町":16,"新大阪":16,"塚本":16,"桜ノ宮":17,"南森町":17,"新福島":17,"大阪天満宮":17,"淀屋橋":17,"野田":18,"天神橋筋六丁目":18,"肥後橋":18,"東淀川":18,"十三":18,"西中島南方":18,"都島":19,"海老江":19,"心斎橋":19,"本町":20,"北浜":20,"西九条":21,"大阪城公園":21,"京橋":21,"野江内代":21,"御幣島":21,"吹田":21,"尼崎":21,"神崎川":21,"淡路":21,"江坂":21,"野田阪神":21,"天満橋":22,"四ツ橋":22,"森ノ宮":23,"西大橋":23,"阿波座":23,"堺筋本町":23,"関目高殿":23,"なんば":23,"加島":23,"三国":23,"弁天町":25,"玉造":25,"谷町四丁目":25,"千林大宮":25,"鴫野":25,"岸辺":25,"庄内":25,"園田":25,"相川":25,"日本橋":25,"九条":26,"大国町":26,"鶴橋":27,"太子橋今市":27,"谷町六丁目":28,"千里丘":28,"豊中":28,"塚口":28,"動物園前":28,"大正":29,"桃谷":29,"花園町":29,"放出":29,"正雀":29,"新今宮":30,"朝潮橋":30,"谷町九丁目":30,"芦原橋":31,"今宮":31,"寺田町":31,"緑橋":31,"守口":31,"岸里玉出":31,"だいどう豊里":31,"清水":31,"茨木":31,"岡町":31,"武庫之荘":31,"摂津市":31,"天王寺":33,"大阪港":33,"四天王寺前夕陽丘":33,"瑞光四丁目":33,"新森古市":33,"関目成育":33,"服部天神":33,"千里山":33,"コスモスクエア":35,"深江橋":35,"大日":35,"阿倍野":35,"井高野":35,"蒲生四丁目":35,"今里":35,"摂津富田":35,"曽根":35,"西宮北口":35,"南茨木":35,"関大前":35,"文の里":37,"住之江公園":37,"茨木市":38,"北千里":38,"長居":38,"布施":38,"住道":38,"高井田":39,"田辺":39,"高槻":40,"三宮":40,"駒川中野":41,"西田辺":41,"鴻池新田":41,"京都":41,"長田":43,"針中野":43,"三国ヶ丘":43,"万代":45,"近鉄八尾":45,"堺":45,"堺市":48,"中百舌鳥":51,"奈良":63},
+    rent:{"1R1K":63000,"1DK1LDK":67000,"2LDK":100000,"3LDK":128000},
+    tags:["商店街2本","梅田10分","スーパー激戦区"],
+    desc:"十三のディープな食文化も徒歩圏。にぎわいと生活コストのバランスで、玄人が選ぶ北の穴場。",
+    priority:{"cheap":4,"short":4,"shopping":4,"quiet":2,"cafe":2,"nature":1,"safety":2,"family":3,"nightlife":3,"new":2}
+  },
+  {
+    name:"姫島・千船",hub:"梅田",
+    nick:"梅田8分、各停だけの静けさ",insight:"阪神の急行は梅田を出ると野田の次は尼崎。あいだの姫島・千船は普通のみで、梅田8分なのに相場が一段下がります。姫島は駅にスーパー直結",
+    anaba:"姫島(駅にスーパー直結)・千船(朝だけ区間急行)",
+    nearStations:["姫島","千船","淀川"],
+    commute:{"梅田":8,"大阪":9,"東梅田":9,"西梅田":9,"福島":6,"天満":9,"北新地":10,"中津":9,"中崎町":10,"新大阪":10,"塚本":6,"桜ノ宮":11,"南森町":11,"新福島":11,"大阪天満宮":11,"淀屋橋":11,"野田":5,"天神橋筋六丁目":12,"肥後橋":12,"東淀川":12,"十三":12,"西中島南方":12,"都島":13,"海老江":13,"心斎橋":13,"本町":14,"北浜":14,"西九条":9,"大阪城公園":15,"京橋":15,"野江内代":15,"御幣島":6,"吹田":15,"尼崎":8,"神崎川":15,"淡路":15,"江坂":15,"野田阪神":6,"天満橋":16,"四ツ橋":16,"森ノ宮":17,"西大橋":17,"阿波座":17,"堺筋本町":17,"関目高殿":17,"なんば":16,"加島":17,"三国":17,"弁天町":19,"玉造":19,"谷町四丁目":19,"千林大宮":19,"鴫野":19,"岸辺":19,"庄内":19,"園田":19,"相川":19,"日本橋":19,"九条":20,"大国町":20,"鶴橋":21,"太子橋今市":21,"谷町六丁目":22,"千里丘":22,"豊中":22,"塚口":22,"動物園前":22,"大正":23,"桃谷":23,"花園町":23,"放出":23,"正雀":23,"新今宮":24,"朝潮橋":24,"谷町九丁目":24,"芦原橋":25,"今宮":25,"寺田町":25,"緑橋":25,"守口":25,"岸里玉出":25,"だいどう豊里":25,"清水":25,"茨木":25,"岡町":25,"武庫之荘":25,"摂津市":25,"天王寺":27,"大阪港":27,"四天王寺前夕陽丘":27,"瑞光四丁目":27,"新森古市":27,"関目成育":27,"服部天神":27,"千里山":27,"コスモスクエア":29,"深江橋":29,"大日":29,"阿倍野":29,"井高野":29,"蒲生四丁目":29,"今里":29,"摂津富田":29,"曽根":29,"西宮北口":29,"南茨木":29,"関大前":29,"文の里":31,"住之江公園":31,"茨木市":32,"北千里":32,"長居":32,"布施":32,"住道":32,"高井田":33,"田辺":33,"高槻":34,"三宮":34,"駒川中野":35,"西田辺":35,"鴻池新田":35,"長田":37,"針中野":37,"三国ヶ丘":37,"京都":37,"万代":39,"近鉄八尾":39,"堺":39,"堺市":42,"中百舌鳥":45,"奈良":57},
+    rent:{"1R1K":57000,"1DK1LDK":60000,"2LDK":105000,"3LDK":130000},
+    tags:["梅田8分","各停のみで静か","駅前スーパー","淀川近く"],
+    desc:"急行が飛ばす2駅、というだけで相場が変わる。梅田まで一桁分・買い物は駅前で完結、の実力派です。",
+    priority:{cheap:5,short:4,shopping:3,quiet:4,cafe:1,nature:3,safety:3,family:3,nightlife:1,new:2}
+  },
+  {
+    name:"東淀川・崇禅寺",hub:"新大阪",
+    nick:"新大阪まで1駅の秘密基地",insight:"JRの快速も阪急の準急も素通りする「ダブル各停」ゾーン。新大阪まで1駅なので、新幹線に乗る人ほど得をする立地です",
+    anaba:"東淀川(新大阪まで1駅)・崇禅寺(各停のみ)",
+    nearStations:["東淀川","崇禅寺","柴島"],
+    commute:{"新大阪":2,"西中島南方":5,"大阪":8,"東淀川":1,"北新地":8,"吹田":4,"塚本":8,"梅田":9,"江坂":8,"東梅田":10,"西梅田":10,"新福島":9,"福島":10,"天満":10,"大阪天満宮":10,"中津":10,"中崎町":11,"海老江":11,"十三":6,"桜ノ宮":12,"南森町":12,"岸辺":6,"淀屋橋":12,"野田":13,"天神橋筋六丁目":13,"肥後橋":13,"御幣島":13,"尼崎":13,"淡路":6,"都島":14,"神崎川":14,"心斎橋":14,"本町":15,"加島":15,"千里丘":8,"北浜":15,"西九条":16,"大阪城公園":16,"京橋":16,"野江内代":16,"三国":16,"野田阪神":16,"天満橋":17,"四ツ橋":17,"相川":17,"森ノ宮":18,"西大橋":18,"阿波座":18,"堺筋本町":18,"関目高殿":18,"なんば":18,"茨木":18,"庄内":18,"園田":18,"弁天町":20,"玉造":20,"谷町四丁目":20,"千林大宮":20,"鴫野":20,"日本橋":20,"九条":21,"大国町":21,"豊中":21,"塚口":21,"正雀":21,"鶴橋":22,"太子橋今市":22,"摂津富田":22,"谷町六丁目":23,"摂津市":23,"動物園前":23,"大正":24,"桃谷":24,"花園町":24,"だいどう豊里":24,"放出":24,"岡町":24,"武庫之荘":24,"朝潮橋":25,"谷町九丁目":25,"千里山":25,"芦原橋":26,"寺田町":26,"緑橋":26,"守口":26,"岸里玉出":26,"瑞光四丁目":26,"清水":26,"服部天神":26,"高槻":27,"南茨木":27,"関大前":27,"今宮":28,"新今宮":28,"天王寺":28,"大阪港":28,"四天王寺前夕陽丘":28,"井高野":28,"新森古市":28,"関目成育":28,"蒲生四丁目":28,"曽根":28,"西宮北口":28,"京都":28,"コスモスクエア":30,"深江橋":30,"大日":30,"阿倍野":30,"今里":30,"茨木市":30,"北千里":30,"住道":31,"文の里":32,"住之江公園":32,"長居":33,"三宮":33,"高井田":34,"田辺":34,"鴻池新田":34,"駒川中野":36,"西田辺":36,"布施":36,"長田":38,"針中野":38,"三国ヶ丘":38,"万代":40,"堺":40,"近鉄八尾":43,"堺市":43,"中百舌鳥":46,"奈良":60},
+    rent:{"1R1K":60000,"1DK1LDK":63000,"2LDK":115000,"3LDK":140000},
+    tags:["新大阪1駅","出張・帰省に強い","ダブル各停ゾーン","家賃控えめ"],
+    desc:"JRと阪急、ふたつの各停ゾーンが重なる静かな街。新大阪まで1駅は、新幹線をよく使う人には千金の価値。",
+    priority:{cheap:4,short:4,shopping:2,quiet:4,cafe:1,nature:2,safety:3,family:3,nightlife:1,new:2}
+  },
+  {
+    name:"神崎川・園田",hub:"梅田",
+    nick:"特急が飛ばす、だから安い",insight:"阪急神戸線の特急は十三の次が西宮北口。手前の神崎川・園田は各停のみで、梅田6〜9分の割に相場が控えめ。園田は普通の待避で数分のびる日があるのが正直なところ",
+    anaba:"神崎川(梅田約6分)・園田(県境でもう一段安く)",
+    nearStations:["神崎川","園田"],
+    commute:{"梅田":7,"大阪":9,"東梅田":7,"西梅田":7,"福島":8,"天満":8,"北新地":8,"中津":8,"中崎町":9,"新大阪":9,"塚本":9,"桜ノ宮":10,"南森町":10,"新福島":10,"大阪天満宮":10,"淀屋橋":10,"野田":11,"天神橋筋六丁目":11,"肥後橋":11,"東淀川":11,"十三":3,"西中島南方":11,"都島":12,"海老江":12,"心斎橋":12,"本町":13,"北浜":13,"西九条":14,"大阪城公園":14,"京橋":14,"野江内代":14,"御幣島":14,"吹田":14,"尼崎":9,"神崎川":1,"淡路":14,"江坂":14,"野田阪神":14,"天満橋":15,"四ツ橋":15,"森ノ宮":16,"西大橋":16,"阿波座":16,"堺筋本町":16,"関目高殿":16,"なんば":16,"加島":8,"三国":8,"弁天町":18,"玉造":18,"谷町四丁目":18,"千林大宮":18,"鴫野":18,"岸辺":18,"庄内":18,"園田":2,"相川":18,"日本橋":18,"九条":19,"大国町":19,"鶴橋":20,"太子橋今市":20,"谷町六丁目":21,"千里丘":21,"豊中":21,"塚口":6,"動物園前":21,"大正":22,"桃谷":22,"花園町":22,"放出":22,"正雀":22,"新今宮":23,"朝潮橋":23,"谷町九丁目":23,"芦原橋":24,"今宮":24,"寺田町":24,"緑橋":24,"守口":24,"岸里玉出":24,"だいどう豊里":24,"清水":24,"茨木":24,"岡町":24,"武庫之荘":24,"摂津市":24,"天王寺":26,"大阪港":26,"四天王寺前夕陽丘":26,"瑞光四丁目":26,"新森古市":26,"関目成育":26,"服部天神":26,"千里山":26,"コスモスクエア":28,"深江橋":28,"大日":28,"阿倍野":28,"井高野":28,"蒲生四丁目":28,"今里":28,"摂津富田":28,"曽根":28,"西宮北口":15,"南茨木":28,"関大前":28,"文の里":30,"住之江公園":30,"茨木市":31,"北千里":31,"長居":31,"布施":31,"住道":31,"高井田":32,"田辺":32,"高槻":33,"三宮":33,"駒川中野":34,"西田辺":34,"鴻池新田":34,"長田":36,"針中野":36,"三国ヶ丘":36,"京都":36,"万代":38,"近鉄八尾":38,"堺":38,"堺市":41,"中百舌鳥":44,"奈良":56},
+    rent:{"1R1K":50000,"1DK1LDK":61000,"2LDK":108000,"3LDK":135000},
+    tags:["梅田6〜9分","阪急の各停駅","静かな住宅地","コスパ重視"],
+    desc:"特急の窓から見える駅に住む、という発想。県境をまたぐ園田まで行くと、もう一段安くなります。",
+    priority:{cheap:4,short:4,shopping:2,quiet:4,cafe:1,nature:3,safety:3,family:3,nightlife:1,new:2}
   },
 ];;
 
@@ -1259,7 +1393,7 @@ function getAreaRent1K(area) {
     `<span class="rent-station-item">${p.s} <strong>${p.r}万</strong></span>`
   ).join('');
   return `<div class="rent-row">
-    <span class="rent-row-label">🏷️ 近隣駅の家賃目安（1K/1DK）</span>
+    <span class="rent-row-label">🏷️ 近隣駅の家賃目安(1K)（1K/1DK）</span>
     <div class="rent-station-list">${items}</div>
   </div>`;
 }
@@ -1308,7 +1442,7 @@ document.addEventListener('click', e => {
 function startQuiz() {
   const val = input.value.trim();
   if (!val) {
-    input.style.borderColor = '#F47B2D';
+    input.style.borderColor = '#DE6E3C';
     input.focus();
     setTimeout(() => input.style.borderColor = '', 2000);
     return;
@@ -1365,7 +1499,31 @@ function renderQ(goBack) {
     }
   }
 
+  renderAnswerLog();
   window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function renderAnswerLog() {
+  const box = document.getElementById('answerLog');
+  if (!box) return;
+  const L = {commute:'乗車',rent:'家賃',mbtiTypeInput:'MBTI',ei1:'休日',sn1:'内見',tf1:'決め手',jp1:'準備',ei2:'帰り道',sn2:'街選び',tf2:'重視',jp2:'リズム',dislikes:'苦手'};
+  const chips = [];
+  if (state.workStation) chips.push('🏢 ' + state.workStation);
+  for (const q of QUESTIONS) {
+    if (q.id === 'mbtiKnown') continue;
+    const a = quizAnswers[q.id];
+    if (a == null || (Array.isArray(a) && !a.length)) continue;
+    let v = '';
+    if (q.type === 'single') { const o = (q.options||[]).find(o => String(o.val) === String(a)); v = o ? o.label : a; }
+    else if (q.type === 'contrast') { const n = parseInt(a); v = n < 0 ? q.leftLabel : n > 0 ? q.rightLabel : 'どちらでも'; }
+    else if (q.type === 'multi') { v = a.map(x => { const o = q.options.find(o => o.val === x); return o ? o.label : x; }).join('・'); }
+    else if (q.type === 'mbtiSelect') { v = a; }
+    if (v) chips.push((L[q.id] ? L[q.id] + '：' : '') + v);
+  }
+  box.innerHTML = chips.length
+    ? '<div class="alog-title">📝 ここまでの回答</div>' + chips.map(c => `<span class="alog-chip">${c}</span>`).join('')
+    : '';
+  box.style.display = chips.length ? 'block' : 'none';
 }
 
 function renderMbtiSelect(q) {
@@ -1375,7 +1533,7 @@ function renderMbtiSelect(q) {
     `<div class="mbti-type-chip" data-val="${t}" onclick="selectMbtiChip(this,'${t}')">${t}</div>`
   ).join('');
   return `
-    <div class="quiz-q">${q.q}</div>
+    <div class="quiz-q"><span class="qq">${q.q}</span></div>
     <div class="quiz-sub">タイプをタップして選んでください</div>
     <div class="mbti-type-grid">${chips}</div>
     <button class="btn-main" id="mbtiConfirmBtn"
@@ -1399,7 +1557,7 @@ function renderSingle(q) {
       ${o.sub ? `<span class="q-sub">${o.sub}</span>` : ''}
     </div>`).join('');
   return `
-    <div class="quiz-q">${q.q.replace(/\n/g,'<br>')}${q.optional ? '<span class="optional-badge">任意</span>' : ''}</div>
+    <div class="quiz-q"><span class="qq">${q.q.replace(/\n/g,'<br>')}</span>${q.optional ? '<span class="optional-badge">任意</span>' : ''}</div>
     ${q.sub ? `<div class="quiz-sub">${q.sub}</div>` : ''}
     <div class="quiz-options">${opts}</div>
     ${q.optional ? `<div class="quiz-skip" onclick="quizSkip()">スキップ →</div>` : ''}`;
@@ -1410,7 +1568,7 @@ function renderMulti(q) {
     `<div class="quiz-chip" data-val="${o.val}" onclick="toggleChip(this,'${q.id}')">${o.label}</div>`
   ).join('');
   return `
-    <div class="quiz-q">${q.q}${q.optional ? '<span class="optional-badge">任意・複数可</span>' : ''}</div>
+    <div class="quiz-q"><span class="qq">${q.q}</span>${q.optional ? '<span class="optional-badge">任意・複数可</span>' : ''}</div>
     <div class="quiz-sub">${q.sub||''}</div>
     <div class="quiz-chips">${chips}</div>
     <button class="btn-main" onclick="quizNext()" style="margin-top:4px;">次へ　→</button>
@@ -1419,7 +1577,7 @@ function renderMulti(q) {
 
 function renderContrast(q) {
   return `
-    <div class="quiz-q">${q.q}</div>
+    <div class="quiz-q"><span class="qq">${q.q}</span></div>
     <div class="quiz-sub" style="margin-bottom:18px;">どちらに近いか直感で選んでください</div>
     <div class="contrast-options">
       <div class="contrast-card left" data-cval="-1" onclick="pickContrast(this,'${q.id}')">
@@ -1512,23 +1670,40 @@ function restartQuiz() {
 // 回答→ステート変換
 // ===========================
 function buildState() {
-  state.commuteMax      = parseInt(quizAnswers.commute)        || 30;
-  state.rentMax         = parseInt(quizAnswers.rent)           || 70000;
-  state.roomType        = quizAnswers.roomType                 || '1R1K';
-  state.gender          = quizAnswers.gender                   || null;
-  state.ageGroup        = quizAnswers.ageGroup                 || null;
-  state.dislikes        = quizAnswers.dislikes                 || [];
-  state.contrasts       = ['contrast0','contrast1','contrast2','contrast3','contrast4']
-    .map(k => quizAnswers[k] != null ? parseInt(quizAnswers[k]) : 0);
-  state.commuteMethod   = quizAnswers.commuteMethod            || 'train';
-  state.cooking         = quizAnswers.cooking                  || 'sometimes';
-  state.homeTime        = quizAnswers.homeTime != null ? parseInt(quizAnswers.homeTime) : 0;
-  state.firstMove       = quizAnswers.firstMove                || null;
-  state.movingCostKnown = quizAnswers.movingCostKnown          || null;
-  state.mbtiKnown       = quizAnswers.mbtiKnown                || 'no';
-  state.mbtiTypeInput   = quizAnswers.mbtiTypeInput            || null;
-  // 車通勤の場合は乗車時間制限を緩和
-  if (state.commuteMethod === 'car') state.commuteMax = 60;
+  state.commuteMax    = parseInt(quizAnswers.commute) || 30;
+  state.rentMax       = parseInt(quizAnswers.rent)    || 70000;
+  state.roomType      = '1R1K';
+  state.dislikes      = quizAnswers.dislikes          || [];
+  state.mbtiKnown     = quizAnswers.mbtiKnown         || 'no';
+  state.mbtiTypeInput = quizAnswers.mbtiTypeInput     || null;
+
+  // 4軸スコア（各軸2問、回答は -1 / 0 / +1）→ 合計 -2〜+2
+  const ax = p => ['1','2'].reduce((s, n) => {
+    const v = quizAnswers[p + n];
+    return s + (v != null ? parseInt(v) : 0);
+  }, 0);
+  state.axes = { ei: ax('ei'), sn: ax('sn'), tf: ax('tf'), jp: ax('jp') };
+
+  // タイプ直接入力の場合は、タイプの文字から軸を復元（±1）
+  // → 入力派にもライフスタイル採点が効くようになる（v13までは中立だった）
+  if (state.mbtiTypeInput) {
+    const t = state.mbtiTypeInput;
+    state.axes = {
+      ei: t[0] === 'E' ? 1 : -1,
+      sn: t[1] === 'N' ? 1 : -1,
+      tf: t[2] === 'F' ? 1 : -1,
+      jp: t[3] === 'P' ? 1 : -1,
+    };
+  }
+
+  // 旧5対比互換の好みベクトル（エリア採点用）: [静↔賑, 自然↔都会, 家賃↔アクセス, 未使用, 落ち着き↔おしゃれ]
+  const sgn = v => v > 0 ? 1 : (v < 0 ? -1 : 0);
+  state.contrasts = [sgn(state.axes.ei), sgn(state.axes.sn), sgn(state.axes.tf), 0, sgn(state.axes.jp)];
+
+  // v14で質問を廃止した項目は中立の既定値（採点に影響しない）
+  state.gender = null; state.ageGroup = null;
+  state.cooking = 'sometimes'; state.homeTime = 0;
+  state.commuteMethod = 'train'; state.firstMove = null; state.movingCostKnown = null;
 }
 
 // ===========================
@@ -1633,12 +1808,12 @@ function showResult() {
   // サブタイトル
   const rentLabel = state.rentMax === 999999 ? '上限なし' : state.rentMax.toLocaleString() + '円';
   document.getElementById('resultSubtitle').textContent =
-    `職場：${state.workStation} ／ 乗車時間${state.commuteMax}分以内 ／ 〜${rentLabel}`;
+    `職場：${state.workStation} ／ 乗車時間${state.commuteMax}分以内 ／ ～${rentLabel}`;
 
   // プロフィールサマリー
   const gL = {male:'男性',female:'女性',other:''};
   const aL = {teen:'10代以下','20s':'20代','30s':'30代','40s':'40代','50s':'50代以上'};
-  const cL = [['静か','賑やか'],['自然','都会'],['家賃重視','アクセス重視'],['広さ重視','立地重視'],['落ち着き','おしゃれ']];
+  const cL = [['おうち充電派','おでかけ派'],['堅実派','個性派'],['コスパ派','フィーリング派'],['',''],['計画派','自由派']];
   const dL = {noisy:'騒音NG',crowd:'人混みNG',nightlife:'夜の街NG',hills:'坂道NG',old:'古い物件NG',unsafe:'治安重視',traffic:'幹線道路NG',far:'駅遠NG'};
   const parts = [];
   if (state.gender && gL[state.gender]) parts.push(gL[state.gender]);
@@ -1657,13 +1832,14 @@ function showResult() {
   <div class="mbti-card">
     <div class="mbti-label">✨ あなたの住まいMBTIタイプ</div>
     <div class="mbti-row">
-      <div class="mbti-emoji">${mbtiInfo.emoji}</div>
+      <img class="mbti-caticon" src="${TYPE_ICONS[mbtiType]||''}" alt="${mbtiType}" style="border-color:${TYPE_COLORS[mbtiType]||'#D96820'}" onerror="this.style.display='none'">
       <div class="mbti-type-wrap">
         <div class="mbti-type">${mbtiType}</div>
         <div class="mbti-name">${mbtiInfo.name}</div>
       </div>
     </div>
     <div class="mbti-desc">${mbtiInfo.desc}</div>
+    <div class="mbti-hint">🏠 あなたに合う部屋のヒント：<strong>${TYPE_HINTS[mbtiType]||'あなたの感覚を信じてOK'}</strong></div>
     <div class="mbti-dims">${mbtiDimLabels(mbtiType)}</div>
   </div>`;
 
@@ -1686,6 +1862,7 @@ function showResult() {
         <span class="result-name">${area.name}</span>
         <span class="match-badge">${matchLbl}</span>
       </div>
+      ${area.nick ? `<div class="area-nick">${area.nick}</div>` : ''}
       <div class="result-tags">
         ${area.tags.slice(0,3).map(t=>`<span class="result-tag">${t}</span>`).join('')}
       </div>
@@ -1693,6 +1870,8 @@ function showResult() {
         🚃 乗車時間：<strong>約${area.commuteTime}分</strong>
       </div>
       <div class="result-desc">${area.desc}</div>
+      ${area.insight ? `<div class="area-insight">🔍 プロの気づき：${area.insight}</div>` : ''}
+      ${area.anaba ? `<div class="area-anaba">🚉 穴場駅：${area.anaba}</div>` : ''}
       <div class="station-list">
         ${(area.nearStations||[]).map(s=>`<span class="station-badge">🚉 ${s}</span>`).join('')}
       </div>
@@ -1766,10 +1945,24 @@ function showResult() {
       document.body.appendChild(toast);
       setTimeout(() => toast.remove(), 4000);
       // 0.6秒後にLINE公式アカウントを開く
-      setTimeout(() => { setTimeout(() => { window.open('https://line.me/ti/p/@935yytsb', '_blank'); }, 600);}, 600);
+      setTimeout(() => { setTimeout(() => { window.open('https://lin.ee/o3OHmib', '_blank'); }, 600);}, 600);
     };
   });
 
+  const dh = results[3];
+  if (dh) {
+    const dhRent = (typeof dh.rent === 'number') ? dh.rent : (dh.rent ? dh.rent['1R1K'] : null);
+    document.getElementById('resultCards').insertAdjacentHTML('beforeend',
+      `<div class="result-card darkhorse">
+        <div><span class="rank-badge dh">🌙</span><span class="result-name">隠れ相性：${dh.name}</span></div>
+        ${dh.nick ? `<div class="area-nick">${dh.nick}</div>` : ''}
+        <div class="result-info">🚃 乗車時間：<strong>約${dh.commuteTime}分</strong> ／ 家賃目安(1K) ${dhRent ? (dhRent/10000).toFixed(1)+'万円' : '要確認'}</div>
+        ${dh.insight ? `<div class="area-insight">🔍 ${dh.insight}</div>` : ''}
+        ${dh.anaba ? `<div class="area-anaba">🚉 穴場駅：${dh.anaba}</div>` : ''}
+      </div>`);
+  }
+  const reportsHtml = `<div class="reports-box"><div class="reports-title">📚 もっと詳しく（住まらぼ研究所のレポート）</div><a href="https://sumalabo-mbti-lp.vercel.app/articles/mbti-osaka-area.html" target="_blank" rel="noopener">▶ ${mbtiType}さんに合う大阪の街は？【16タイプ別】</a><a href="https://sumalabo-mbti-lp.vercel.app/articles/osaka-yasui-eki.html" target="_blank" rel="noopener">▶ 梅田15分圏で家賃5万円台「安い駅」5選</a><a href="https://sumalabo-mbti-lp.vercel.app/articles/kaisoku-tomaranai-eki.html" target="_blank" rel="noopener">▶ 【新着】梅田まで10分なのに安い駅9選（穴場駅チェッカー付き）</a><a href="https://sumalabo-mbti-lp.vercel.app/articles/osaka-seikatsuhi.html" target="_blank" rel="noopener">▶ 一人暮らしの生活費は月いくら？</a></div>`;
+  document.getElementById('resultCards').insertAdjacentHTML('beforeend', reportsHtml);
   showScreen('screen4');
   setTimeout(() => {
     document.querySelectorAll('.score-fill').forEach(el => {
@@ -1824,6 +2017,16 @@ async function saveResultImage() {
     btn.style.opacity = '1';
     btn.style.pointerEvents = 'auto';
   }
+}
+
+async function shareQuiz(){
+  const url = 'https://sumalabo-line.vercel.app/';
+  const text = 'MBTI×通勤×家賃で"あなたに合う大阪の街"がわかる無料3分診断🐱';
+  if (navigator.share) {
+    try { await navigator.share({ title: '住まいエリア診断｜住まらぼ', text: text, url: url }); return; } catch(e) {}
+  }
+  try { await navigator.clipboard.writeText(text + '\n' + url); alert('診断のリンクをコピーしました！友だちに貼り付けて送ってね🐱'); }
+  catch(e) { prompt('このリンクをコピーしてね', url); }
 }
 </script>
 </body>
