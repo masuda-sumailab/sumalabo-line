@@ -1844,7 +1844,7 @@ function showResult() {
   </div>`;
 
   document.getElementById('resultCards').innerHTML = mbtiHtml + profileHtml + top3.map((area, idx) => {
-    const rentDisp  = area.rent[state.roomType] ? area.rent[state.roomType].toLocaleString() : '要確認';
+    const rentDisp  = (typeof area.rent === 'number' && area.rent > 0) ? area.rent.toLocaleString() : '要確認';
     const maxScore  = top3[0].score;
     const pct       = maxScore > 0 ? Math.min(99, Math.max(45, Math.round((area.score / maxScore) * 99))) : 80;
     const matchLbl  = idx === 0 ? '最適' : idx === 1 ? 'おすすめ' : '候補';
@@ -1915,7 +1915,7 @@ function showResult() {
     '▼ おすすめエリア TOP3',
   ].concat(
     top3.map((a,i) => ['1位','2位','3位'][i] + ': ' + a.name
-      + ' (乗車約' + a.commuteTime + '分 / 目安' + (a.rent[state.roomType]/10000).toFixed(1) + '万円)')
+      + ' (乗車約' + a.commuteTime + '分 / 目安' + ((typeof a.rent === 'number' && a.rent > 0) ? (a.rent/10000).toFixed(1) + '万円' : '要確認') + ')')
   ).concat([
     '',
     '詳しくご提案をお願いします！'
