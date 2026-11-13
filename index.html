@@ -1989,6 +1989,32 @@ function showResult() {
 }
 
 // ===========================
+// 画像の右下に診断No.を小さく入れる
+// フォローメールから来た人だけ(LINEの文面と同じ番号)。それ以外の人の画像は今まで通り
+// 結果のカードに重ならないよう、画像の下に細い余白を足して、その右端に書く
+// ===========================
+function addDiagNoToImage(src) {
+  if (!DIAG_NO) return src;
+  try {
+    const fs = Math.max(18, Math.round(src.width * 0.03));
+    const band = Math.round(fs * 2.4);
+    const out = document.createElement('canvas');
+    out.width = src.width;
+    out.height = src.height + band;
+    const ctx = out.getContext('2d');
+    ctx.fillStyle = '#FFF8F3';
+    ctx.fillRect(0, 0, out.width, out.height);
+    ctx.drawImage(src, 0, 0);
+    ctx.font = '600 ' + fs + 'px -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Noto Sans JP", "Yu Gothic", Meiryo, sans-serif';
+    ctx.fillStyle = '#9A8573';
+    ctx.textAlign = 'right';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('診断No.' + DIAG_NO, out.width - Math.round(fs * 1.1), src.height + band / 2);
+    return out;
+  } catch (e) { return src; }
+}
+
+// ===========================
 // 結果を画像化してLINEに送る
 // ===========================
 async function saveResultImage() {
@@ -2000,12 +2026,13 @@ async function saveResultImage() {
 
   try {
     const target = document.getElementById('resultCards');
-    const canvas = await html2canvas(target, {
+    const shot = await html2canvas(target, {
       scale: 2,
       backgroundColor: '#FFF8F3',
       useCORS: true,
       logging: false
     });
+    const canvas = addDiagNoToImage(shot);
 
     canvas.toBlob(async (blob) => {
       const file = new File([blob], '住まい診断結果.png', { type: 'image/png' });
