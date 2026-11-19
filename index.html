@@ -569,6 +569,25 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;background:#EDE0CE;bac
 .perk-choice{position:relative;margin-top:20px;padding-top:16px;background:#FFFDF4;border:1.5px dashed #EBC27A;}
 .perk-ribbon{position:absolute;top:-13px;left:50%;transform:translateX(-50%);white-space:nowrap;}
 .line-perk-select{background:linear-gradient(135deg,#FFE3A8,#F6BF66);color:#7A4A12;font-size:.78rem;font-weight:700;padding:6px 18px;border-radius:999px;box-shadow:0 2px 8px rgba(200,140,40,.28);letter-spacing:.4px;margin:0;text-shadow:none;}
+/* ▼ v19: ほかのページからの引き継ぎ(トップページの駅・生活費シミュレーションの家賃)と、結果から生活費シミュレーションへの入口 */
+.ph{display:inline-block;}
+.carry-note,.s1-carry{background:#FFF1E4;border:1px solid #F3D9BE;border-radius:12px;padding:8px 12px;font-size:.8rem;font-weight:700;color:#C9611A;line-height:1.6;text-align:left;}
+.carry-note{margin:0 0 14px;}
+.s1-carry{margin-top:12px;}
+.ydoor{background:#fff;border:2px solid #F3D9BE;border-radius:16px;overflow:hidden;margin:4px 0 14px;box-shadow:0 4px 14px rgba(120,90,60,.16);text-align:left;}
+.ydoor-head{display:flex;gap:10px;align-items:center;padding:11px 14px;background:linear-gradient(135deg,#FFF3E6,#FFE2C6);border-bottom:1px solid #F3D9BE;}
+.ydoor-head img{width:44px;height:44px;border-radius:50%;background:#fff;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.08);flex:none;}
+.ydoor-head .x{display:block;flex:1;min-width:0;}
+.ydoor-head .r{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.ydoor-head .q{font-size:.7rem;font-weight:700;color:#C9611A;line-height:1.5;white-space:nowrap;}
+.ydoor-head b{display:block;font-family:'Zen Maru Gothic','Noto Sans JP',sans-serif;font-weight:900;font-size:clamp(14.5px,4.4vw,17px);color:#4A392C;line-height:1.35;white-space:nowrap;}
+.ydoor-head .tm{flex:none;font-size:.69rem;font-weight:700;background:#fff;box-shadow:inset 0 0 0 1.5px #F3D9BE;border-radius:99px;padding:2px 10px;color:#C9611A;white-space:nowrap;}
+.ydoor-body{padding:14px 16px 16px;}
+.ydoor-body .t{font-family:'Zen Maru Gothic','Noto Sans JP',sans-serif;font-weight:900;font-size:1.1rem;line-height:1.5;margin:0 0 4px;color:#4A392C;}
+.ydoor-body .s{font-size:.84rem;color:#7A6752;margin:0 0 10px;line-height:1.75;}
+.ydoor .carry{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px;}
+.ydoor .carry span{font-size:.75rem;font-weight:700;background:#FFF1E4;color:#C9611A;border-radius:8px;padding:3px 9px;line-height:1.6;}
+.ydoor-go{display:block;text-align:center;background:linear-gradient(135deg,#DE6E3C,#D96820);color:#fff;font-weight:700;border-radius:99px;padding:13px 8px;font-size:.95rem;text-decoration:none;box-shadow:0 6px 16px rgba(217,104,32,.3);line-height:1.5;}
 /* ▲▲ スキンここまで ▲▲ */
 </style>
 </head>
@@ -593,6 +612,7 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;background:#EDE0CE;bac
         placeholder="例：梅田、本町、天王寺…" autocomplete="off">
       <div class="autocomplete-list" id="autocompleteList"></div>
       <div class="s1-hint">ひらがな・カタカナ・漢字どれでも検索できます</div>
+      <div class="s1-carry" id="s1Carry" style="display:none"></div>
     </div>
     <button class="btn-main" onclick="startQuiz()">診断スタート　→</button>
   </div>
@@ -799,10 +819,43 @@ let state = {
 let quizIndex = 0;
 let quizAnswers = {};
 
+// ===========================
+// ほかのページからの引き継ぎ(v19)
+//   トップページの「診断スタート」       … ?station=駅名
+//   生活費シミュレーションの結果の画面  … #rent=7.0&station=駅名&alt=近い大きな駅
+// 駅は、STATIONS にある駅名(または読み)とぴったり合うときだけ受けとる。
+// 家賃は 2〜30(万円)の数字のときだけ受けとり、家賃の質問をとばす。
+// 受けとりは、このファイルのいちばん最後で1回だけ行う。
+// ===========================
+const HANDOFF = { rent: null, fromSim: false, station: '' };
+const ST_ALIAS = { '難波':'なんば', '大阪難波':'なんば', 'JR難波':'なんば', '大阪梅田':'梅田', 'なかもず':'中百舌鳥', '三国ケ丘':'三国ヶ丘' };
+// 生活費シミュレーションが「通勤先」として受けとれる駅(シミュレーションの勤務先の一覧と同じもの。向こうを変えたら、ここも合わせる)
+const SIM_WORK = new Set(["大阪","福島","野田","西九条","弁天町","新今宮","天王寺","寺田町","桃谷","鶴橋","玉造","森ノ宮","大阪城公園","京橋","天満","コスモスクエア","大阪港","朝潮橋","九条","阿波座","本町","堺筋本町","谷町四丁目","緑橋","天神橋筋六丁目","中崎町","東梅田","南森町","天満橋","谷町六丁目","谷町九丁目","阿倍野","中百舌鳥","西梅田","肥後橋","四ツ橋","なんば","大国町","蒲生四丁目","海老江","新福島","北新地","鴫野","新大阪","梅田","中津","十三","心斎橋","淀屋橋","北浜","日本橋","動物園前","長居","西中島南方","江坂","野田阪神","堺","三国ヶ丘"]);
+const SIM_CAT = 'data:image/png;base64,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';
+function escHtml(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function phr(t) { return t.split('|').map(x => '<span class="ph">' + x + '</span>').join(''); }
+function rentManLabel(yen) { return (yen / 10000).toFixed(1).replace(/\.0$/, '') + '万円まで'; }
+function findStation(raw) {
+  let t = String(raw || '').trim().replace(/駅$/, '');
+  if (!t || t.length > 20) return null;
+  if (Object.prototype.hasOwnProperty.call(ST_ALIAS, t)) t = ST_ALIAS[t];
+  const n = normalize(t);
+  return STATIONS.find(s => s.name === t) || STATIONS.find(s => normalize(s.name) === n || s.yomi === n) || null;
+}
+function carryNoteHtml() {
+  const parts = [];
+  if (HANDOFF.station && state.workStation === HANDOFF.station) parts.push('職場の駅 ' + escHtml(HANDOFF.station));
+  if (HANDOFF.rent) parts.push('家賃 ' + rentManLabel(HANDOFF.rent));
+  if (!parts.length) return '';
+  // 「|」の所でだけ折り返す(iPhone でも言葉の途中で切れないように)
+  return '<div class="carry-note">' + phr('✓ ' + (HANDOFF.fromSim ? '生活費シミュレーションから|' : '') + '引き継ぎました：|' + parts.join('・|')) + '</div>';
+}
+
 // スキップすべき質問IDを返す
 function getSkippedIds() {
   const skip = new Set();
   if (quizAnswers.mbtiKnown !== 'yes') skip.add('mbtiTypeInput');
+  if (HANDOFF.rent) skip.add('rent');   // 生活費シミュレーションから家賃の上限を引き継いだとき
   if (quizAnswers.mbtiKnown === 'yes') {
     ['ei1','sn1','tf1','jp1','ei2','sn2','tf2','jp2'].forEach(id => skip.add(id));
   }
@@ -1466,6 +1519,7 @@ function startQuiz() {
   state.workStation = val;
   quizIndex = 0;
   quizAnswers = {};
+  if (HANDOFF.rent) quizAnswers.rent = String(HANDOFF.rent);
   document.getElementById('progressWrap').style.display = 'block';
   showScreen('screenQuiz');
   renderQ(false);
@@ -1487,6 +1541,7 @@ function renderQ(goBack) {
   if (q.type === 'multi')     el.innerHTML = renderMulti(q);
   if (q.type === 'contrast')  el.innerHTML = renderContrast(q);
   if (q.type === 'mbtiSelect') el.innerHTML = renderMbtiSelect(q);
+  if (visIdx === 0) el.insertAdjacentHTML('afterbegin', carryNoteHtml());   // 引き継いだ条件のお知らせ(最初の質問の上)
 
   // 保存済みの回答を復元
   const saved = quizAnswers[q.id];
@@ -1524,13 +1579,13 @@ function renderAnswerLog() {
   if (!box) return;
   const L = {commute:'乗車',rent:'家賃',mbtiTypeInput:'MBTI',ei1:'休日',sn1:'内見',tf1:'決め手',jp1:'準備',ei2:'帰り道',sn2:'街選び',tf2:'重視',jp2:'リズム',dislikes:'苦手'};
   const chips = [];
-  if (state.workStation) chips.push('🏢 ' + state.workStation);
+  if (state.workStation) chips.push('🏢 ' + escHtml(state.workStation));
   for (const q of QUESTIONS) {
     if (q.id === 'mbtiKnown') continue;
     const a = quizAnswers[q.id];
     if (a == null || (Array.isArray(a) && !a.length)) continue;
     let v = '';
-    if (q.type === 'single') { const o = (q.options||[]).find(o => String(o.val) === String(a)); v = o ? o.label : a; }
+    if (q.type === 'single') { const o = (q.options||[]).find(o => String(o.val) === String(a)); v = o ? o.label : (q.id === 'rent' ? rentManLabel(parseInt(a)) : a); }
     else if (q.type === 'contrast') { const n = parseInt(a); v = n < 0 ? q.leftLabel : n > 0 ? q.rightLabel : 'どちらでも'; }
     else if (q.type === 'multi') { v = a.map(x => { const o = q.options.find(o => o.val === x); return o ? o.label : x; }).join('・'); }
     else if (q.type === 'mbtiSelect') { v = a; }
@@ -1679,6 +1734,8 @@ function restartQuiz() {
   state = { workStation: null, commuteMax: 30, rentMax: 70000, roomType: '1R1K', gender: null, ageGroup: null, dislikes: [], contrasts: [0,0,0,0,0], commuteMethod:'train', cooking:'sometimes', homeTime:0, firstMove:null, movingCostKnown:null, mbtiKnown:'no', mbtiTypeInput:null };
   input.value = '';
   quizAnswers = {};
+  HANDOFF.rent = null; HANDOFF.fromSim = false; HANDOFF.station = '';   // もう一度のときは、引き継ぎなしで最初から
+  const sc = document.getElementById('s1Carry'); if (sc) sc.style.display = 'none';
   showScreen('screen1');
 }
 
@@ -1978,6 +2035,21 @@ function showResult() {
         ${dh.anaba ? `<div class="area-anaba">🚉 穴場駅：${dh.anaba}</div>` : ''}
       </div>`);
   }
+  // 生活費シミュレーションへの入口(シミュレーションから来た人には出さない。保存する画像にも入れない)
+  if (!HANDOFF.fromSim) {
+    const canCarry = SIM_WORK.has(state.workStation);
+    const simUrl = 'https://sumalabo-mbti-lp.vercel.app/seikatsuhi.html' + (canCarry ? '#w=' + encodeURIComponent(state.workStation) : '');
+    document.getElementById('resultCards').insertAdjacentHTML('beforeend',
+      `<div class="ydoor" data-html2canvas-ignore="true">
+        <div class="ydoor-head"><img src="${SIM_CAT}" alt="" width="44" height="44"><span class="x"><span class="r"><span class="q">つぎは、いくらかかる?</span><span class="tm">1分・無料</span></span><b>生活費シミュレーション</b></span></div>
+        <div class="ydoor-body">
+          <p class="t">${phr('この街の家賃、|あなたの手取りで|払える?')}</p>
+          <p class="s">${phr('手取りを入れると、|家賃の上限・|月の内訳・|貯金の余力が出ます。|TOP3の家賃の目安と、|見くらべてみてください。')}</p>
+          ${canCarry ? `<div class="carry"><span>✓ 通勤先 ${escHtml(state.workStation)} を引き継ぎます</span></div>` : ''}
+          <a class="ydoor-go" href="${simUrl}" target="_blank" rel="noopener">${phr('生活費シミュレーションへ|(1分・無料) →')}</a>
+        </div>
+      </div>`);
+  }
   const reportsHtml = `<div class="reports-box"><div class="reports-title">📚 もっと詳しく（住まらぼ研究所のレポート）</div><a href="https://sumalabo-mbti-lp.vercel.app/articles/mbti-osaka-area.html" target="_blank" rel="noopener">▶ ${mbtiType}さんに合う大阪の街は？【16タイプ別】</a><a href="https://sumalabo-mbti-lp.vercel.app/articles/osaka-yasui-eki.html" target="_blank" rel="noopener">▶ 梅田15分圏で家賃5万円台「安い駅」5選</a><a href="https://sumalabo-mbti-lp.vercel.app/articles/kaisoku-tomaranai-eki.html" target="_blank" rel="noopener">▶ 【新着】梅田まで10分なのに安い駅9選（穴場駅チェッカー付き）</a><a href="https://sumalabo-mbti-lp.vercel.app/articles/osaka-seikatsuhi.html" target="_blank" rel="noopener">▶ 一人暮らしの生活費は月いくら？</a></div>`;
   document.getElementById('resultCards').insertAdjacentHTML('beforeend', reportsHtml);
   showScreen('screen4');
@@ -2072,6 +2144,29 @@ async function shareQuiz(){
   try { await navigator.clipboard.writeText(text + '\n' + url); alert('診断のリンクをコピーしました！友だちに貼り付けて送ってね🐱'); }
   catch(e) { prompt('このリンクをコピーしてね', url); }
 }
+
+// ===========================
+// 引き継ぎの受けとり(v19)。ページを開いたときに1回だけ
+// ===========================
+(function () {
+  try {
+    const qs = new URLSearchParams(window.location.search);
+    const hs = new URLSearchParams((window.location.hash || '').replace(/^#/, ''));
+    if (!(qs.has('station') || hs.has('station') || hs.has('rent') || hs.has('alt'))) return;
+    const rawSt = hs.get('station') || qs.get('station') || '';
+    const r = parseFloat(hs.get('rent') || '');
+    if (r >= 2 && r <= 30) { HANDOFF.rent = Math.round(r * 10) * 1000; HANDOFF.fromSim = true; }
+    const st = findStation(rawSt) || findStation(hs.get('alt') || '');
+    // 住所から引き継ぎの部分を消す(読みこみ直しやブックマークで残らないように)。メールの目印(?from= と &d=)は残す
+    try { qs.delete('station'); const rest = qs.toString(); history.replaceState(null, '', window.location.pathname + (rest ? '?' + rest : '')); } catch (e) {}
+    if (HANDOFF.rent) {
+      const sc = document.getElementById('s1Carry');
+      if (sc) { sc.innerHTML = phr('✓ 家賃の上限(' + rentManLabel(HANDOFF.rent).replace('まで', '') + ')は、|生活費シミュレーションから|引き継ぎました'); sc.style.display = 'block'; }
+    }
+    if (st) { selectStation(st.name); HANDOFF.station = st.name; startQuiz(); }
+    else if (rawSt) { input.value = rawSt.replace(/[<>"'&`]/g, '').slice(0, 20); input.dispatchEvent(new Event('input')); }
+  } catch (e) {}
+})();
 </script>
 </body>
 </html>
