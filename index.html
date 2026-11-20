@@ -568,6 +568,7 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;background:#EDE0CE;bac
 .pk-check{flex:none;width:19px;height:19px;margin-top:2px;border-radius:50%;background:linear-gradient(135deg,#43C878,#2E9E5B);color:#fff;font-size:.68rem;font-weight:700;display:inline-flex;align-items:center;justify-content:center;box-shadow:0 1px 3px rgba(46,158,91,.35);}
 .perk-choice{position:relative;margin-top:20px;padding-top:16px;background:#FFFDF4;border:1.5px dashed #EBC27A;}
 .perk-ribbon{position:absolute;top:-13px;left:50%;transform:translateX(-50%);white-space:nowrap;}
+.pk-cond{display:block;font-size:.74rem;font-weight:500;color:#6B7F72;line-height:1.55;margin-top:2px;}
 .line-perk-select{background:linear-gradient(135deg,#FFE3A8,#F6BF66);color:#7A4A12;font-size:.78rem;font-weight:700;padding:6px 18px;border-radius:999px;box-shadow:0 2px 8px rgba(200,140,40,.28);letter-spacing:.4px;margin:0;text-shadow:none;}
 /* ▼ v19: ほかのページからの引き継ぎ(トップページの駅・生活費シミュレーションの家賃)と、結果から生活費シミュレーションへの入口 */
 .ph{display:inline-block;}
@@ -653,7 +654,7 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;background:#EDE0CE;bac
       <div class="line-perks perk-choice">
         <div class="perk-ribbon"><span class="line-perk-select">🎁 どちらか選べる！</span></div>
         <div class="line-perk"><span class="pk-check">✓</span><span><strong>冷蔵庫・洗濯機・電子レンジ</strong>を無料でプレゼント</span></div>
-        <div class="line-perk"><span class="pk-check">✓</span><span><strong>お引越し費用</strong>が無料</span></div>
+        <div class="line-perk"><span class="pk-check">✓</span><span><strong>お引越し</strong>が無料<small class="pk-cond">※近畿圏内からのお引越しが対象です。他のエリアからは割引になります</small></span></div>
       </div>
       <div class="line-stores">
         <a href="https://lin.ee/o3OHmib" class="btn-line" target="_blank" style="flex:none;width:100%;max-width:320px;margin:0 auto;">
